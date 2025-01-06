@@ -1,0 +1,127 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+
+
+.header {
+   border-bottom: variables.$border-style;
+   padding-left: 24px;
+   padding-right: 32px;
+   height: variables.$header-h;
+   
+
+   .inner {
+      height: 100%;
+      width: 100%;
+      justify-content: space-between;   
+      @include mixins.flex-row;
+      gap: 20px;
+
+      .logo {
+         display: flex;
+         align-items: center;
+         
+         translate: 0 6px;
+      }
+
+      .search-wrapper {
+         flex: 1;
+      
+         @include mixins.flex-center;
+
+         .search-box {
+            box-sizing: content-box;
+            overflow: hidden;
+            width: clamp(30%, 480px, 90%);
+            border-radius: 92px;
+            background-color: variables.$input-bg-color;
+            padding: 12px 16px;
+            transition: all 0.2s ease; 
+
+            @include mixins.flex-row;
+
+            input {
+               flex: 1;
+               color: variables.$input-text-color;
+               caret-color: variables.$primary-color;
+
+               &::placeholder {
+                  color: variables.$input-placeholder-color;
+                  font-weight: variables.$input-placeholder-fweight;
+               }
+
+               &:not(:placeholder-shown) ~ button .search-btn {
+                  color: variables.$search-btn-color-hover;
+               }
+            }
+
+            button {
+               padding: 12px 20px 12px 16px;
+               margin: -12px -16px -12px 0px;
+               position: relative;
+               cursor: pointer;
+
+               &::after {
+                  position: absolute;
+                  content: "";
+                  display: block;
+                  background-color: variables.$divide-line-color;
+                  height: 80%;
+                  width: 1px;
+                  top: 50%;
+                  translate: 0 -50%;
+                  left: 0;
+               }
+
+               .search-btn {
+                  color: variables.$search-btn-color;
+                  font-size: 2rem;
+               }
+            }
+
+            &:hover, &:focus-within{
+               border: 0.5px solid variables.$search-box-border-color;
+                
+               button {
+                  background-color: variables.$search-btn-bg-color-hover;
+
+                  .search-btn {
+                     
+                  }
+               }
+            }
+
+         }
+      }
+
+      .user-actions {
+         @include mixins.flex-row;
+         align-items: center;
+
+         button, .actions-icon {
+            cursor: pointer;
+         }
+
+         button {
+            background-color: variables.$primary-color;
+            color: variables.$actions-btn-color;
+            font-weight: variables.$actions-btn-fweight;
+            padding: 8px 24px;
+            font-size: 1.6rem;
+            min-height: 36px;
+            min-width: 100px;
+            border-radius: 4px;
+
+            &:hover {
+               opacity: 0.9;
+            }
+         } 
+
+         .actions-icon {
+            color: #fff;
+            font-size: 2rem;
+            margin: 0 24px;
+         }
+      }
+   }
+}

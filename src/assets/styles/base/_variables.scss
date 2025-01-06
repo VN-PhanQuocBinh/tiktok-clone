@@ -1,5 +1,29 @@
 $font: "IBM Plex Sans", serif;
 
+$primary-color: #fe2c55;
+$page-bg-color: rgba(18, 18, 18, 1);
+
+$border-color: #ccc;
+$border-style: 1px solid $border-color;
+
 $line-height: 1.5;
 
-$primary-color: #fe2c55
+$sidebar-w: 240px;
+
+// Header
+$header-h: 60px;
+
+$search-box-border-color: rgba(255, 255, 255, 0.2);
+$input-bg-color: rgba(255, 255, 255, 0.12);
+$input-text-color: rgba(255, 255, 255, 0.9);
+$input-placeholder-color: rgba(255, 255, 255, 0.6);
+$input-placeholder-fweight: 500;
+
+$search-btn-color: rgba(255, 255, 255, 0.34);
+$search-btn-color-hover: rgba(255, 255, 255, 0.9);
+$search-btn-bg-color-hover: rgba(255, 255, 255, 0.12);
+
+$divide-line-color: rgba(255, 255, 255, 0.12);
+
+$actions-btn-color: rgba(255, 255, 255, 0.9);
+$actions-btn-fweight: 600;

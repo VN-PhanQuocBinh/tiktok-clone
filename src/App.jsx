@@ -6,12 +6,11 @@ import { publicRoutes } from "./routes";
 import { DefaultLayout, HeaderOnlyLayout } from "./components/Layouts";
 import { LAYOUT_TYPE } from "./constants";
 
+
+
 function App() {
   return (
     <BrowserRouter>
-      <h1>React App - Tiktok Clone</h1>
-      <button>Button</button>
-
       <Routes>
         {publicRoutes.map((route, index) => {
           let Layout

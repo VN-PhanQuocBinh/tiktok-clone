@@ -1,0 +1,13 @@
+@use "../base/mixins";
+
+.container {
+   width: 100vw;
+   @include mixins.flex-column;
+}
+
+.main {
+   @include mixins.flex-row;
+   width: 100%;
+   min-height: 1000px;
+   
+}
