@@ -5,9 +5,9 @@ import App from './App.jsx'
 import GlobalStyle from './components/GlobalStyle/index.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <GlobalStyle>
       <App />
     </GlobalStyle>
-  </StrictMode>,
+  // </StrictMode>,
 )

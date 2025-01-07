@@ -4,4 +4,14 @@ const LAYOUT_TYPE = {
    NO_LAYOUT: "no_layout" 
 }
 
-export { LAYOUT_TYPE }
+const HEADER_ITEM_TYPE = {
+   DEFAULT: "default",
+   SEARCH_RESULT: "search_result",
+   ACTIONS: "actions",
+   USER_SUGGEST: "user-suggest"
+}
+
+export { 
+   LAYOUT_TYPE,
+   HEADER_ITEM_TYPE
+}

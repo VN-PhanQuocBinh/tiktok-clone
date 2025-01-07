@@ -1,0 +1,43 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+.list {
+   $padding-x: 16px;
+ 
+   overscroll-behavior: none;
+   position: absolute;
+   top: 100%;
+   left: 0;
+   width: 100%;
+   z-index: 100;
+   background-color: variables.$dropdown-bg-color;
+   border-radius: 8px;
+   padding-top: 8px;
+   max-height: min(100vh - 200px, 700px);
+   overflow-y: scroll;
+
+   &::-webkit-scrollbar {
+      appearance: none;
+      background-color: transparent;
+      width: 8px;
+   }
+
+   &::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: variables.$dropdown-list-thumb-color;
+   }
+
+   .title {
+      color: variables.$dropdown-title-color;
+      padding: 6px 12px;
+      font-weight: 500;
+      font-size: 1.4rem;
+   }
+
+   li.more-title {
+      font-weight: 500;
+      font-size: 1.6rem;
+      color: variables.$dropdown-more-title-color;
+      padding: $padding-x;
+   }
+}

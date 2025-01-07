@@ -1,0 +1,86 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+$border-radius: 92px;
+
+.search-wrapper {
+   width: variables.$search-box-w;
+   position: relative;
+
+   @include mixins.flex-center;
+
+   .search-box {
+      width: 100%;
+      border-radius: $border-radius;
+      background-color: variables.$input-bg-color;
+      padding: 0 16px;
+      transition: variables.$transition;
+      height: variables.$search-box-h;
+
+      @include mixins.flex-row;
+      align-items: center;
+
+      border: 0.5px solid transparent;
+
+      &:hover {           
+         button {
+            background-color: variables.$search-btn-bg-color-hover; 
+         }
+      }
+
+      &:focus-within, &:hover {
+         border-color: variables.$search-box-border-color;
+      }
+
+      input {
+         flex: 1;
+         color: variables.$input-text-color;
+         caret-color: variables.$primary-color;
+
+         &::placeholder {
+            color: variables.$input-placeholder-color;
+            font-weight: variables.$input-placeholder-fweight;
+         }
+
+         &:not(:placeholder-shown) ~ button .search-btn {
+            color: variables.$search-btn-color-hover;
+         }
+      }
+
+      .clear-icon, .loading-icon {
+         color: variables.$input-icon-color;
+         padding: 8px;
+         cursor: pointer;
+      }
+
+      button {
+         padding: 12px 20px 12px 16px;
+         margin: -12px -16px -12px 0px;
+         position: relative;
+         cursor: pointer;
+         transition: variables.$transition;
+         border-top-right-radius: $border-radius;
+         border-bottom-right-radius: $border-radius;
+
+         &::after {
+            position: absolute;
+            content: "";
+            display: block;
+            background-color: variables.$divide-line-color;
+            height: 80%;
+            width: 1px;
+            top: 50%;
+            translate: 0 -50%;
+            left: 0;
+         }
+
+         .search-btn {
+            color: variables.$search-btn-color;
+            font-size: 2rem;
+         }
+      }
+
+      
+
+   }
+}

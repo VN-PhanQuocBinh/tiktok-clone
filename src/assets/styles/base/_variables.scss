@@ -3,6 +3,7 @@ $font: "IBM Plex Sans", serif;
 $primary-color: #fe2c55;
 $page-bg-color: rgba(18, 18, 18, 1);
 
+
 $border-color: #ccc;
 $border-style: 1px solid $border-color;
 
@@ -10,14 +11,20 @@ $line-height: 1.5;
 
 $sidebar-w: 240px;
 
+$transition: all 0.2s ease;
+
 // Header
 $header-h: 60px;
+$search-box-h: 46px;
+$search-box-w: clamp(30%, 516px, 90%);
 
 $search-box-border-color: rgba(255, 255, 255, 0.2);
 $input-bg-color: rgba(255, 255, 255, 0.12);
 $input-text-color: rgba(255, 255, 255, 0.9);
 $input-placeholder-color: rgba(255, 255, 255, 0.6);
 $input-placeholder-fweight: 500;
+
+$input-icon-color: rgba(255, 255, 255, 0.34);
 
 $search-btn-color: rgba(255, 255, 255, 0.34);
 $search-btn-color-hover: rgba(255, 255, 255, 0.9);
@@ -27,3 +34,15 @@ $divide-line-color: rgba(255, 255, 255, 0.12);
 
 $actions-btn-color: rgba(255, 255, 255, 0.9);
 $actions-btn-fweight: 600;
+
+
+// Component
+$dropdown-bg-color: rgb(37, 37, 37);
+$dropdown-list-thumb-color: rgb(54, 54, 54);
+
+$dropdown-title-color: rgba(255, 255, 255, 0.75);
+$dropdown-more-title-color: rgba(255, 255, 255, 0.9);
+$dropdown-item-bg-color-hover: rgba(255, 255, 255, 0.04);
+$dropdown-item-text-color: rgba(255, 255, 255, 0.9);
+$dropdown-item-cap-color: rgba(255, 255, 255, 0.75);
+$dropdown-item-icon-color: rgba(255, 255, 255, 0.34);

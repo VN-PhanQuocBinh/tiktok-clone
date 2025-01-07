@@ -1,0 +1,44 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+
+li {
+   padding: 10px;
+   @include mixins.flex-row;
+   align-items: center;
+   gap: 12px;
+   cursor: pointer;
+
+   &:hover {
+      background-color: variables.$dropdown-item-bg-color-hover;
+   }
+
+   .icon {
+      font-size: 0.6rem;
+      color: variables.$dropdown-item-icon-color;
+   }
+
+   .text {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: variables.$dropdown-item-text-color;
+      line-height: 24px;
+   }
+}
+
+li.user-suggest {
+   img {
+      $rec-size: 40px;
+      display: block;
+      width: $rec-size;
+      height: $rec-size;
+      background-color: #ccc;
+      border-radius: 50%;
+   }
+
+   .user-info {
+      p {
+         color: variables.$dropdown-item-cap-color;
+      }
+   }
+}
