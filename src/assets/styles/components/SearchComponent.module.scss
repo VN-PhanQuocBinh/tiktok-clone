@@ -52,6 +52,10 @@ $border-radius: 92px;
          padding: 8px;
          cursor: pointer;
       }
+      
+      .loading-icon {
+         animation: loadingAnimation 1.25s linear infinite;
+      }
 
       button {
          padding: 12px 20px 12px 16px;
@@ -79,8 +83,29 @@ $border-radius: 92px;
             font-size: 2rem;
          }
       }
+   }
 
-      
+   li.more-title {
+      font-weight: 500;
+      font-size: 1.6rem;
+      color: variables.$dropdown-more-title-color;
+      padding: variables.$dropdown-item-padding-x;
+   }
 
+   .title {
+      color: variables.$dropdown-title-color;
+      padding: 6px 12px;
+      font-weight: 500;
+      font-size: 1.4rem;
+   }
+}
+
+@keyframes loadingAnimation {
+   from {
+      rotate: 0deg;
+   }
+
+   to {
+      rotate: 360deg;
    }
 }

@@ -4,7 +4,7 @@ const LAYOUT_TYPE = {
    NO_LAYOUT: "no_layout" 
 }
 
-const HEADER_ITEM_TYPE = {
+const DROPDOWN_ITEM_TYPE = {
    DEFAULT: "default",
    SEARCH_RESULT: "search_result",
    ACTIONS: "actions",
@@ -13,5 +13,5 @@ const HEADER_ITEM_TYPE = {
 
 export { 
    LAYOUT_TYPE,
-   HEADER_ITEM_TYPE
+   DROPDOWN_ITEM_TYPE
 }

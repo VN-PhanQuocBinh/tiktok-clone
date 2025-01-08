@@ -1,6 +1,4 @@
-import HeaderItem from './DropDownItem'
-
-import { defaultSearchItems, userDefaultSugItems  } from '../fakeDB'
+import { memo } from "react"
 
 import styles from "../assets/styles/components/DropDown.module.scss"
 import classNames from "classnames/bind"
@@ -9,12 +7,21 @@ import classNames from "classnames/bind"
 // Component
 let cx = classNames.bind(styles)
 
-export default function DropDown({ isVisible, children }) {
+function DropDown({ isVisible, width, animation, children }) {
+   console.log("DropDown re-render");
    
    return (
-      <ul className={cx("list")}>
-         {children}
-         <li className={cx("more-title")}>View all results for "{}"</li>
-      </ul>
+      (isVisible && 
+         <ul 
+            className={cx("list", animation ? "fadeout" : "")}
+            style={{
+               width: width || "100%",
+            }}
+         >
+            {children}     
+         </ul>
+      )
    )
 }
+
+export default memo(DropDown)

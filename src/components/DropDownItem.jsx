@@ -1,4 +1,4 @@
-import { HEADER_ITEM_TYPE as TYPE } from '../constants'
+import { DROPDOWN_ITEM_TYPE as TYPE } from '../constants'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { 
@@ -45,7 +45,11 @@ export default function DropDownItem({ type, item, itemClick }) {
                className={cx("drop-item")}
                onClick={() => itemClick(item.label)}
             >
-               <FontAwesomeIcon className={cx("icon")} icon={faCircle} />
+               <FontAwesomeIcon 
+                  className={cx("icon", "actions")} 
+                  icon={item.icon} 
+                  color=""
+               />
                <p className={cx("text")}>{item.label}</p>
             </li>
          )

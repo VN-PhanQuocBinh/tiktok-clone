@@ -4,7 +4,7 @@ $primary-color: #fe2c55;
 $page-bg-color: rgba(18, 18, 18, 1);
 
 
-$border-color: #ccc;
+$border-color: rgba(255, 255, 255, 0.12);
 $border-style: 1px solid $border-color;
 
 $line-height: 1.5;
@@ -46,3 +46,5 @@ $dropdown-item-bg-color-hover: rgba(255, 255, 255, 0.04);
 $dropdown-item-text-color: rgba(255, 255, 255, 0.9);
 $dropdown-item-cap-color: rgba(255, 255, 255, 0.75);
 $dropdown-item-icon-color: rgba(255, 255, 255, 0.34);
+
+$dropdown-item-padding-x: 16px;
