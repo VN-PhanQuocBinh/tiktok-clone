@@ -3,19 +3,30 @@
 
 
 li {
+   @mixin wrapperStyle {
+      @include mixins.flex-row;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+   }
+
+   @include wrapperStyle;
    padding: 10px variables.$dropdown-item-padding-x;
-   @include mixins.flex-row;
-   align-items: center;
-   gap: 12px;
    cursor: pointer;
 
-   &:hover {
+   a {
+      @include wrapperStyle;
+      text-decoration: none;
+   }
+
+   &:not(.header):hover {
       background-color: variables.$dropdown-item-bg-color-hover;
    }
 
    .icon {
       font-size: 0.6rem;
       color: variables.$dropdown-item-icon-color;
+      user-select: none;
 
       &.actions {
          font-size: 1.6rem;
@@ -29,6 +40,7 @@ li {
       color: variables.$dropdown-item-text-color;
       line-height: 24px;
       font-style: normal;
+      user-select: none;
    }
 }
 
@@ -45,6 +57,31 @@ li.user-suggest {
    .user-info {
       p {
          color: variables.$dropdown-item-cap-color;
+      }
+   }
+}
+
+li.header {
+   position: relative;
+   justify-content: center;
+   cursor: default;
+
+   .icon {
+      position: absolute;
+      top: 50%;
+      left: variables.$dropdown-item-padding-x;
+      translate: 0 -50%;
+      padding: 4px;
+      cursor: pointer;
+   }
+
+   .text {
+      text-align: center;
+   }
+
+   & ~ li {
+      .text {
+         font-size: 1.4rem;
       }
    }
 }

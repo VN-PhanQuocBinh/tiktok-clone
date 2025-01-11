@@ -1,4 +1,4 @@
-import { memo } from "react"
+import { memo, useEffect, useState } from "react"
 
 import styles from "../assets/styles/components/DropDown.module.scss"
 import classNames from "classnames/bind"
@@ -7,13 +7,45 @@ import classNames from "classnames/bind"
 // Component
 let cx = classNames.bind(styles)
 
-function DropDown({ isVisible, width, animation, children }) {
-   console.log("DropDown re-render");
+function DropDown({ 
+   isVisible, 
+   width, 
+   animation, 
+   delay = [0, 0], 
+   className, 
+   children, 
+   onHide
+}) {
+   const [isAppear, setIsAppear] = useState(isVisible)
    
+   
+   useEffect(() => {
+      if (!isVisible) {
+         setTimeout(() => {
+            // console.log(`hide ${delay[1]}`);
+            setIsAppear(false)
+            onHide && onHide()
+         }, delay[1])
+      } else {
+         setTimeout(() => {
+            // console.log(`appear ${delay[0]}`);
+            setIsAppear(true)
+         }, delay[0])
+      }
+   }, [isVisible])
+
+
+   console.log("DropDown re-render");
    return (
-      (isVisible && 
+      (isAppear && 
          <ul 
-            className={cx("list", animation ? "fadeout" : "")}
+            className={cx({
+               "list": true, 
+               [animation?.appear]: animation?.appear,
+               [animation?.hide]: !isVisible,
+               [className]: className
+            })}
+            // className={[cx("list", animation ? "fadeout" : ""), className || ""].join(" ")}
             style={{
                width: width || "100%",
             }}

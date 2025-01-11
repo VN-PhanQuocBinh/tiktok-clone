@@ -6,43 +6,45 @@ import { publicRoutes } from "./routes";
 import { DefaultLayout, HeaderOnlyLayout } from "./components/Layouts";
 import { LAYOUT_TYPE } from "./constants";
 
-
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {publicRoutes.map((route, index) => {
-          let Layout
+      <AuthProvider>
+        <Routes>
+          {publicRoutes.map((route, index) => {
+            let Layout;
 
-          switch (route.layout) {
-            case LAYOUT_TYPE.NO_LAYOUT:
-              Layout = Fragment
-              break
-            case LAYOUT_TYPE.HEADER_ONLY:
-              Layout = HeaderOnlyLayout
-              break
-            case LAYOUT_TYPE.DEFAULT:
-              Layout = DefaultLayout
-              break
-            default:
-              throw Error("Unknown Layout: " + route.layout)
-          }
+            switch (route.layout) {
+              case LAYOUT_TYPE.NO_LAYOUT:
+                Layout = Fragment;
+                break;
+              case LAYOUT_TYPE.HEADER_ONLY:
+                Layout = HeaderOnlyLayout;
+                break;
+              case LAYOUT_TYPE.DEFAULT:
+                Layout = DefaultLayout;
+                break;
+              default:
+                throw Error("Unknown Layout: " + route.layout);
+            }
 
-          const Page = route.element;
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                <Layout>
-                  <Page />
-                </Layout>
-              }
-            />
-          );
-        })}
-      </Routes>
+            const Page = route.element;
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                }
+              />
+            );
+          })}
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

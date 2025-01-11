@@ -1,0 +1,11 @@
+@use "../base//variables";
+@use "../base//mixins";
+@use "sass:list";
+
+.badge {
+   position: absolute;
+   background-color: variables.$badge-bg;
+   padding: 2px 4px;
+   font-size: 1.2rem;
+   border-radius: 999px;
+}

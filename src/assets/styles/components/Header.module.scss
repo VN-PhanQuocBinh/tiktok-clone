@@ -9,7 +9,6 @@
    padding-right: 32px;
    height: variables.$header-h;
    
-
    .inner {
       height: 100%;
       width: 100%;
@@ -27,36 +26,35 @@
       .user-actions {
          @include mixins.flex-row;
          align-items: center;
-
-         button, .actions-icon {
-            cursor: pointer;
-         }
-
-         button {
-            background-color: variables.$primary-color;
-            color: variables.$actions-btn-color;
-            font-weight: variables.$actions-btn-fweight;
-            padding: 8px 24px;
-            font-size: 1.6rem;
-            min-height: 36px;
-            min-width: 100px;
-            border-radius: 4px;
-
-            &:hover {
-               opacity: 0.9;
-            }
-         } 
+         gap: 4px;
 
          i {
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-sizing: border-box;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            margin: 0 12px;   
 
-            .actions-icon {
-               color: #fff;
-               font-size: 2rem;
-               margin: 0 12px;
-               padding: 12px;
+            .actions-icon {      
+               font-size: 1.6rem;
+               padding: 12px;  
+            }    
+            
+            .avt-icon {
+               font-size: 3.2rem;
             }
          }     
+
+         .message-btn {
+            position: relative;
+            // padding: 0;
+            // margin: 0 8px;
+         }
       }
    }
 }

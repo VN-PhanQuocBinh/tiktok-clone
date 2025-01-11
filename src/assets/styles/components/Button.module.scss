@@ -1,0 +1,62 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+@use "sass:map";
+@use "sass:color";
+
+$styleBtn: ("primary", "secondary");
+$styleColor: (
+   "primary": (
+      "bg": variables.$button-primary-bg,
+      "bg-hover": variables.$button-primary-bg-hover,
+   ),
+   "secondary": (
+      "bg": variables.$button-secondary-bg,
+      "bg-hover": variables.$button-secondary-bg-hover,
+   )
+);
+
+.button {
+   padding: 8px 24px;
+   color: variables.$actions-btn-color;
+   font-weight: variables.$actions-btn-fweight;
+   padding: 8px 16px;
+   font-size: 1.6rem;
+   min-height: 36px;
+   border-radius: 2px;
+   @include mixins.flex-row;
+   align-items: center;
+   cursor: pointer;
+   justify-content: center;
+
+   @each $style in $styleBtn {
+      &.#{$style} {
+         background-color: map.get(map.get($styleColor, $style), "bg");
+
+         &:hover {
+            background-color: map.get(map.get($styleColor, $style), "bg-hover");
+         }
+      }
+   }
+
+   &.primary {
+      background-color: variables.$button-primary-bg;
+   }
+
+   &.secondary {
+      background-color: variables.$button-secondary-bg;
+   }
+
+   .icon {
+      font-size: variables.$button-icon-size-small;
+
+      &.large {
+         font-size: variables.$button-icon-size-large;
+      }
+   }
+
+   > span {
+      margin-left: 8px;
+   }
+}
+

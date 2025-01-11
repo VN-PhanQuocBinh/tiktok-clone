@@ -1,3 +1,6 @@
+@use "sass:color";
+
+
 $font: "IBM Plex Sans", serif;
 
 $primary-color: #fe2c55;
@@ -36,7 +39,8 @@ $actions-btn-color: rgba(255, 255, 255, 0.9);
 $actions-btn-fweight: 600;
 
 
-// Component
+// COMPONENT
+// + DropDown
 $dropdown-bg-color: rgb(37, 37, 37);
 $dropdown-list-thumb-color: rgb(54, 54, 54);
 
@@ -48,3 +52,20 @@ $dropdown-item-cap-color: rgba(255, 255, 255, 0.75);
 $dropdown-item-icon-color: rgba(255, 255, 255, 0.34);
 
 $dropdown-item-padding-x: 16px;
+
+
+// + Button 
+$button-primary-bg: $primary-color;
+$button-secondary-bg: rgba(255, 255, 255, 0.08);
+
+$button-primary-bg-hover: color.adjust($button-primary-bg, $blackness: 10%);
+$button-secondary-bg-hover: color.adjust($button-secondary-bg, $blackness: 60%);
+
+$button-primary-text-color: rgba(255, 255, 255, 0.9);
+
+$button-icon-size-large: 2rem;
+$button-icon-size-small: 1.6rem;
+
+
+// + Badge
+$badge-bg: $primary-color;

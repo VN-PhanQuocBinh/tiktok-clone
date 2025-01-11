@@ -1,8 +1,12 @@
+import { icon } from "@fortawesome/fontawesome-svg-core"
 import { 
    faEarthAmericas,
    faCircleQuestion,
    faCircleHalfStroke,
-   faHome
+   faHome,
+   faCoins,
+   faGear,
+   faUser
 } from "@fortawesome/free-solid-svg-icons"
 
 
@@ -44,16 +48,115 @@ const userDefaultSugItems = [
    {userId: "user1111", caption: "cap1111"},
 ]
 
-const actionItems = [
-   {label: "Creator tools", icon: faHome},
-   {label: "English", icon: faEarthAmericas},
-   {label: "Feedback and help", icon: faCircleQuestion},
-   {label: "Dark mode", icon: faCircleHalfStroke}
+const actionItems_loggedOut = [
+   {
+      label: "Creator tools", 
+      icon: faHome,
+      to: "/creatortools"
+   },
+   {
+      label: "English", 
+      icon: faEarthAmericas,
+      children: [
+         {
+            label: "English"
+         },
+         {
+            label: "Tiếng Việt"
+         }
+      ]
+   },
+   {
+      label: "Feedback and help", 
+      icon: faCircleQuestion,
+      to: "/feedback"
+   },
+   {
+      label: "Dark mode", 
+      icon: faCircleHalfStroke,
+      children: [
+         {
+            label: "Use Device theme",
+            children: [
+               {
+                  label: "label 1",
+                  to: "/link"
+               },
+               {
+                  label: "label 2"
+               }
+            ]
+         },
+         {
+            label: "Dark mode"
+         }, 
+         {
+            label: "Light mode"
+         }
+      ]
+   }
+]
+
+const actionItems_loggedIn = [
+   {
+      label: "View profile",
+      icon: faUser,
+      to: "/profile"
+   },
+   {
+      label: "Get coins",
+      icon: faCoins,
+      to: "/getcoins"
+   }, 
+   {
+      label: "Creator tools", 
+      icon: faHome,
+      to: "/creatortools"
+   },
+   {
+      label: "Setting", 
+      icon: faGear,
+      to: "/settings"
+   },
+   {
+      label: "English", 
+      icon: faEarthAmericas,
+      children: [
+         {
+            label: "English"
+         },
+         {
+            label: "Tiếng Việt"
+         }
+      ]
+   },
+   {
+      label: "Feedback and help", 
+      icon: faCircleQuestion,
+      to: "/feedback"
+   },
+   {
+      label: "Dark mode", 
+      icon: faCircleHalfStroke,
+      children: [
+         {
+            label: "Use Device theme",
+         },
+         {
+            label: "Dark mode"
+         }, 
+         {
+            label: "Light mode"
+         }
+      ]
+   }
+
 ]
 
 export { 
    searchItems,
    defaultSearchItems,
    userDefaultSugItems,
-   actionItems
+   actionItems_loggedOut,
+   actionItems_loggedIn
 }

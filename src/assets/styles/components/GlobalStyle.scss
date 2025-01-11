@@ -19,6 +19,7 @@ body {
    line-height: variables.$line-height;
    text-rendering: optimizeSpeed;
    background-color: variables.$page-bg-color;
+   overflow: hidden;
 }
 
 input {

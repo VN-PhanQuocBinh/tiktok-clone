@@ -8,7 +8,9 @@ const DROPDOWN_ITEM_TYPE = {
    DEFAULT: "default",
    SEARCH_RESULT: "search_result",
    ACTIONS: "actions",
+   ACTIONS_HEADER: "actions_header",
    USER_SUGGEST: "user-suggest"
+
 }
 
 export { 

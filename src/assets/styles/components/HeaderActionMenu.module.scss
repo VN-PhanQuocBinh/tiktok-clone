@@ -1,0 +1,28 @@
+@use "../base/variables";
+
+.drop-down {
+   overflow: visible;
+   padding-bottom: 8px;
+   max-height: none;
+
+   &::before {
+      display: block;
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      right: 16px;
+      translate: 50% 0;
+      border-top: 0px;
+      border-right: 8px solid transparent;
+      border-left: 8px solid transparent;
+      border-bottom: 8px solid variables.$dropdown-bg-color;
+   }
+
+   .drop-item {
+      min-width: 232px;
+   }
+
+   .logout-action {
+      border-top: variables.$border-style;
+   }
+}
