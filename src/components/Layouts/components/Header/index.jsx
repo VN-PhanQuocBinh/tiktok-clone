@@ -10,12 +10,14 @@ import {
 import {
    faMessage
 } from "@fortawesome/free-regular-svg-icons"
+import { MessagePlane } from "../../../Icons"
 
 
 import SearchComponent from "../../../SearchComponent"
 import HeaderActionMenu from "../../../HeaderActionMenu"
 import Button from "../../../Button"
 import Badge from "../../../Badge"
+import Tooltip from "../../../Tooltip/Tooltip"
 import { useAuth } from "../../../../contexts/AuthContext"
 
 import { actionItems_loggedIn, actionItems_loggedOut } from "../../../../fakeDB"
@@ -26,15 +28,20 @@ const cx = classNames.bind(styles)
 
 export default function Header() {
    const [currentActionMenu, setCurrentActionMenu] = useState(actionItems_loggedOut)
-   const { isLoggedIn, login, logout } = useAuth()
+   const { isLoggedIn, login } = useAuth()
    const [isVisible, setIsVisible] = useState(false)
    const timerId = useRef()
 
    useEffect(() => {
-      if (isLoggedIn)
+      if (isLoggedIn) {
          setCurrentActionMenu(actionItems_loggedIn)
-      else 
+         console.log("login");      
+      }
+      else {
          setCurrentActionMenu(actionItems_loggedOut)
+         console.log("logout");
+      }
+      setIsVisible(false)
    }, [isLoggedIn])
    
    function handleMouseEnter() {
@@ -49,6 +56,14 @@ export default function Header() {
       }, 1000)
    }
 
+   // console.group("-->>> header re-render");
+
+   // console.log(currentActionMenu);
+
+   // console.groupEnd()
+   
+   
+   // console.log("header re-render");
    return (
       <header className={cx("header")}>
          <div className={cx("inner")}>
@@ -68,21 +83,28 @@ export default function Header() {
                />
 
                { isLoggedIn &&
-                  <Button
-                     transparent
-                     icon={faMessage}
-                     iconSize={"large"}
-                     className={cx("message-btn")}
+                  <Tooltip
+                     content={
+                        <span>Message</span>
+                     }
                   >
-                     <Badge
-                        label={"99+"}
-                        position={"top-right"}
-                        styleRule={{
-                           bottom: "50%",
-                           left: "50%"
-                        }}
-                     />
-                  </Button>
+                     <Button
+                        transparent
+                        icon={MessagePlane}
+                        iconSize={"large"}
+                        className={cx("message-btn")}
+                     >
+                        <Badge
+                           label={"99+"}
+                           position={"top-right"}
+                           styleRule={{
+                              bottom: "50%",
+                              left: "50%"
+                           }}
+                        />
+                     </Button>
+                  </Tooltip>
+                  
                }
                <i
                   onMouseEnter={handleMouseEnter}
@@ -103,6 +125,8 @@ export default function Header() {
                   <HeaderActionMenu
                      isVisible={isVisible}
                      items={ currentActionMenu }
+                     appearDelay={0}
+                     hideDelay={100}
                   />
                </i>
             </div>

@@ -12,17 +12,21 @@ import { faAngleLeft, faArrowRightToBracket } from "@fortawesome/free-solid-svg-
 
 const cx = classNames.bind(styles)
 
-export default function HeaderActionMenu({ isVisible, items }) {
+export default function HeaderActionMenu({ 
+   isVisible, 
+   items, 
+   appearDelay = 0, 
+   hideDelay = 0 
+}) {
    const initHistory = useCallback(() => {
       return [{ children: items }]
    }, [items])
 
    const [history, setHistory] = useState(initHistory)
    const [currentMenu, setCurrentMenu] = useState(history[0])
-
    const { isLoggedIn, logout } = useAuth()
 
-   useLayoutEffect(() => {
+   useEffect(() => {
       setCurrentMenu(history[history.length - 1])
 
       return () => {}
@@ -54,10 +58,12 @@ export default function HeaderActionMenu({ isVisible, items }) {
    function handleHide() {
       setHistory(initHistory)
    }
-
-   console.log("history: ", history);
-   console.log("current: ", currentMenu);
      
+   // console.group("Header action re-render")
+   // console.log("history: ", history)
+   // console.log("logged in: ", isLoggedIn)
+   // console.groupEnd()
+
    return (
       <DropDown 
          isVisible={isVisible} 
@@ -66,7 +72,7 @@ export default function HeaderActionMenu({ isVisible, items }) {
             appear: "fadeout",
             hide: "fadein"
          }}
-         delay={[0, 100]}
+         delay={[appearDelay, hideDelay]}
          className={cx("drop-down")}
          onHide={handleHide}
       >

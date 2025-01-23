@@ -38,13 +38,13 @@ export default function SearchComponent() {
       return () => {
          clearTimeout(timerId)
          setIsLoading(false)
-         console.log("reset Effect");       
+         // console.log("reset Effect");       
       }
    }, [query])
 
    useEffect(() => {
-      if (debounceQuery) 
-         console.log("Searching for: ", debounceQuery);
+      // if (debounceQuery) 
+      //    console.log("Searching for: ", debounceQuery);
    }, [debounceQuery])
 
    const handleChange = (e) => {
@@ -84,8 +84,7 @@ export default function SearchComponent() {
    ), [debounceQuery])
    
 
-   // Return
-   console.log("Search Component re-render");
+   // console.log("Search Component re-render");
    return (
       <div className={cx("search-wrapper")}>
          <div className={cx("search-box")}>

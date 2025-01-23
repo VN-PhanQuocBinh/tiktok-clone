@@ -1,11 +1,14 @@
+import { forwardRef, useImperativeHandle, useRef, Fragment} from "react"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import classNames from "classnames/bind"
 import styles from "../assets/styles/components/Button.module.scss"
 
 const cx = classNames.bind(styles)
-
-export default function Button({ 
+const defaultFunction = () => {}
+ 
+function Button({ 
    className,
    children,
    primary, 
@@ -14,17 +17,37 @@ export default function Button({
    label, 
    icon,
    iconSize = "small" ,
-   onClick = () => {}
-}) {
+   style,
+   onClick = defaultFunction,
+   onPointerEnter = defaultFunction,
+   onPointerLeave = defaultFunction,
+}, ref) {
+   const _ref = useRef(null)
+
+   useImperativeHandle(ref, () => {
+      const rect = _ref.current.getBoundingClientRect()
+      
+      return {
+         x: rect.x,
+         y: rect.y,
+         height: rect.height,
+         width: rect.width
+      }
+   }, [])
+
    const props = {
+      style,
+      ref: _ref,
       className: cx({
          "button": true,
          [className]: className,
          primary,
          secondary,
-         transparent, 
+         transparent,
       }),
-      onClick
+      onClick,
+      onPointerEnter,
+      onPointerLeave
    }
 
    const iconProps = {
@@ -42,3 +65,5 @@ export default function Button({
       </button>
    )
 }
+
+export default forwardRef(Button)

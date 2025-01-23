@@ -7,10 +7,7 @@ export default function Badge({
    label, 
    position = "top-left", 
    styleRule
-}) {
-
-   console.log(styleRule);
-   
+}) { 
    const props = {
       className: cx({
          "badge": true,

@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 
 import styles from "../assets/styles/components/DropDown.module.scss"
 import classNames from "classnames/bind"
@@ -17,17 +17,21 @@ function DropDown({
    onHide
 }) {
    const [isAppear, setIsAppear] = useState(isVisible)
-   
-   
+   const timerId = useRef()
+
    useEffect(() => {
       if (!isVisible) {
-         setTimeout(() => {
+         clearTimeout(timerId.current)
+
+         timerId.current = setTimeout(() => {
             // console.log(`hide ${delay[1]}`);
             setIsAppear(false)
             onHide && onHide()
          }, delay[1])
       } else {
-         setTimeout(() => {
+         clearTimeout(timerId.current)
+
+         timerId.current = setTimeout(() => {
             // console.log(`appear ${delay[0]}`);
             setIsAppear(true)
          }, delay[0])
@@ -35,7 +39,7 @@ function DropDown({
    }, [isVisible])
 
 
-   console.log("DropDown re-render");
+   // console.log("DropDown re-render");
    return (
       (isAppear && 
          <ul 
@@ -45,7 +49,7 @@ function DropDown({
                [animation?.hide]: !isVisible,
                [className]: className
             })}
-            // className={[cx("list", animation ? "fadeout" : ""), className || ""].join(" ")}
+
             style={{
                width: width || "100%",
             }}

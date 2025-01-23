@@ -25,8 +25,10 @@
 
       .user-actions {
          @include mixins.flex-row;
+         justify-content: flex-end;
          align-items: center;
          gap: 4px;
+         min-width: 240px;
 
          i {
             position: relative;
@@ -51,7 +53,7 @@
          }     
 
          .message-btn {
-            position: relative;
+            // position: relative;
             // padding: 0;
             // margin: 0 8px;
          }

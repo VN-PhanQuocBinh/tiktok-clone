@@ -1,0 +1,27 @@
+@use "../base/mixins";
+@use "../base/variables";
+
+.tooltip {
+   background-color: variables.$tooltip-bg-color;
+   color: variables.$tooltip-text-color;
+   padding: 8px 16px;
+   border-radius: 4px;
+   font-weight: 500;
+
+   &::after {
+      $arrow-size: 6px;
+
+      display: block;
+      content: "";
+      width: 0;
+      height: 0;
+      border-top: 0px;
+      border-left: $arrow-size solid transparent;
+      border-right: $arrow-size solid transparent;
+      border-bottom: $arrow-size solid variables.$tooltip-bg-color;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      translate: -50%;
+   }
+}
