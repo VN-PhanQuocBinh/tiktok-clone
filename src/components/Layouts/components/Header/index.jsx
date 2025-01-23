@@ -1,17 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import logo from "../../../../assets/images/logo.svg"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-   faCircleUser,
-   faEllipsisVertical,
-   faPlus,
-} from "@fortawesome/free-solid-svg-icons"
 import {
-   faMessage
-} from "@fortawesome/free-regular-svg-icons"
-import { MessagePlane } from "../../../Icons"
-
+   Icon_MessagePlane,
+   Icon_Plus,
+   Icon_CircleUser,
+   Icon_EllipsisVertical 
+} from "../../../Icons"
 
 import SearchComponent from "../../../SearchComponent"
 import HeaderActionMenu from "../../../HeaderActionMenu"
@@ -78,7 +73,7 @@ export default function Header() {
                   label={isLoggedIn ? "Upload" : "Log in"}
                   secondary={isLoggedIn}
                   primary={!isLoggedIn}
-                  icon={faPlus}
+                  icon={<Icon_Plus/>}
                   onClick={!isLoggedIn ? login : () => {}}
                />
 
@@ -90,8 +85,7 @@ export default function Header() {
                   >
                      <Button
                         transparent
-                        icon={MessagePlane}
-                        iconSize={"large"}
+                        icon={<Icon_MessagePlane/>}
                         className={cx("message-btn")}
                      >
                         <Badge
@@ -111,21 +105,15 @@ export default function Header() {
                   onMouseLeave={handleMouseLeave}
                >
                   {isLoggedIn ?
-                     <FontAwesomeIcon 
-                        className={cx("avt-icon")} 
-                        icon={faCircleUser} 
-                     />
+                     <Icon_CircleUser className={cx("avt-icon")}/>
                      :
-                     <FontAwesomeIcon 
-                        className={cx("actions-icon")} 
-                        icon={faEllipsisVertical} 
-                     /> 
+                     <Icon_EllipsisVertical className={cx("actions-icon")}/>
                   }   
                    
                   <HeaderActionMenu
                      isVisible={isVisible}
                      items={ currentActionMenu }
-                     appearDelay={0}
+                     appearDelay={0}              
                      hideDelay={100}
                   />
                </i>

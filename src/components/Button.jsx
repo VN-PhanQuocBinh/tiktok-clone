@@ -16,7 +16,6 @@ function Button({
    transparent, 
    label, 
    icon,
-   iconSize = "small" ,
    style,
    onClick = defaultFunction,
    onPointerEnter = defaultFunction,
@@ -53,13 +52,13 @@ function Button({
    const iconProps = {
       className: cx({
          "icon": true,
-         [iconSize]: iconSize
       })
    }
 
    return (
       <button {...props}>
-         {icon ? <FontAwesomeIcon {...iconProps} icon={icon}/> : ""}
+         {icon || Fragment}
+         {/* {icon ? <FontAwesomeIcon {...iconProps} icon={icon}/> : ""} */}
          {label && <span>{label}</span>}
          {children}
       </button>

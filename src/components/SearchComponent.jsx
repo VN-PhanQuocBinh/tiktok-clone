@@ -2,11 +2,12 @@ import DropDown from './Dropdown'
 import DropDownItem from './DropDownItem'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import { 
-   faMagnifyingGlass,
-   faCircleXmark, 
-   faCircleNotch 
-} from "@fortawesome/free-solid-svg-icons"
+   Icon_Loading, 
+   Icon_Clear,
+   Icon_Search 
+} from './Icons'
 
 import { searchItems, userDefaultSugItems } from '../fakeDB'
 import { DROPDOWN_ITEM_TYPE as TYPE } from '../constants'
@@ -27,24 +28,22 @@ export default function SearchComponent() {
    const [isLoading, setIsLoading] = useState(false)
 
    useEffect(() => {
+      if (query !== '')
+         setIsLoading(true)
 
-      let timerId = setTimeout(() => {
-         // if (query) 
-         //    setIsLoading(true)
-         
+      let timerId = setTimeout(() => {      
          setDebounceQuery(query)
+         setIsLoading(false)
       }, 500)
 
       return () => {
-         clearTimeout(timerId)
-         setIsLoading(false)
-         // console.log("reset Effect");       
+         clearTimeout(timerId)      
       }
    }, [query])
 
    useEffect(() => {
-      // if (debounceQuery) 
-      //    console.log("Searching for: ", debounceQuery);
+      if (debounceQuery) 
+         console.log("Searching for: ", debounceQuery);
    }, [debounceQuery])
 
    const handleChange = (e) => {
@@ -97,23 +96,17 @@ export default function SearchComponent() {
                onBlur={() => setShowSearchResults(false)}
             />
 
-            {isLoading && (
-               <FontAwesomeIcon 
-                  className={cx("loading-icon")}
-                  icon={faCircleNotch} 
-               />
-            )}
+            {isLoading && <Icon_Loading className={cx('loading-icon')}/>}
 
-            {(query && !isLoading) && (
-               <FontAwesomeIcon 
-                  className={cx("clear-icon")} 
-                  icon={faCircleXmark} 
+            {(query && !isLoading) && 
+               <Icon_Clear 
+                  className={cx('clear-icon')} 
                   onClick={() => setQuery("")}
-               /> 
-            )}
+               />
+            }
 
             <button>
-               <FontAwesomeIcon className={cx("search-btn")} icon={faMagnifyingGlass} />
+               <Icon_Search className={cx("search-btn")}/>
             </button>
          </div>  
 

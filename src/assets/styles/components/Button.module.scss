@@ -49,10 +49,6 @@ $styleColor: (
 
    .icon {
       font-size: variables.$button-icon-size-small;
-
-      &.large {
-         font-size: variables.$button-icon-size-large;
-      }
    }
 
    > span {
