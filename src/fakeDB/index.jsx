@@ -1,14 +1,12 @@
-import { icon } from "@fortawesome/fontawesome-svg-core"
-import { 
-   faEarthAmericas,
-   faCircleQuestion,
-   faCircleHalfStroke,
-   faHome,
-   faCoins,
-   faGear,
-   faUser
-} from "@fortawesome/free-solid-svg-icons"
-
+import {
+   Icon_Earth,
+   Icon_Question,
+   Icon_HalfStroke,
+   Icon_CreatorTool,
+   Icon_Coin,
+   Icon_Gear,
+   Icon_User
+} from "../assets/Icons";
 
 const searchItems = [
    { label: "You might like 1" },
@@ -17,7 +15,7 @@ const searchItems = [
    { label: "You might like 4" },
    { label: "You might like 5" },
    { label: "You might like 6" },
-]
+];
 
 const defaultSearchItems = [
    { label: "You might like 1" },
@@ -33,130 +31,129 @@ const defaultSearchItems = [
    { label: "You might like 6" },
    { label: "You might like 6" },
    { label: "You might like 6" },
-]
+];
 
 const userDefaultSugItems = [
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-   {userId: "user1111", caption: "cap1111"},
-]
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+   { userId: "user1111", caption: "cap1111" },
+];
 
 const actionItems_loggedOut = [
    {
-      label: "Creator tools", 
-      icon: faHome,
-      to: "/creatortools"
+      label: "Creator tools",
+      icon: Icon_CreatorTool,
+      to: "/creatortools",
    },
    {
-      label: "English", 
-      icon: faEarthAmericas,
+      label: "English",
+      icon: Icon_Earth,
       children: [
          {
-            label: "English"
+            label: "English",
          },
          {
-            label: "Tiếng Việt"
-         }
-      ]
+            label: "Tiếng Việt",
+         },
+      ],
    },
    {
-      label: "Feedback and help", 
-      icon: faCircleQuestion,
-      to: "/feedback"
+      label: "Feedback and help",
+      icon: Icon_Question,
+      to: "/feedback",
    },
    {
-      label: "Dark mode", 
-      icon: faCircleHalfStroke,
+      label: "Dark mode",
+      icon: Icon_HalfStroke,
       children: [
          {
             label: "Use Device theme",
             children: [
                {
                   label: "label 1",
-                  to: "/link"
+                  to: "/link",
                },
                {
-                  label: "label 2"
-               }
-            ]
+                  label: "label 2",
+               },
+            ],
          },
          {
-            label: "Dark mode"
-         }, 
+            label: "Dark mode",
+         },
          {
-            label: "Light mode"
-         }
-      ]
-   }
-]
+            label: "Light mode",
+         },
+      ],
+   },
+];
 
 const actionItems_loggedIn = [
    {
       label: "View profile",
-      icon: faUser,
-      to: "/profile"
+      icon: Icon_User,
+      to: "/profile",
    },
    {
       label: "Get coins",
-      icon: faCoins,
-      to: "/getcoins"
-   }, 
-   {
-      label: "Creator tools", 
-      icon: faHome,
-      to: "/creatortools"
+      icon: Icon_Coin,
+      to: "/getcoins",
    },
    {
-      label: "Setting", 
-      icon: faGear,
-      to: "/settings"
+      label: "Creator tools",
+      icon: Icon_CreatorTool,
+      to: "/creatortools",
    },
    {
-      label: "English", 
-      icon: faEarthAmericas,
+      label: "Setting",
+      icon: Icon_Gear,
+      to: "/settings",
+   },
+   {
+      label: "English",
+      icon: Icon_Earth,
       children: [
          {
-            label: "English"
+            label: "English",
          },
          {
-            label: "Tiếng Việt"
-         }
-      ]
+            label: "Tiếng Việt",
+         },
+      ],
    },
    {
-      label: "Feedback and help", 
-      icon: faCircleQuestion,
-      to: "/feedback"
+      label: "Feedback and help",
+      icon: Icon_Question,
+      to: "/feedback",
    },
    {
-      label: "Dark mode", 
-      icon: faCircleHalfStroke,
+      label: "Dark mode",
+      icon: Icon_HalfStroke,
       children: [
          {
             label: "Use Device theme",
          },
          {
-            label: "Dark mode"
-         }, 
+            label: "Dark mode",
+         },
          {
-            label: "Light mode"
-         }
-      ]
-   }
+            label: "Light mode",
+         },
+      ],
+   },
+];
 
-]
-
-export { 
+export {
    searchItems,
    defaultSearchItems,
    userDefaultSugItems,
    actionItems_loggedOut,
-   actionItems_loggedIn
-}
+   actionItems_loggedIn,
+};

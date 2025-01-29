@@ -28,7 +28,7 @@
          justify-content: flex-end;
          align-items: center;
          gap: 4px;
-         min-width: 240px;
+         min-width: 280px;
 
          i {
             position: relative;
@@ -48,14 +48,24 @@
             }    
             
             .avt-icon {
-               font-size: 3.2rem;
+               $size: 42px;
+               width: $size;
+               height: $size;
+               object-fit: contain;
+               border-radius: 999px;
+               overflow: hidden;
             }
          }     
 
          .message-btn {
-            // position: relative;
-            // padding: 0;
-            // margin: 0 8px;
+            $size: 40px;
+            padding: 0;
+            width: $size;
+            height: $size;
+
+            .message-icon {
+               fill: #fff;
+            }
          }
       }
    }

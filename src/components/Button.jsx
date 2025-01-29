@@ -1,7 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef, Fragment} from "react"
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-
 import classNames from "classnames/bind"
 import styles from "../assets/styles/components/Button.module.scss"
 

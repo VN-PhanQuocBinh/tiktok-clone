@@ -37,8 +37,6 @@ export default function Tooltip({ children, content }) {
       }  
    }, [targetRect])
 
-   
-   console.log("tooltip re-render");
    return (
       <>
          {cloneChild}  

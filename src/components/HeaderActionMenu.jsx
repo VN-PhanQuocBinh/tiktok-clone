@@ -8,9 +8,16 @@ import { DROPDOWN_ITEM_TYPE as TYPE } from "../constants"
 
 import classNames from "classnames/bind"
 import styles from "../assets/styles/components/HeaderActionMenu.module.scss"
-import { faAngleLeft, faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons"
+
+
+import {
+   Icon_AngleLeft,
+   Icon_ArrowRightToBracket
+} from "../assets/Icons"
 
 const cx = classNames.bind(styles)
+
+
 
 export default function HeaderActionMenu({ 
    isVisible, 
@@ -18,21 +25,29 @@ export default function HeaderActionMenu({
    appearDelay = 0, 
    hideDelay = 0 
 }) {
-   const initHistory = useCallback(() => {
-      return [{ children: items }]
-   }, [items])
-
-   const [history, setHistory] = useState(initHistory)
-   const [currentMenu, setCurrentMenu] = useState(history[0])
+   const [history, setHistory] = useState([])
+   const [currentMenu, setCurrentMenu] = useState()
    const { isLoggedIn, logout } = useAuth()
 
-   useEffect(() => {
-      setCurrentMenu(history[history.length - 1])
+   // useLayoutEffect(() => {
+   //    setHistory([{children: items}])
+   // }, [items])
 
+   useLayoutEffect(() => {
+      const resetValue = {children: items}
+      // console.log("init ", resetValue);
+      
+      // setCurrentMenu(resetValue)
+      setHistory([resetValue])
+      
       return () => {}
+   }, [items])
+
+   useLayoutEffect(() => {
+      setCurrentMenu(history[history.length - 1])
    }, [history])
 
-   function handleClick(index) {
+   const handleClick = useCallback((index) => {
       const clickedItem = history[history.length - 1].children[index]
       console.log(history[history.length - 1]);
       
@@ -41,10 +56,10 @@ export default function HeaderActionMenu({
          setHistory((prev) => [...prev, clickedItem])  
       } else {
          console.log(clickedItem);        
-      }     
-   }
+      }   
+   }, [history])
 
-   function handleBack() {
+   const handleBack = () => {
       setHistory((prev) => {
          let len = prev.length
 
@@ -55,14 +70,11 @@ export default function HeaderActionMenu({
       })
    }
 
-   function handleHide() {
-      setHistory(initHistory)
-   }
-     
-   // console.group("Header action re-render")
-   // console.log("history: ", history)
-   // console.log("logged in: ", isLoggedIn)
-   // console.groupEnd()
+   const handleHide = useCallback(() => { 
+      setHistory([{children: items}])
+   }, [items]) 
+
+
 
    return (
       <DropDown 
@@ -74,39 +86,42 @@ export default function HeaderActionMenu({
          }}
          delay={[appearDelay, hideDelay]}
          className={cx("drop-down")}
-         onHide={handleHide}
+         // onHide={handleHide}
       >
+         {/* {console.log(history)} */}
          {history.length > 1 && 
             <DropDownItem
                type={TYPE.ACTIONS_HEADER}
                itemClick={handleBack}
                item={{
                   label: currentMenu.label,
-                  icon: faAngleLeft
+                  icon: Icon_AngleLeft
                }}
             />
          }
 
-         {currentMenu.children.map((item, index) => (
+         {currentMenu?.children.map((item, index) => (
             <DropDownItem
                key={index}
                type={TYPE.ACTIONS}
                item={item}
                itemClick={() => handleClick(index)}
                className={cx("drop-item")}
+               icon_className={cx("icon")}
             />
          ))}
 
          {(isLoggedIn && history.length <= 1) && 
             <DropDownItem
-            type={TYPE.ACTIONS}
-            itemClick={logout}
-            item={{
-               label: "Log out",
-               icon: faArrowRightToBracket
-            }}
-            className={cx("logout-action")}
-         />
+               type={TYPE.ACTIONS}
+               itemClick={logout}
+               item={{
+                  label: "Log out",
+                  icon: Icon_ArrowRightToBracket
+               }}
+               className={cx("logout-action")}
+               icon_className={cx("icon")}
+            />
          }
       </DropDown>
    )

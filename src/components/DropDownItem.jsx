@@ -1,10 +1,10 @@
 import { Link } from "react-router"
+import { memo } from "react"
 import { DROPDOWN_ITEM_TYPE as TYPE } from '../constants'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { 
-   faCircle
-} from "@fortawesome/free-solid-svg-icons"
+   Icon_Circle
+} from "../assets/Icons"
 
 import styles from "../assets/styles/components/DropDownItem.module.scss"
 import classNames from 'classnames/bind'
@@ -13,11 +13,12 @@ import { Fragment } from "react"
 const cx = classNames.bind(styles)
 
 
-export default function DropDownItem({ 
+function DropDownItem({ 
    type, 
    item, 
    itemClick = () => {}, 
-   className 
+   className,
+   icon_className 
 }) {
 
    let Component = Fragment
@@ -28,7 +29,7 @@ export default function DropDownItem({
 
       common_Props = {
          to: item.to,
-         target: item.to ? "_blank" : ""
+         target: item.to ? "_self" : ""
       }
    }
 
@@ -45,7 +46,7 @@ export default function DropDownItem({
 
          content = (
             <>
-               <FontAwesomeIcon className={cx("icon")} icon={faCircle} />
+               <Icon_Circle className={cx("icon")} />
                <h4 className={cx("text")}>{item.label}</h4>
             </>
          )
@@ -71,13 +72,12 @@ export default function DropDownItem({
             className: cx("drop-item", {[className]: className}),
             onClick: itemClick
          }
-
+         
          content = (
             <>
                {!!item.icon && 
-                  <FontAwesomeIcon 
-                     className={cx("icon", "actions")} 
-                     icon={item.icon} 
+                  <item.icon 
+                     className={cx("icon", "actions", {[icon_className]: icon_className})} 
                      color=""
                   />
                }
@@ -96,9 +96,8 @@ export default function DropDownItem({
          content = (
             <>
                {hasIcon && 
-                  <FontAwesomeIcon 
+                  <item.icon 
                      className={cx("icon", "actions")} 
-                     icon={item.icon} 
                      onClick={itemClick}
                   />
                }
@@ -110,6 +109,8 @@ export default function DropDownItem({
          throw Error("Unknown TYPE: " + type)
    }
 
+   console.log("item re-render");
+   
    return (
       <li {...props}>
          <Component {...common_Props}>
@@ -118,3 +119,6 @@ export default function DropDownItem({
       </li>
    )
 }
+
+
+export default memo(DropDownItem)

@@ -1,54 +1,59 @@
-import DropDown from './Dropdown'
-import DropDownItem from './DropDownItem'
+import DropDown from "./Dropdown";
+import DropDownItem from "./DropDownItem";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Icon_Loading, Icon_Clear, Icon_Search } from "../assets/Icons";
 
-import { 
-   Icon_Loading, 
-   Icon_Clear,
-   Icon_Search 
-} from './Icons'
+import { searchItems, userDefaultSugItems } from "../fakeDB";
+import { DROPDOWN_ITEM_TYPE as TYPE } from "../constants";
 
-import { searchItems, userDefaultSugItems } from '../fakeDB'
-import { DROPDOWN_ITEM_TYPE as TYPE } from '../constants'
+import styles from "../assets/styles/components/SearchComponent.module.scss";
+import classNames from "classnames/bind";
+import { useEffect, useMemo, useState, useRef } from "react";
 
-import styles from "../assets/styles/components/SearchComponent.module.scss"
-import classNames from "classnames/bind"
-import { useEffect, useMemo, useState } from 'react'
-
-const cx = classNames.bind(styles)
-
-
+const cx = classNames.bind(styles);
 
 export default function SearchComponent() {
-   const [query, setQuery] = useState("")
-   const [debounceQuery, setDebounceQuery] = useState(query)
+   const [query, setQuery] = useState("");
+   const [debounceQuery, setDebounceQuery] = useState(query);
 
-   const [showSearchResults, setShowSearchResults] = useState(false)
-   const [isLoading, setIsLoading] = useState(false)
+   const [showSearchResults, setShowSearchResults] = useState(false);
+   const [isLoading, setIsLoading] = useState(false);
+
+   const loadingTimerId = useRef(null)
 
    useEffect(() => {
-      if (query !== '')
-         setIsLoading(true)
+      let timerId = setTimeout(() => {
+         setDebounceQuery(query);
+      }, 500);
 
-      let timerId = setTimeout(() => {      
-         setDebounceQuery(query)
-         setIsLoading(false)
-      }, 500)
+      clearTimeout(loadingTimerId.current)
+      setIsLoading(false)
 
       return () => {
-         clearTimeout(timerId)      
-      }
-   }, [query])
+         clearTimeout(timerId);
+         // clearTimeout(loadingTimerId)
+      };
+   }, [query]);
 
    useEffect(() => {
-      if (debounceQuery) 
+      if (debounceQuery) {
          console.log("Searching for: ", debounceQuery);
-   }, [debounceQuery])
+
+         setIsLoading(true)
+
+         loadingTimerId.current = setTimeout(() => {
+            setIsLoading(false)
+         }, 2000)
+      }
+
+      return () => {
+         setIsLoading(false)
+      }
+   }, [debounceQuery]);
 
    const handleChange = (e) => {
-      setQuery(e.target.value)
-   }
+      setQuery(e.target.value);
+   };
 
    const dropDownChildren = useMemo(() => (
       <>
@@ -81,9 +86,8 @@ export default function SearchComponent() {
          <li className={cx("more-title")}>View all results for "{query}"</li>
       </>
    ), [debounceQuery])
-   
 
-   // console.log("Search Component re-render");
+   console.log("Search Component re-render");
    return (
       <div className={cx("search-wrapper")}>
          <div className={cx("search-box")}>
@@ -96,25 +100,23 @@ export default function SearchComponent() {
                onBlur={() => setShowSearchResults(false)}
             />
 
-            {isLoading && <Icon_Loading className={cx('loading-icon')}/>}
+            {isLoading && <Icon_Loading className={cx("loading-icon")} />}
 
-            {(query && !isLoading) && 
-               <Icon_Clear 
-                  className={cx('clear-icon')} 
+            {query && !isLoading && (
+               <Icon_Clear
+                  className={cx("clear-icon")}
                   onClick={() => setQuery("")}
                />
-            }
+            )}
 
             <button>
-               <Icon_Search className={cx("search-btn")}/>
+               <Icon_Search className={cx("search-btn")} />
             </button>
-         </div>  
+         </div>
 
-         <DropDown 
-            isVisible={showSearchResults}
-         >
+         <DropDown isVisible={showSearchResults}>
             {dropDownChildren}
          </DropDown>
       </div>
-   )  
+   );
 }
