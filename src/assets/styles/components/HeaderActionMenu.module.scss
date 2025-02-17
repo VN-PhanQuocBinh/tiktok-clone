@@ -1,9 +1,9 @@
 @use "../base/variables";
 
 .drop-down {
-   overflow: visible;
+   // overflow: visible;
    padding-bottom: 8px;
-   max-height: none;
+   // max-height: none;
    right: -16px;
 
    &::before {

@@ -86,7 +86,7 @@ export default function HeaderActionMenu({
          }}
          delay={[appearDelay, hideDelay]}
          className={cx("drop-down")}
-         // onHide={handleHide}
+         onHide={handleHide}
       >
          {/* {console.log(history)} */}
          {history.length > 1 && 

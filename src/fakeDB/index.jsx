@@ -5,7 +5,7 @@ import {
    Icon_CreatorTool,
    Icon_Coin,
    Icon_Gear,
-   Icon_User
+   Icon_User,
 } from "../assets/Icons";
 
 const searchItems = [
@@ -46,6 +46,29 @@ const userDefaultSugItems = [
    { userId: "user1111", caption: "cap1111" },
 ];
 
+const actionItems_languages = [
+   { label: "English" },
+   { label: "Tiếng Việt" },
+   { label: "中文" },
+   { label: "日本語" },
+   { label: "한국어" },
+   { label: "Español" },
+   { label: "Français" },
+   { label: "Deutsch" },
+   { label: "Português" },
+   { label: "Italiano" },
+   { label: "Русский" },
+   { label: "العربية" },
+   { label: "हिन्दी" },
+   { label: "বাঙালি" },
+   { label: "اردو" },
+   { label: "ລາວ" },
+   { label: "ខ្មែរ" },
+   { label: "မြန်မာ" },
+   { label: "Filipino" },
+   { label: "Indonesia" },
+];
+
 const actionItems_loggedOut = [
    {
       label: "Creator tools",
@@ -55,14 +78,7 @@ const actionItems_loggedOut = [
    {
       label: "English",
       icon: Icon_Earth,
-      children: [
-         {
-            label: "English",
-         },
-         {
-            label: "Tiếng Việt",
-         },
-      ],
+      children: actionItems_languages,
    },
    {
       label: "Feedback and help",
@@ -119,14 +135,7 @@ const actionItems_loggedIn = [
    {
       label: "English",
       icon: Icon_Earth,
-      children: [
-         {
-            label: "English",
-         },
-         {
-            label: "Tiếng Việt",
-         },
-      ],
+      children: actionItems_languages
    },
    {
       label: "Feedback and help",

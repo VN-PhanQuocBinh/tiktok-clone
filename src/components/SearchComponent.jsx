@@ -111,7 +111,7 @@ export default function SearchComponent() {
       </>
    ), [searchResults])
 
-   console.log("Search Component re-render");
+   // console.log("Search Component re-render");
    return (
       <div className={cx("search-wrapper")}>
          <div className={cx("search-box")}>
