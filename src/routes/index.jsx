@@ -5,24 +5,26 @@ import Profile from "../pages/Profile";
 
 import { LAYOUT_TYPE } from "../constants";
 
+import routesConfig from "../config/routes";
+
 const publicRoutes = [
   {
-    path: "/",
+    path: routesConfig.home,
     element: Home,
     layout: LAYOUT_TYPE.DEFAULT
   },
   {
-    path: "/following",
+    path: routesConfig.following,
     element: Following,
     layout: LAYOUT_TYPE.NO_LAYOUT
   },
   {
-    path: "/chat",
+    path: routesConfig.chat,
     element: Chat,
     layout: LAYOUT_TYPE.HEADER_ONLY
   },
   {
-    path: "/profile/:nickname?",
+    path: routesConfig.profile,
     element: Profile,
     layout: LAYOUT_TYPE.SIDEBAR_ONLY
   }

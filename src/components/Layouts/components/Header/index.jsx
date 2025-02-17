@@ -1,4 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react"
+import { Link } from "react-router"
+import routesConfig from "../../../../config/routes"
 
 import logo from "../../../../assets/images/logo.svg"
 
@@ -65,9 +67,9 @@ export default function Header() {
    return (
       <header className={cx("header")}>
          <div className={cx("inner")}>
-            <div className={cx("logo")}>
+            <Link to={routesConfig.home} className={cx("logo")}>
                <img src={logo} alt="" />
-            </div>
+            </Link>
 
             <SearchComponent/>
             
@@ -130,9 +132,7 @@ export default function Header() {
                         </Button>
                      </Tooltip>
 
-                  </>
-                  
-                  
+                  </> 
                }
                <i
                   onMouseEnter={handleMouseEnter}

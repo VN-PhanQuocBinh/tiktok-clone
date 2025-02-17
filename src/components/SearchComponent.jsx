@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import { useDebounce } from "../hooks/";
+
+import * as searchServices from "../services/apiService/searchService"
 
 import DropDown from "./Dropdown";
 import DropDownItem from "./DropDownItem";
@@ -20,56 +22,28 @@ export default function SearchComponent() {
    const [isLoading, setIsLoading] = useState(false);
 
    const DOM_input = useRef(null)
-
-   // useEffect(() => {
-   //    let timerId = setTimeout(() => {
-   //       setDebounceQuery(query.trim());
-   //    }, 500);
-
-   //    return () => {
-   //       clearTimeout(timerId);
-   //    };
-   // }, [query]);
-
    const debounceQuery = useDebounce(query, 500)
-
-   const fetchAPI = async (query) => {
-      try {
-         const API_query = `https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(query)}&type=less`
-         const response = await fetch(API_query)
-         if (!response.ok) {
-            throw Error("Network response was not ok!")
-         }
-
-         const responseData = await response.json()
-         const data = responseData.data
-
-         return data
-      } catch (error) {
-         console.log("Error fetching search result: ", error)
-      }
-   }
 
    useEffect(() => {
       if (debounceQuery) {
-         // console.log("Searching for: ", debounceQuery);
-         setIsLoading(true)
+         const fetchAPI = async () => {
+            setIsLoading(true)
 
-         fetchAPI(debounceQuery)
-            .then(data => {
-               // console.log(data);
-               if (data.length > 0) {
-                  setShowSearchResults(true)
-                  setSearchResults(data)
-               } else {
-                  setSearchResults([])
-               }
-               
-               setIsLoading(false)
-            })
-            .catch(error => {
-               console.log(error);
-            })
+            const result = await searchServices.search(debounceQuery)
+            await console.log(result);
+            
+
+            if (result.length > 0) {
+               setSearchResults(result)
+            } else {
+               setSearchResults([])
+            }
+
+            setIsLoading(false)
+         }
+
+         fetchAPI()
+
       } else {
          setSearchResults([])
       }
@@ -77,21 +51,36 @@ export default function SearchComponent() {
 
 
    useEffect(() => {
-      if (searchResults.length == 0) {
+      if (searchResults?.length == 0) {
          setShowSearchResults(false)
+      } else {
+         setShowSearchResults(true)
       }
    }, [searchResults])
 
+   // hide results when click clear button
+   useEffect(() => {
+      if (query == "")
+         setShowSearchResults(false)
+   }, [query])
+
    const handleChange = (e) => {
       let newValue = e.target.value
-      newValue = newValue.trimStart()
-      setQuery(newValue);
+
+      if (!newValue.startsWith(" ")) {
+         setQuery(newValue)
+      }
+      // newValue = newValue.trimStart()
    };
 
    const handleClickClear = () => {
       setQuery("")
       DOM_input.current.focus()
    }
+
+   const preventFocus = useCallback((e) => {
+      e.preventDefault()
+   })
 
    const handleFocusInput = () => {
       if (debounceQuery !== '') {
@@ -145,7 +134,7 @@ export default function SearchComponent() {
             )}
 
             <button>
-               <Icon_Search className={cx("search-btn")} />
+               <Icon_Search className={cx("search-btn")} onMouseDown={preventFocus}/>
             </button>
          </div>
 
