@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 
 import { publicRoutes } from "./routes";
 
-import { DefaultLayout, HeaderOnlyLayout } from "./components/Layouts";
+import { DefaultLayout, HeaderOnlyLayout, SidebarOnlyLayout } from "./components/Layouts";
 import { LAYOUT_TYPE } from "./constants";
 
 import { AuthProvider } from "./contexts/AuthContext";
@@ -25,6 +25,9 @@ function App() {
                 break;
               case LAYOUT_TYPE.DEFAULT:
                 Layout = DefaultLayout;
+                break;
+              case LAYOUT_TYPE.SIDEBAR_ONLY:
+                Layout = SidebarOnlyLayout
                 break;
               default:
                 throw Error("Unknown Layout: " + route.layout);

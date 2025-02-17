@@ -1,7 +1,8 @@
 const LAYOUT_TYPE = {
    DEFAULT: "default",
    HEADER_ONLY: "header_only",
-   NO_LAYOUT: "no_layout" 
+   SIDEBAR_ONLY: "sidebar_only",
+   NO_LAYOUT: "no_layout", 
 }
 
 const DROPDOWN_ITEM_TYPE = {

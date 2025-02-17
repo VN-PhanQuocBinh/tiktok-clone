@@ -1,6 +1,7 @@
 import { Link } from "react-router"
 import { memo } from "react"
 import { DROPDOWN_ITEM_TYPE as TYPE } from '../constants'
+import Image from "../components/Image"
 
 import { 
    Icon_Circle
@@ -58,13 +59,13 @@ function DropDownItem({
          }
 
          content = (
-            <>
-               <img className={cx("avt")} />
+            <Link to={`/profile/${item.nickname}`}>
+               <Image src={item.avatar} className={cx("avt")} />
                <div className={cx("user-info")} >
-                  <h4 className={cx("text")}>{item.userId}</h4>
-                  <p>{item.caption}</p>
+                  <h4 className={cx("text")}>{item.nickname}</h4>
+                  <p>{item.full_name}</p>
                </div>
-            </>
+            </Link>
          )
          break
       case TYPE.ACTIONS:

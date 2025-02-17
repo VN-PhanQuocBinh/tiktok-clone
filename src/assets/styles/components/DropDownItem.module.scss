@@ -45,13 +45,13 @@ li {
 }
 
 li.user-suggest {
-   img {
+   .avt {
       $rec-size: 40px;
-      display: block;
+      // display: block;
       width: $rec-size;
       height: $rec-size;
-      background-color: #ccc;
       border-radius: 50%;
+      object-fit: cover;
    }
 
    .user-info {

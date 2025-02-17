@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react"
+import { memo, useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import styles from "../assets/styles/components/DropDown.module.scss"
 import classNames from "classnames/bind"
@@ -8,7 +8,8 @@ import classNames from "classnames/bind"
 let cx = classNames.bind(styles)
 
 function DropDown({ 
-   isVisible, 
+   isVisible,
+   onBlur,
    width, 
    animation, 
    delay = [0, 0], 
@@ -18,11 +19,11 @@ function DropDown({
 }) {
    const [isAppear, setIsAppear] = useState(isVisible)
    const timerId = useRef()
+   const DOM_container = useRef(null)
 
    useEffect(() => {
       if (!isVisible) {
          clearTimeout(timerId.current)
-
          timerId.current = setTimeout(() => {
             // console.log(`hide ${delay[1]}`);
             setIsAppear(false)
@@ -30,7 +31,6 @@ function DropDown({
          }, delay[1])
       } else {
          clearTimeout(timerId.current)
-
          timerId.current = setTimeout(() => {
             // console.log(`appear ${delay[0]}`);
             setIsAppear(true)
@@ -38,6 +38,20 @@ function DropDown({
       }
    }, [isVisible])
 
+   useEffect(() => {
+      if (onBlur) {
+         function handleClickOutside(e) {
+            if (!DOM_container.current?.contains(e.target)) 
+               onBlur()
+         }
+   
+         document.addEventListener("mousedown", handleClickOutside)
+   
+         return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+         }
+      }
+   }, [])
 
    // console.log("DropDown re-render");
    return (
@@ -47,12 +61,14 @@ function DropDown({
                "list": true, 
                [animation?.appear]: animation?.appear,
                [animation?.hide]: !isVisible,
-               [className]: className
+               [className]: className,
             })}
 
             style={{
                width: width || "100%",
             }}
+
+            ref={DOM_container}
          >
             {children}     
          </ul>

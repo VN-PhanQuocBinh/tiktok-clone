@@ -14,10 +14,6 @@ export default function Image({
 
    return (
       <img
-         style={{
-            // width: '100%',
-            // height: '100%'
-         }}
          onError={HandleError}
          src={fallback || src} 
          {...props} 

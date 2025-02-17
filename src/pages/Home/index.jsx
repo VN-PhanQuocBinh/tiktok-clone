@@ -1,8 +1,6 @@
 import styles from "./Home.module.scss"
 import classNames from "classnames/bind"
 
-import DropDown from "../../components/Dropdown"
-
 let cx = classNames.bind(styles)
 
 export default function Home() {
