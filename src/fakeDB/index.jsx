@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
    Icon_Earth,
    Icon_Question,
@@ -7,6 +8,7 @@ import {
    Icon_Gear,
    Icon_User,
 } from "../assets/Icons";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const searchItems = [
    { label: "You might like 1" },
@@ -159,10 +161,61 @@ const actionItems_loggedIn = [
    },
 ];
 
+const navList = [
+   {
+      label: "For you",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "Explore",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "Following",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "Friends",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "Upload",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "Activity",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "Messanges",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "LIVE",
+      icon: () => {},
+      to: "/"
+   },
+   {
+      label: "Profile",
+      icon: () => {},
+      to: "/"
+   }
+]
+
 export {
    searchItems,
    defaultSearchItems,
    userDefaultSugItems,
    actionItems_loggedOut,
    actionItems_loggedIn,
+   navList
 };
+
+

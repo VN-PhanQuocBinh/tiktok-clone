@@ -1,19 +1,19 @@
-import { useEffect, useState, useLayoutEffect, useCallback } from "react"
-import { useAuth } from "../contexts/AuthContext"
+import { useState, useLayoutEffect, useCallback } from "react"
+import { useAuth } from "../../../contexts/AuthContext"
 
-import DropDown from "./DropDown"
-import DropDownItem from "./DropDownItem"
+import DropDown from "../../../components/DropDown"
+import DropDownItem from "../../../components/DropDownItem"
 
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../constants"
+import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants"
 
 import classNames from "classnames/bind"
-import styles from "../assets/styles/components/HeaderActionMenu.module.scss"
+import styles from "../../../assets/styles/components/HeaderActionMenu.module.scss"
 
 
 import {
    Icon_AngleLeft,
    Icon_ArrowRightToBracket
-} from "../assets/Icons"
+} from "../../../assets/Icons"
 
 const cx = classNames.bind(styles)
 
@@ -75,7 +75,6 @@ export default function HeaderActionMenu({
    }, [items]) 
 
 
-
    return (
       <DropDown 
          isVisible={isVisible} 
@@ -88,7 +87,6 @@ export default function HeaderActionMenu({
          className={cx("drop-down")}
          onHide={handleHide}
       >
-         {/* {console.log(history)} */}
          {history.length > 1 && 
             <DropDownItem
                type={TYPE.ACTIONS_HEADER}

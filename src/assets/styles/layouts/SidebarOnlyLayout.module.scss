@@ -1,0 +1,7 @@
+@use "../base/mixins";
+
+
+.container {
+   height: 100vh;
+   @include mixins.flex-row;
+}

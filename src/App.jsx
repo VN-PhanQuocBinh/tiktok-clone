@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 
 import { publicRoutes } from "./routes";
 
-import { DefaultLayout, HeaderOnlyLayout, SidebarOnlyLayout } from "./components/Layouts";
+import { DefaultLayout, HeaderOnlyLayout, SidebarOnlyLayout } from "./layouts";
 import { LAYOUT_TYPE } from "./constants";
 
 import { AuthProvider } from "./contexts/AuthContext";

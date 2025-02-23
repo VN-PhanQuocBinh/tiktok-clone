@@ -5,26 +5,26 @@ import Profile from "../pages/Profile";
 
 import { LAYOUT_TYPE } from "../constants";
 
-import routesConfig from "../config/routes";
+import config from "../config";
 
 const publicRoutes = [
   {
-    path: routesConfig.home,
+    path: config.routes.home,
     element: Home,
-    layout: LAYOUT_TYPE.DEFAULT
+    layout: LAYOUT_TYPE.SIDEBAR_ONLY
   },
   {
-    path: routesConfig.following,
+    path: config.routes.following,
     element: Following,
     layout: LAYOUT_TYPE.NO_LAYOUT
   },
   {
-    path: routesConfig.chat,
+    path: config.routes.chat,
     element: Chat,
     layout: LAYOUT_TYPE.HEADER_ONLY
   },
   {
-    path: routesConfig.profile,
+    path: config.routes.profile,
     element: Profile,
     layout: LAYOUT_TYPE.SIDEBAR_ONLY
   }

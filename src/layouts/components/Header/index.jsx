@@ -1,27 +1,27 @@
 import { useLayoutEffect, useRef, useState } from "react"
 import { Link } from "react-router"
-import routesConfig from "../../../../config/routes"
+import config from "../../../config"
 
-import logo from "../../../../assets/images/logo.svg"
+import logo from "../../../assets/images/logo.svg"
 
 import {
    Icon_MessagePlane,
    Icon_Plus,
    Icon_EllipsisVertical,
    Icon_MessageBox 
-} from "../../../../assets/Icons"
+} from "../../../assets/Icons"
 
-import SearchComponent from "../../../SearchComponent"
-import HeaderActionMenu from "../../../HeaderActionMenu"
-import Button from "../../../Button"
-import Badge from "../../../Badge"
-import Tooltip from "../../../Tooltip/Tooltip"
-import Image from "../../../Image"
-import { useAuth } from "../../../../contexts/AuthContext"
+import SearchComponent from "../../../components/SearchComponent"
+import HeaderActionMenu from "./HeaderActionMenu"
+import Button from "../../../components/Button"
+import Badge from "../../../components/Badge"
+import Tooltip from "../../../components/Tooltip/Tooltip"
+import Image from "../../../components/Image"
+import { useAuth } from "../../../contexts/AuthContext"
 
-import { actionItems_loggedIn, actionItems_loggedOut } from "../../../../fakeDB"
+import { actionItems_loggedIn, actionItems_loggedOut } from "../../../fakeDB"
 
-import styles from "../../../../assets/styles/components/Header.module.scss"
+import styles from "../../../assets/styles/components/Header.module.scss"
 import classNames from "classnames/bind"
 const cx = classNames.bind(styles)
 
@@ -67,8 +67,8 @@ export default function Header() {
    return (
       <header className={cx("header")}>
          <div className={cx("inner")}>
-            <Link to={routesConfig.home} className={cx("logo")}>
-               <img src={logo} alt="" />
+            <Link to={config.routes.home} className={cx("logo")}>
+               <Image src={logo} alt="" />
             </Link>
 
             <SearchComponent/>

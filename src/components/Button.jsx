@@ -1,4 +1,5 @@
-import { forwardRef, useImperativeHandle, useRef, Fragment} from "react"
+import { forwardRef, useImperativeHandle, useRef, Fragment, Component} from "react"
+import { NavLink } from "react-router"
 
 import classNames from "classnames/bind"
 import styles from "../assets/styles/components/Button.module.scss"
@@ -15,6 +16,7 @@ function Button({
    label, 
    icon,
    style,
+   to,
    onClick = defaultFunction,
    onPointerEnter = defaultFunction,
    onPointerLeave = defaultFunction,
@@ -32,6 +34,9 @@ function Button({
       }
    }, [])
 
+   let ElementType = 'button'
+   if (to != null) ElementType = NavLink
+
    const props = {
       style,
       ref: _ref,
@@ -42,24 +47,21 @@ function Button({
          secondary,
          transparent,
       }),
+      to,
       onClick,
       onPointerEnter,
       onPointerLeave
    }
 
-   const iconProps = {
-      className: cx({
-         "icon": true,
-      })
-   }
+   console.log(to);
+   
 
    return (
-      <button {...props}>
+      <ElementType {...props}>
          {icon || Fragment}
-         {/* {icon ? <FontAwesomeIcon {...iconProps} icon={icon}/> : ""} */}
          {label && <span>{label}</span>}
          {children}
-      </button>
+      </ElementType>
    )
 }
 
