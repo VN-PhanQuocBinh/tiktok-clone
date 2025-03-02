@@ -110,7 +110,11 @@ function DropDownItem({
          throw Error("Unknown TYPE: " + type)
    }
 
-   console.log("item re-render");
+   props = {
+      ...props,
+      className: props.className + " " + cx("dropdown-item")
+   }
+   
    
    return (
       <li {...props}>

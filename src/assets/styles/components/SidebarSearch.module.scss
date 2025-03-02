@@ -1,0 +1,68 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+.wrapper {
+   width: 32rem;
+   height: 100vh;
+   border: variables.$border-style;
+   padding: 2rem 1.2rem 1rem;
+   @include mixins.flex-column;
+   gap: 1.6rem;
+
+   .header {
+      color: variables.$text-color;
+      @include mixins.flex-row;
+      justify-content: space-between;
+      margin-bottom: 1.8rem;
+
+      .title {
+         font-size: 2.4rem;
+      }
+
+      .icon-wrapper {
+         @include mixins.flex-center;
+         $rect-size: 2.8rem;
+         width: $rect-size;
+         height: $rect-size;
+         background-color: variables.$sidebarSearch-bg-xmark-color;
+         border-radius: 100rem;
+         cursor: pointer;
+
+
+         &:hover {
+            background-color: variables.$sidebarSearch-bg-xmark-color-hover;
+         }
+         .icon {
+
+         }
+      }
+      
+   }
+
+   input {
+      padding: 10px 4px 10px 16px;
+      background-color: variables.$sidebarSearch-input-bg-color;
+      border-radius: 99px;
+      caret-color: variables.$primary-color;
+      height: 40px;
+      border: 1px solid transparent;
+
+      &:focus {
+         border: 1px solid variables.$sidebarSearch-input-border-color;
+      }
+   }
+
+   .results {
+      p {
+         font-weight: 500;
+         color: variables.$dropdown-title-color;
+         padding: 0 0.8rem 0;
+      }
+
+      ul {
+         .search-item {
+            border-radius: 4px;
+         }
+      }
+   }
+}

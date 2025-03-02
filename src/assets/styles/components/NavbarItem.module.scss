@@ -1,0 +1,48 @@
+@use "../base/mixins";
+@use "../base/variables";
+
+.nav-item {
+   height: 40px;
+   width: 100%;
+   @include mixins.flex-row;
+   align-items: center;
+   gap: 1.2rem;
+   padding: 0.4rem;
+   border-radius: 6px;
+
+   &:hover {
+      background-color: variables.$navItem-hover-color;
+   }
+
+   &.active {
+      .icon, .nav-content {
+         color: variables.$navItem-active-text-color !important;
+      }
+   }
+
+   .icon-wrapper {
+      @include mixins.flex-center;
+      height: 100%;
+
+      .icon {
+         color: variables.$text-color;
+         width: 3.2rem;
+         height: 3.2rem;
+         border-radius: 100px;
+
+         &.live {
+            padding: 2px;
+            border: 2px solid variables.$primary-color;
+         }
+      }
+   }
+   
+   .nav-content {
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: variables.$text-color;
+      display: flex;
+      align-items: center;
+   }
+}
+

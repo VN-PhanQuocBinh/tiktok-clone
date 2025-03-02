@@ -16,7 +16,6 @@ function Button({
    label, 
    icon,
    style,
-   to,
    onClick = defaultFunction,
    onPointerEnter = defaultFunction,
    onPointerLeave = defaultFunction,
@@ -34,9 +33,6 @@ function Button({
       }
    }, [])
 
-   let ElementType = 'button'
-   if (to != null) ElementType = NavLink
-
    const props = {
       style,
       ref: _ref,
@@ -47,21 +43,25 @@ function Button({
          secondary,
          transparent,
       }),
-      to,
       onClick,
       onPointerEnter,
       onPointerLeave
    }
-
-   console.log(to);
    
-
    return (
-      <ElementType {...props}>
-         {icon || Fragment}
+      <button {...props}>
+         {icon && (
+            <div className={cx("icon-wrapper")}>
+               {icon}
+            </div>
+         )}
+         {/* <div>
+            {icon || Fragment}
+         </div> */}
+         
          {label && <span>{label}</span>}
          {children}
-      </ElementType>
+      </button>
    )
 }
 

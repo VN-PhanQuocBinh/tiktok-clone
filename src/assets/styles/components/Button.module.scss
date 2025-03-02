@@ -47,8 +47,16 @@ $styleColor: (
       background-color: variables.$button-secondary-bg;
    }
 
+   &.transparent {
+      background-color: transparent;
+   }
+
    .icon {
       font-size: variables.$button-icon-size-small;
+   }
+
+   .icon-wrapper {
+      @include mixins.flex-center;
    }
 
    > span {

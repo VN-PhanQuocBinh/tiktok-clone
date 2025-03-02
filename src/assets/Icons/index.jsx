@@ -17,3 +17,20 @@ export {
    Icon_AngleLeft,
    Icon_ArrowRightToBracket
 } from "./components/Header";
+
+
+export {
+   Icon_HomeRegular,
+   Icon_HomeSolid,
+   Icon_CompassSolid,
+   Icon_CompassRegular,
+   Icon_UserArrowSolid,
+   Icon_UserArrowRegular,
+   Icon_UserGroupSolid,
+   Icon_UserGroupRegular,
+   Icon_PlusSolid,
+   Icon_MessageSolid,
+   Icon_MessageRegular,
+   Icon_PlaneSolid,
+   Icon_XMark
+} from "./components/Sidebar"

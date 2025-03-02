@@ -29,6 +29,7 @@ const Icon_MessagePlane = ({
          height={height}
          viewBox="0 0 48 48"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -40,17 +41,14 @@ const Icon_MessagePlane = ({
    );
 };
 
-const Icon_MessageBox = ({
-   width = '3.2rem',
-   height = '3.2rem',
-   ...props
-}) => {
+const Icon_MessageBox = ({ width = "3.2rem", height = "3.2rem", ...props }) => {
    return (
       <svg
          width={width}
          height={height}
          viewBox="0 0 32 32"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -89,6 +87,7 @@ const Icon_Earth = (props) => {
          height="20"
          viewBox="0 0 48 48"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -107,6 +106,7 @@ const Icon_Question = (props) => {
          height="20"
          viewBox="0 0 48 48"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -125,6 +125,7 @@ const Icon_HalfStroke = (props) => {
          height="20"
          viewBox="0 0 48 48"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -143,6 +144,7 @@ const Icon_User = (props) => {
          xmlns="http://www.w3.org/2000/svg"
          width="20"
          height="20"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -161,6 +163,7 @@ const Icon_Coin = (props) => {
          height="20"
          viewBox="0 0 20 20"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -184,6 +187,7 @@ const Icon_Gear = (props) => {
          height="20"
          viewBox="0 0 48 48"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path
@@ -197,7 +201,13 @@ const Icon_Gear = (props) => {
 
 const Icon_CreatorTool = (props) => {
    return (
-      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <svg
+         width="20"
+         height="20"
+         xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
+         {...props}
+      >
          <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -222,6 +232,7 @@ const Icon_ArrowRightToBracket = (props) => {
          height="20"
          viewBox="0 0 48 48"
          xmlns="http://www.w3.org/2000/svg"
+         fill="currentColor"
          {...props}
       >
          <path

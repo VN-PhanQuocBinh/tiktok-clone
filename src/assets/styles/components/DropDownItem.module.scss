@@ -2,7 +2,7 @@
 @use "../base/mixins";
 
 
-li {
+.dropdown-item {
    @mixin wrapperStyle {
       @include mixins.flex-row;
       align-items: center;
@@ -44,7 +44,7 @@ li {
    }
 }
 
-li.user-suggest {
+.dropdown-item.user-suggest {
    .avt {
       $rec-size: 40px;
       // display: block;
@@ -61,7 +61,7 @@ li.user-suggest {
    }
 }
 
-li.header {
+.dropdown-item.header {
    position: relative;
    justify-content: center;
    cursor: default;

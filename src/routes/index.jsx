@@ -16,7 +16,7 @@ const publicRoutes = [
   {
     path: config.routes.following,
     element: Following,
-    layout: LAYOUT_TYPE.NO_LAYOUT
+    layout: LAYOUT_TYPE.SIDEBAR_ONLY
   },
   {
     path: config.routes.chat,

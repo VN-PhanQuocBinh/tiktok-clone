@@ -1,5 +1,7 @@
 @use "sass:color";
 
+$padding-left-page: 20px;
+$padding-right-page: 20px;
 
 $font: "IBM Plex Sans", serif;
 
@@ -13,8 +15,11 @@ $border-style: 1px solid $border-color;
 $line-height: 1.5;
 
 $sidebar-w: 24rem;
+$sidebar-collapsed-w: 8rem;
 
 $transition: all 0.2s ease;
+
+$text-color: rgba(255, 255, 255, 0.9);
 
 // Header
 $header-h: 60px;
@@ -23,7 +28,7 @@ $search-box-w: clamp(30%, 516px, 90%);
 
 $search-box-border-color: rgba(255, 255, 255, 0.2);
 $input-bg-color: rgba(255, 255, 255, 0.12);
-$input-text-color: rgba(255, 255, 255, 0.9);
+$input-text-color: $text-color;
 $input-placeholder-color: rgba(255, 255, 255, 0.6);
 $input-placeholder-fweight: 500;
 
@@ -45,9 +50,9 @@ $dropdown-bg-color: rgb(37, 37, 37);
 $dropdown-list-thumb-color: rgb(54, 54, 54);
 
 $dropdown-title-color: rgba(255, 255, 255, 0.75);
-$dropdown-more-title-color: rgba(255, 255, 255, 0.9);
+$dropdown-more-title-color: $text-color;
 $dropdown-item-bg-color-hover: rgba(255, 255, 255, 0.04);
-$dropdown-item-text-color: rgba(255, 255, 255, 0.9);
+$dropdown-item-text-color: $text-color;
 $dropdown-item-cap-color: rgba(255, 255, 255, 0.75);
 $dropdown-item-icon-color: rgba(255, 255, 255, 0.34);
 
@@ -61,7 +66,7 @@ $button-secondary-bg: rgba(255, 255, 255, 0.08);
 $button-primary-bg-hover: color.adjust($button-primary-bg, $blackness: 10%);
 $button-secondary-bg-hover: color.adjust($button-secondary-bg, $blackness: 60%);
 
-$button-primary-text-color: rgba(255, 255, 255, 0.9);
+$button-primary-text-color: $text-color;
 
 $button-icon-size-large: 2rem;
 $button-icon-size-small: 1.6rem;
@@ -72,4 +77,20 @@ $badge-bg: $primary-color;
 
 // + Tooltip
 $tooltip-bg-color: rgba(84, 84, 84, 0.92);
-$tooltip-text-color: rgba(255, 255, 255, 0.9);
+$tooltip-text-color: $text-color;
+
+// + NavbarItem
+$navItem-icon-color: $text-color;
+$navItem-hover-color: c;
+
+$navItem-active-text-color: $primary-color; 
+
+$navbar-search-btn-bg: rgba(31, 31, 31, 1);
+
+$navbar-placeholder-color: rgba(255, 255, 255, 0.4);
+
+// SideSearch
+$sidebarSearch-bg-xmark-color: rgba(255, 255, 255, 0.08);
+$sidebarSearch-bg-xmark-color-hover: rgba(255, 255, 255, 0.13);
+$sidebarSearch-input-bg-color: rgba(255, 255, 255, 0.05);
+$sidebarSearch-input-border-color: rgba(255, 255, 255, 0.12);

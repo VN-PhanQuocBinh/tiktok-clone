@@ -1,0 +1,9 @@
+@use "../base/mixins";
+@use "../base/variables";
+
+nav {
+   .list {
+      @include mixins.flex-column;
+      gap: 0.4rem;
+   }
+}

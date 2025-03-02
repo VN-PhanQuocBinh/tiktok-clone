@@ -2,11 +2,10 @@
 @use "../base/mixins";
 
 
-
 .header {
    border-bottom: variables.$border-style;
-   padding-left: 24px;
-   padding-right: 32px;
+   padding-left: variables.$padding-left-page;
+   padding-right: variables.$padding-right-page;
    height: variables.$header-h;
    
    .inner {

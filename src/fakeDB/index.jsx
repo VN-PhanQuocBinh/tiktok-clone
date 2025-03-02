@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import {
    Icon_Earth,
    Icon_Question,
@@ -8,7 +7,21 @@ import {
    Icon_Gear,
    Icon_User,
 } from "../assets/Icons";
-import { icon } from "@fortawesome/fontawesome-svg-core";
+
+import {
+   Icon_HomeRegular,
+   Icon_HomeSolid,
+   Icon_CompassSolid,
+   Icon_CompassRegular,
+   Icon_UserArrowSolid,
+   Icon_UserArrowRegular,
+   Icon_UserGroupSolid,
+   Icon_UserGroupRegular,
+   Icon_PlusSolid,
+   Icon_MessageSolid,
+   Icon_MessageRegular,
+   Icon_PlaneSolid
+} from "../assets/Icons"
 
 const searchItems = [
    { label: "You might like 1" },
@@ -161,52 +174,49 @@ const actionItems_loggedIn = [
    },
 ];
 
-const navList = [
+const navListData = [
    {
       label: "For you",
-      icon: () => {},
+      icon: Icon_HomeRegular,
+      activeIcon: Icon_HomeSolid, 
       to: "/"
    },
    {
       label: "Explore",
-      icon: () => {},
-      to: "/"
+      icon: Icon_CompassSolid,
+      activeIcon: Icon_CompassRegular,
+      to: "/explore"
    },
    {
       label: "Following",
-      icon: () => {},
-      to: "/"
+      icon: Icon_UserArrowSolid,
+      activeIcon: Icon_UserArrowRegular,
+      to: "/following"
    },
    {
       label: "Friends",
-      icon: () => {},
-      to: "/"
+      icon: Icon_UserGroupSolid,
+      activeIcon: Icon_UserGroupRegular,
+      to: "/friends"
    },
    {
       label: "Upload",
-      icon: () => {},
-      to: "/"
+      icon: Icon_PlusSolid,
+      activeIcon: null,
+      to: "/upload"
    },
    {
       label: "Activity",
-      icon: () => {},
-      to: "/"
+      icon: Icon_MessageSolid,
+      activeIcon: Icon_MessageRegular,
+      to: "/activity"
    },
    {
-      label: "Messanges",
-      icon: () => {},
-      to: "/"
+      label: "Messages",
+      icon: Icon_PlaneSolid,
+      activeIcon: null,
+      to: "/messages"
    },
-   {
-      label: "LIVE",
-      icon: () => {},
-      to: "/"
-   },
-   {
-      label: "Profile",
-      icon: () => {},
-      to: "/"
-   }
 ]
 
 export {
@@ -215,7 +225,7 @@ export {
    userDefaultSugItems,
    actionItems_loggedOut,
    actionItems_loggedIn,
-   navList
+   navListData
 };
 
 
