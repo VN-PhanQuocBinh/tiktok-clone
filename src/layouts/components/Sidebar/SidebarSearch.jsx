@@ -1,4 +1,5 @@
-import DropDown from "../../../components/DropDown";
+import { useImperativeHandle, forwardRef, useRef } from "react";
+
 import DropDownItem from "../../../components/DropDownItem";
 
 import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants";
@@ -10,18 +11,31 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function SidebarSearch({ className }) {
+function SidebarSearch({ className, onClose }, ref) {
+   const DOM_input = useRef(null)
+
+   useImperativeHandle(ref, () => {
+      return {
+         focus() {
+            DOM_input?.current?.focus()
+         }
+      }
+   }, [])
+
+   console.log("sidebarSearch re-render");
+   
+
    return (
       <section className={cx("wrapper", { [className]: className })}>
          <div className={cx("header")}>
             <strong className={cx("title")}>Search</strong>
 
-            <span className={cx("icon-wrapper")}>
+            <span onClick={onClose} className={cx("icon-wrapper")}>
                <Icon_XMark className={cx("icon")} />
             </span>
          </div>
 
-         <input placeholder="Search" type="text" />
+         <input ref={DOM_input} placeholder="Search" type="text" />
 
          <div className={cx("results")}>
             <p>You may like</p>
@@ -53,4 +67,4 @@ function SidebarSearch({ className }) {
    );
 }
 
-export default SidebarSearch;
+export default forwardRef(SidebarSearch);

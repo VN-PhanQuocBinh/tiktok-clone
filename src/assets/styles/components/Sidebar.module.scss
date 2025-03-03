@@ -1,52 +1,100 @@
 @use "../base/variables";
 @use "../base/mixins";
 
-.wrapper {
-   width: variables.$sidebar-w;
-   border-right: variables.$border-style;
-   padding: variables.$padding-left-page;
-   position: relative;
+.aside {
+   .wrapper {
+      width: variables.$sidebar-w;
+      height: 100vh;
+      padding: variables.$padding-y-page variables.$padding-x-page;
+      position: relative;
+      z-index: 100;
 
-   &.collapsed {
-      width: variables.$sidebar-collapsed-w;
-   }
+      &.collapsed {
+         width: variables.$sidebar-collapsed-w;
 
-   .logo {
-      margin: 1rem 0;
-      display: block;
-   }
+         .logo-img {
+            width: 100%;
+         }
 
-   .search-area {
-      position: absolute;
-      top: 0;
-      left: calc(100% + 20px);
-   }
+         .search-btn {
+            width: 40px;
+            overflow: hidden;
+         }
 
-   .search-btn {
-      background-color: variables.$navbar-search-btn-bg;
-      width: 100%;
-      height: 4rem;
-      border-radius: 99px;
-      color: variables.$text-color;
-      @include mixins.flex-row;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 1.2rem;
-      padding: 0 1.2rem;
-      cursor: pointer;
+         .animation-bg {
+            width: variables.$sidebar-collapsed-w;
+         }
 
-      .search-icon {
-         width: 1.6rem;
+         .search-area {
+            opacity: 1;
+            left: variables.$sidebar-collapsed-w;
+         }
       }
 
-      .placeholder {
-         color: variables.$navbar-placeholder-color;
+      &:not(.collapsed) {
+         .logo-img {
+            margin: 12px 0px 0px 7px;
+            scale: 1.01;
+         }
       }
-   }
 
-   .navbar {
-      @include mixins.flex-column;
-      gap: .4rem;
+      .animation-bg {
+         background-color: variables.$page-bg-color;
+         width: calc(variables.$sidebar-w * 0.8);
+         height: 100%;
+         position: fixed;
+         top: 0;
+         left: 0;
+         z-index: -1;
+         transition: width 0.5s ease;
+      }
+
+      .logo {
+         margin-bottom: 1.8rem;
+         display: flex;
+         align-items: center;
+         justify-content: flex-start;
+         height: 42px;
+      }
+
+      .search-area {
+         position: absolute;
+         top: 0;
+         left: -100%;
+         z-index: -2;
+         background-color: variables.$page-bg-color;
+         opacity: 0;
+         border-right: variables.$border-style;
+         transition: all 0.4s;
+      }
+
+      .search-btn {
+         background-color: variables.$navbar-search-btn-bg;
+         width: calc(variables.$sidebar-w - 2 * variables.$padding-left-page);
+         height: 4rem;
+         border-radius: 99px;
+         color: variables.$text-color;
+         @include mixins.flex-row;
+         align-items: center;
+         justify-content: flex-start;
+         gap: 1.2rem;
+         padding: 0 1.2rem;
+         cursor: pointer;
+         transition: width 0.4s;
+         margin-bottom: 12px;
+
+         .search-icon {
+            width: 1.6rem;
+         }
+
+         .placeholder {
+            color: variables.$navbar-placeholder-color;
+         }
+      }
+
+      .navbar {
+         @include mixins.flex-column;
+         gap: 0.4rem;
+      }
    }
 }
-

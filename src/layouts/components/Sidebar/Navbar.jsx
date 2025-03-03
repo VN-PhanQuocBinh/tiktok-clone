@@ -33,6 +33,7 @@ function Navbar({className, showLabel}) {
                to={"/profile"}
                iconProps={{
                   src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHORVLY3-9bljdur2Lmf-bFufXufDUrwF92g&s",
+                  className: "avt"
                }}
                showLabel={showLabel}
             />

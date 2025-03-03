@@ -30,11 +30,9 @@ function NavbarItem({
                   )}
                </span>
 
-               {showLabel && (
-                  <div className={cx("nav-content")}>
-                     <span>{label}</span>
-                  </div>
-               )}
+               <div className={cx("nav-content", {hidden: !showLabel})}>
+                  <span>{label}</span>
+               </div>
             </li>
          )}
       </NavLink>

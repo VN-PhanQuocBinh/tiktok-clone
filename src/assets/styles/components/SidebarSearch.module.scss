@@ -4,8 +4,9 @@
 .wrapper {
    width: 32rem;
    height: 100vh;
-   border: variables.$border-style;
-   padding: 2rem 1.2rem 1rem;
+   border-left: variables.$border-style;
+   border-left: variables.$border-style;
+   padding: 1.2rem 1.2rem 1rem;
    @include mixins.flex-column;
    gap: 1.6rem;
 
@@ -13,7 +14,7 @@
       color: variables.$text-color;
       @include mixins.flex-row;
       justify-content: space-between;
-      margin-bottom: 1.8rem;
+      margin-bottom: 0.8rem;
 
       .title {
          font-size: 2.4rem;
@@ -46,6 +47,7 @@
       caret-color: variables.$primary-color;
       height: 40px;
       border: 1px solid transparent;
+      color: variables.$text-color;
 
       &:focus {
          border: 1px solid variables.$sidebarSearch-input-border-color;

@@ -28,21 +28,30 @@
          color: variables.$text-color;
          width: 3.2rem;
          height: 3.2rem;
-         border-radius: 100px;
 
          &.live {
             padding: 2px;
             border: 2px solid variables.$primary-color;
          }
+
+         &.live, &.avt {
+            border-radius: 100px;
+         }
       }
    }
    
    .nav-content {
-      font-size: 1.6rem;
-      font-weight: 400;
+      font-size: 1.8rem;
+      font-weight: 500;
       color: variables.$text-color;
       display: flex;
       align-items: center;
+      transition: all 0.1s ease;
+      min-width: max-content;
+
+      &.hidden {
+         opacity: 0;
+      }
    }
 }
 
