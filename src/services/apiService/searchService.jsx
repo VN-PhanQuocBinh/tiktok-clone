@@ -10,8 +10,6 @@ export const search = async (query, type = 'less') => {
          }
       })
 
-      // await console.log(response);
-
       return response.data
    } catch (error) {
       console.log("Error fetching search result: ", error)

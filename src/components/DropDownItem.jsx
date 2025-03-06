@@ -4,7 +4,8 @@ import { DROPDOWN_ITEM_TYPE as TYPE } from '../constants'
 import Image from "../components/Image"
 
 import { 
-   Icon_Circle
+   Icon_Circle,
+   Icon_EllipsisVertical
 } from "../assets/Icons"
 
 import styles from "../assets/styles/components/DropDownItem.module.scss"
@@ -19,7 +20,8 @@ function DropDownItem({
    item, 
    itemClick = () => {}, 
    className,
-   icon_className 
+   icon_className,
+   smallSize
 }) {
 
    let Component = Fragment
@@ -65,6 +67,7 @@ function DropDownItem({
                   <h4 className={cx("text")}>{item.nickname}</h4>
                   <p>{item.full_name}</p>
                </div>
+               <Icon_EllipsisVertical className={cx("icon")} />
             </Link>
          )
          break
@@ -112,7 +115,7 @@ function DropDownItem({
 
    props = {
       ...props,
-      className: props.className + " " + cx("dropdown-item")
+      className: props.className + " " + cx("dropdown-item", {small: smallSize})
    }
    
    

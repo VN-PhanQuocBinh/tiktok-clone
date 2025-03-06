@@ -3,6 +3,9 @@
 
 
 .dropdown-item {
+   --padding-x: 16px;
+   --padding-y: 10px;
+
    @mixin wrapperStyle {
       @include mixins.flex-row;
       align-items: center;
@@ -11,7 +14,7 @@
    }
 
    @include wrapperStyle;
-   padding: 10px variables.$dropdown-item-padding-x;
+   padding: var(--padding-y) var(--padding-x);
    cursor: pointer;
 
    a {
@@ -45,11 +48,25 @@
 }
 
 .dropdown-item.user-suggest {
+   --rect-size: 40px;
+   position: relative;
+
+   &.small {
+      --rect-size: 30px;
+      --padding-y: 6px;
+      --padding-x: 8px;
+   }
+
+   &:hover {
+      .icon {
+         display: block;
+      }
+   }
+
    .avt {
-      $rec-size: 40px;
       // display: block;
-      width: $rec-size;
-      height: $rec-size;
+      width: var(--rect-size);
+      height: var(--rect-size);
       border-radius: 50%;
       object-fit: cover;
    }
@@ -59,7 +76,22 @@
          color: variables.$dropdown-item-cap-color;
       }
    }
+
+   .icon {
+      $icon-size: 14px;
+      display: none;
+      padding: 8px;
+      width: $icon-size;
+      height: $icon-size;
+      position: absolute;
+      right: var(--padding-x);
+      top: 50%;
+      translate: 0 -50%;
+      rotate: 90deg;
+      color: variables.$text-color;
+   }
 }
+
 
 .dropdown-item.header {
    position: relative;
@@ -69,7 +101,7 @@
    .icon {
       position: absolute;
       top: 50%;
-      left: variables.$dropdown-item-padding-x;
+      left: var(--padding-x);
       translate: 0 -50%;
       padding: 4px;
       cursor: pointer;

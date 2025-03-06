@@ -15,7 +15,10 @@ function NavbarItem({
 }) {
    const _iconProps = {
       ...iconProps,
-      className: cx("icon", { live: iconProps?.className?.includes("live") }),
+      className: cx("icon", {
+         live: iconProps?.className?.includes("live"),
+         avt: iconProps?.className?.includes("avt"),
+      }),
    };
 
    return (
@@ -30,7 +33,7 @@ function NavbarItem({
                   )}
                </span>
 
-               <div className={cx("nav-content", {hidden: !showLabel})}>
+               <div className={cx("nav-content", { hidden: !showLabel })}>
                   <span>{label}</span>
                </div>
             </li>
