@@ -1,0 +1,42 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+.wrapper {
+   width: 32rem;
+   height: 100vh;
+   border-left: variables.$border-style;
+   border-left: variables.$border-style;
+   padding: 1.2rem 1.2rem 1rem;
+   @include mixins.flex-column;
+   gap: 1.6rem;
+
+   .header {
+      color: variables.$text-color;
+      @include mixins.flex-row;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+
+      .title {
+         font-size: 2.4rem;
+      }
+
+      .icon-wrapper {
+         @include mixins.flex-center;
+         $rect-size: 2.8rem;
+         width: $rect-size;
+         height: $rect-size;
+         background-color: variables.$sidebarSearch-bg-xmark-color;
+         border-radius: 100rem;
+         cursor: pointer;
+
+
+         &:hover {
+            background-color: variables.$sidebarSearch-bg-xmark-color-hover;
+         }
+         .icon {
+            
+         }
+      }
+   }
+}
+

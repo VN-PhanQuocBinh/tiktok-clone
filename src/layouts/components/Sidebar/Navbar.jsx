@@ -2,14 +2,14 @@ import { navListData } from "../../../fakeDB";
 
 import NavbarItem from "./NavbarItem";
 import Image from "../../../components/Image";
-
+import { Icon_EllipsisVertical } from "../../../assets/Icons";
 
 import classNames from "classnames/bind";
 import styles from "../../../assets/styles/components/Navbar.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Navbar({className, showLabel}) {
+function Navbar({className, showLabel, onClose}) {
    return (
       <nav className={className}>
          <ul className={cx("list")}>
@@ -37,6 +37,18 @@ function Navbar({className, showLabel}) {
                }}
                showLabel={showLabel}
             />
+
+            <li>
+               <button onClick={onClose} className={cx("nav-item")}>
+                  <span className={cx("icon-wrapper")}>
+                     <Icon_EllipsisVertical className={cx("icon")}/>
+                  </span>
+
+                  <div className={cx("nav-content")}>
+                     <span>More</span>
+                  </div>
+               </button>
+            </li>
          </ul>
       </nav>
    );

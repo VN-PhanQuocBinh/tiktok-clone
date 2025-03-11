@@ -6,4 +6,57 @@ nav {
       @include mixins.flex-column;
       gap: 0.8rem;
    }
+
+   .nav-item {
+      height: 40px;
+      width: 100%;
+      @include mixins.flex-row;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 0.4rem;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+   
+      &:hover {
+         background-color: variables.$navItem-hover-color;
+      }
+   
+      &.active {
+         .icon, .nav-content {
+            color: variables.$navItem-active-text-color !important;
+         }
+      }
+   
+      .icon-wrapper {
+         @include mixins.flex-center;
+         height: 100%;
+   
+         .icon {
+            $icon-size: 2.8rem;
+            color: variables.$text-color;
+            width: $icon-size;
+            height: $icon-size;
+            padding: 6px;
+            box-sizing: border-box;
+            rotate: 90deg;
+         }
+      }
+      
+      .nav-content {
+         font-size: 1.8rem;
+         font-weight: 500;
+         color: variables.$text-color;
+         display: flex;
+         align-items: center;
+         transition: all 0.1s ease;
+         min-width: max-content;
+   
+         &.hidden {
+            opacity: 0;
+         }
+      }
+   }
+   
+   
 }

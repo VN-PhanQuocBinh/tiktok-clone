@@ -12,15 +12,15 @@ import DropDownItem from "../../../components/DropDownItem";
 
 import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants";
 
-import { Icon_XMark, Icon_Loading, Icon_Clear } from "../../../assets/Icons";
+import { Icon_Loading, Icon_Clear } from "../../../assets/Icons";
 
 import styles from "../../../assets/styles/components/SidebarSearch.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function SidebarSearch({ className, onClose }, ref) {
-   const DOM_input = useRef(null);
+function SidebarSearch({ sendDataToParent }, ref) {
+   const DOM_input = useRef(null)
 
    const [searchResults, setSearchResults] = useState([])
    const [query, setQuery] = useState("");
@@ -38,10 +38,14 @@ function SidebarSearch({ className, onClose }, ref) {
 
          fetchAPI()
       } else {
-
+         setSearchResults([])
       }
       
    }, [debounceQuery]);
+
+   useEffect(() => {
+      sendDataToParent({currentQuery: debounceQuery})
+   }, [debounceQuery])
 
    const handleChange = (e) => {
       let newValue = e.target.value
@@ -51,6 +55,11 @@ function SidebarSearch({ className, onClose }, ref) {
       }
    };
 
+   const handleClear = () => {
+      setQuery("")
+      DOM_input?.current?.focus()
+   }
+
    useImperativeHandle(
       ref,
       () => {
@@ -58,23 +67,21 @@ function SidebarSearch({ className, onClose }, ref) {
             focus() {
                DOM_input?.current?.focus();
             },
+            currentQuery: debounceQuery
          };
       },
-      []
+      [debounceQuery]
    );
 
-   console.log("sidebarSearch re-render");
+   const handleClose = (e) => {
+      e.preventDefault()
+      onClose()
+   }
+
+   // console.log("sidebarSearch re-render");
 
    return (
-      <section className={cx("wrapper", { [className]: className })}>
-         <div className={cx("header")}>
-            <strong className={cx("title")}>Search</strong>
-
-            <span onClick={onClose} className={cx("icon-wrapper")}>
-               <Icon_XMark className={cx("icon")} />
-            </span>
-         </div>
-
+      <>
          <div className={cx("input-field")}>
             <input
                value={query}
@@ -85,7 +92,7 @@ function SidebarSearch({ className, onClose }, ref) {
             />
 
             {loading && <Icon_Loading className={cx("icon", "loading")}/>}
-            {(!loading && query) && <Icon_Clear className={cx("icon")}/>}
+            <Icon_Clear onClick={handleClear} className={cx("icon", {hidden: !(!loading && query)})}/>
          </div>
          
 
@@ -93,7 +100,6 @@ function SidebarSearch({ className, onClose }, ref) {
             {searchResults.length > 0 && <p>Accounts</p>}
 
             <ul>
-
                {searchResults.map(item => 
                   <DropDownItem
                      key={item.id}
@@ -113,7 +119,7 @@ function SidebarSearch({ className, onClose }, ref) {
                )}
             </ul>
          </div>
-      </section>
+      </>
    );
 }
 

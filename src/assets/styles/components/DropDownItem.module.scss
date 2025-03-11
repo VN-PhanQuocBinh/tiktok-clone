@@ -117,3 +117,16 @@
       }
    }
 }
+
+.dropdown-item.nav-more-item {
+   border-radius: 4px;
+   &, a {
+      justify-content: space-between;
+   }
+
+   .icon {
+      $icon-size: 12px;
+      width: $icon-size;
+      height: $icon-size;
+   }
+}

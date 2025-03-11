@@ -32,5 +32,6 @@ export {
    Icon_MessageSolid,
    Icon_MessageRegular,
    Icon_PlaneSolid,
-   Icon_XMark
+   Icon_XMark,
+   Icon_ChevronRight
 } from "./components/Sidebar"

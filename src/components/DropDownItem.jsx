@@ -1,132 +1,149 @@
-import { Link } from "react-router"
-import { memo } from "react"
-import { DROPDOWN_ITEM_TYPE as TYPE } from '../constants'
-import Image from "../components/Image"
+import { Link } from "react-router";
+import { memo } from "react";
+import { DROPDOWN_ITEM_TYPE as TYPE } from "../constants";
+import Image from "../components/Image";
 
-import { 
-   Icon_Circle,
-   Icon_EllipsisVertical
-} from "../assets/Icons"
+import { Icon_Circle, Icon_EllipsisVertical, Icon_ChevronRight } from "../assets/Icons";
 
-import styles from "../assets/styles/components/DropDownItem.module.scss"
-import classNames from 'classnames/bind'
-import { Fragment } from "react"
+import styles from "../assets/styles/components/DropDownItem.module.scss";
+import classNames from "classnames/bind";
+import { Fragment } from "react";
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
-
-function DropDownItem({ 
-   type, 
-   item, 
-   itemClick = () => {}, 
+function DropDownItem({
+   type,
+   item,
+   itemClick = () => {},
    className,
    icon_className,
    smallSize
 }) {
-
-   let Component = Fragment
-   let common_Props = {}
+   let Component = Fragment;
+   let common_Props = {};
 
    if (item.to) {
-      Component = Link
+      Component = Link;
 
       common_Props = {
          to: item.to,
-         target: item.to ? "_self" : ""
-      }
+         target: item.to ? "_self" : "",
+      };
    }
 
-   
-   let content
-   let props = {}
-   
+   let content;
+   let props = {};
+
    switch (type) {
       case TYPE.DEFAULT:
          props = {
-            className: cx("drop-item", {[className]: className}),
-            onClick: () => itemClick(item.label)
+            className: cx("drop-item"),
+            onClick: () => {}
          }
+
+         content = <p className={cx("text")}>{item.label}</p>;
+         break;
+      case TYPE.BULLETED:
+         props = {
+            className: cx("drop-item", { [className]: className }),
+            onClick: () => itemClick(item.label),
+         };
 
          content = (
             <>
                <Icon_Circle className={cx("icon")} />
                <h4 className={cx("text")}>{item.label}</h4>
             </>
-         )
-         break
+         );
+         break;
       case TYPE.USER_SUGGEST:
          props = {
-            className: cx("drop-item", "user-suggest", {[className]: className}),
-            onClick: () => itemClick(item.userId)
-         }
+            className: cx("drop-item", "user-suggest", {
+               [className]: className,
+            }),
+            onClick: () => itemClick(item.userId),
+         };
 
          content = (
             <Link to={`/profile/${item.nickname}`}>
                <Image src={item.avatar} className={cx("avt")} />
-               <div className={cx("user-info")} >
+               <div className={cx("user-info")}>
                   <h4 className={cx("text")}>{item.nickname}</h4>
                   <p>{item.full_name}</p>
                </div>
                <Icon_EllipsisVertical className={cx("icon")} />
             </Link>
-         )
-         break
+         );
+         break;
       case TYPE.ACTIONS:
          props = {
-            className: cx("drop-item", {[className]: className}),
-            onClick: itemClick
-         }
-         
+            className: cx("drop-item", { [className]: className }),
+            onClick: itemClick,
+         };
+
          content = (
             <>
-               {!!item.icon && 
-                  <item.icon 
-                     className={cx("icon", "actions", {[icon_className]: icon_className})} 
+               {!!item.icon && (
+                  <item.icon
+                     className={cx("icon", "actions", {
+                        [icon_className]: icon_className,
+                     })}
                      color=""
                   />
-               }
+               )}
                <p className={cx("text")}>{item.label}</p>
             </>
-         )
-         break
+         );
+         break;
       case TYPE.ACTIONS_HEADER:
-         let hasIcon = !!item.icon
+         let hasIcon = !!item.icon;
 
          props = {
-            className: cx("header", {[className]: className}),
+            className: cx("header", { [className]: className }),
             onClick: !hasIcon ? itemClick : undefined,
-         }    
+         };
 
          content = (
             <>
-               {hasIcon && 
-                  <item.icon 
-                     className={cx("icon", "actions")} 
+               {hasIcon && (
+                  <item.icon
+                     className={cx("icon", "actions")}
                      onClick={itemClick}
                   />
-               }
+               )}
                <p className={cx("text")}>{item.label}</p>
+            </>
+         );
+         break;
+      case TYPE.NAV_MORE_ITEM:
+         props = {
+            className: cx("nav-more-item", { [className]: className }),
+            onClick: itemClick,
+         };
+
+         content = (
+            <>
+               <p className={cx("text")}>{item.label}</p>
+               {item.children && <Icon_ChevronRight className={cx("icon")}/>}
             </>
          )
          break
       default:
-         throw Error("Unknown TYPE: " + type)
+         throw Error("Unknown TYPE: " + type);
+      
    }
 
    props = {
       ...props,
-      className: props.className + " " + cx("dropdown-item", {small: smallSize})
-   }
-   
-   
+      className:
+         props.className + " " + cx("dropdown-item", { small: smallSize }),
+   };
+
    return (
       <li {...props}>
-         <Component {...common_Props}>
-            {content}
-         </Component>
+         <Component {...common_Props}>{content}</Component>
       </li>
-   )
+   );
 }
 
-
-export default memo(DropDownItem)
+export default memo(DropDownItem);

@@ -7,11 +7,12 @@ const LAYOUT_TYPE = {
 
 const DROPDOWN_ITEM_TYPE = {
    DEFAULT: "default",
+   BULLETED: 'bulleted',
    SEARCH_RESULT: "search_result",
    ACTIONS: "actions",
    ACTIONS_HEADER: "actions_header",
-   USER_SUGGEST: "user-suggest"
-
+   USER_SUGGEST: "user-suggest",
+   NAV_MORE_ITEM: "nav-more-item"
 }
 
 export { 

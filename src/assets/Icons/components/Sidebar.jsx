@@ -1,4 +1,4 @@
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const common_Props = {
@@ -205,6 +205,12 @@ const Icon_XMark = (props) => {
    );
 };
 
+const Icon_ChevronRight = (props) => {
+   return (
+      <FontAwesomeIcon {...props} {...common_Props} icon={faChevronRight} />
+   );
+};
+
 export {
    Icon_HomeRegular,
    Icon_HomeSolid,
@@ -218,5 +224,6 @@ export {
    Icon_MessageSolid,
    Icon_MessageRegular,
    Icon_PlaneSolid,
-   Icon_XMark
+   Icon_XMark,
+   Icon_ChevronRight
 };
