@@ -1,0 +1,53 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+.wrapper {
+   color: variables.$text-color;
+   font-size: 1rem;
+   font-weight: 400;
+   margin-top: 24px;
+   padding-bottom: 100px;
+
+   h2 {
+      color: variables.$userSuggested-header-text-color;
+      margin: 0;
+   }
+
+   .list {
+      position: static;
+      background-color: transparent;
+      overflow: visible;
+      max-height: none;
+      height: auto;
+   }
+
+   .see-more {
+      color: variables.$text-color;
+      @include mixins.flex-row;
+      align-items: center;
+      height: 46px;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 4px;
+      gap: 16px;
+      margin-top: 4px;
+
+      &:hover {
+         background-color: variables.$dropdown-item-bg-color-hover;
+      }
+      
+      .icon {
+         box-sizing: border-box;
+         $size: 28px;
+         padding: 6px;
+         width: $size;
+         height: $size;
+         rotate: 90deg;
+      }
+      
+      span {
+         font-size: 1.6rem;
+         font-weight: 600;
+      }
+   }
+}

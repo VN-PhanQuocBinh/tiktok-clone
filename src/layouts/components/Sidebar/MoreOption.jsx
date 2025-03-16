@@ -6,25 +6,59 @@ import DropDownItem from "../../../components/DropDownItem";
 
 import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants";
 
+import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
+
 import { actionItems_loggedIn } from "../../../fakeDB";
 import classNames from "classnames/bind";
 import styles from "../../../assets/styles/components/MoreOption.module.scss";
 
 const cx = classNames.bind(styles);
 
-function MoreOption({ className }) {
+function MoreOption({ className, onClose }) {
    const { isLoggedIn, login, logout } = useAuth();
-   const [currentMenu, setCurrentMenu] = useState(actionItems_loggedIn);
+   const [currentMenu, setCurrentMenu] = useState({title: "More", list: actionItems_loggedIn});
+   const [history, setHistory] = useState([]);
+
+   const handleClick = (item) => {
+      if (item.children) {
+         setHistory(pre => [...pre, currentMenu]);
+         setCurrentMenu({title: item.label, list: item.children});
+      }
+   };
+
+   const handleBack = () => {
+      console.log("history: ", history);
+      setCurrentMenu(history[history.length - 1])
+      setHistory(history.splice(0, history.length - 1))
+   };
 
    return (
-      <DropDown
-         className={cx("wrapper", { [className]: className })}
-         isVisible={true}
-      >
-         {currentMenu.map((item, key) => (
-            <DropDownItem type={TYPE.NAV_MORE_ITEM} key={key} item={item} />
-         ))}
-      </DropDown>
+      <div className={cx("wrapper", { [className]: className })}>
+         <div className={cx("header", { "back-header": history.length >= 1 })}>
+            <span onClick={handleBack} className={cx("icon-wrapper", "icon-back")}>
+               <Icon_ChevronRight className={cx("icon")} />
+            </span>
+
+            <strong className={cx("title")}>{currentMenu.title}</strong>
+
+            {history.length == 0 && (
+               <span onClick={onClose} className={cx("icon-wrapper")}>
+                  <Icon_XMark className={cx("icon")} />
+               </span>
+            )}
+         </div>
+
+         <DropDown className={cx("list")} isVisible={true}>
+            {currentMenu?.list?.map((item, key) => (
+               <DropDownItem
+                  type={TYPE.NAV_MORE_ITEM}
+                  key={key}
+                  item={item}
+                  itemClick={() => handleClick(item)}
+               />
+            ))}
+         </DropDown>
+      </div>
    );
 }
 

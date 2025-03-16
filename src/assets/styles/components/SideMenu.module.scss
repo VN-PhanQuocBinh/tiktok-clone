@@ -14,6 +14,7 @@
       color: variables.$text-color;
       @include mixins.flex-row;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 0.8rem;
 
       .title {
@@ -32,9 +33,6 @@
 
          &:hover {
             background-color: variables.$sidebarSearch-bg-xmark-color-hover;
-         }
-         .icon {
-            
          }
       }
    }

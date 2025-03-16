@@ -1,7 +1,6 @@
 @use "../base/variables";
 @use "../base/mixins";
 
-
 .dropdown-item {
    --padding-x: 16px;
    --padding-y: 10px;
@@ -38,7 +37,7 @@
    }
 
    .text {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 600;
       color: variables.$dropdown-item-text-color;
       line-height: 24px;
@@ -47,7 +46,7 @@
    }
 }
 
-.dropdown-item.user-suggest {
+.dropdown-item.user {
    --rect-size: 40px;
    position: relative;
 
@@ -74,6 +73,72 @@
    .user-info {
       p {
          color: variables.$dropdown-item-cap-color;
+      }
+   }
+
+   .icon {
+      $icon-size: 14px;
+      display: none;
+      padding: 8px;
+      width: $icon-size;
+      height: $icon-size;
+      position: absolute;
+      right: var(--padding-x);
+      top: 50%;
+      translate: 0 -50%;
+      rotate: 90deg;
+      color: variables.$text-color;
+   }
+}
+
+.dropdown-item.user-suggested {
+   --padding-x: 6px;
+   --padding-y: 4px;
+   --rect-size: 28px;
+   position: relative;
+   border-radius: 4px;
+
+   &:hover {
+      .icon {
+         display: block;
+      }
+   }
+
+   
+   .avt {
+      // display: block;
+      width: var(--rect-size);
+      height: var(--rect-size);
+      border-radius: 50%;
+      object-fit: cover;
+   }
+   
+   .user-info {
+
+      .text {
+         line-height: 20px;
+         position: relative;
+         width: max-content;
+         @include mixins.flex-row;
+         
+         span {
+            display: block;
+            max-width: 142px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+         }
+         .tick {
+            position: absolute;
+            left: calc(100% + 8px);
+            top: 50%;
+            translate: 0 -50%;
+         }
+      }
+
+      p {
+         color: variables.$dropdown-item-cap-color;
+         font-size: 1.2rem;
       }
    }
 

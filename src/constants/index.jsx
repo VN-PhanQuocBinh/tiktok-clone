@@ -11,7 +11,8 @@ const DROPDOWN_ITEM_TYPE = {
    SEARCH_RESULT: "search_result",
    ACTIONS: "actions",
    ACTIONS_HEADER: "actions_header",
-   USER_SUGGEST: "user-suggest",
+   USER: "user-suggest",
+   USER_SUGGESTED: "user-suggested",
    NAV_MORE_ITEM: "nav-more-item"
 }
 

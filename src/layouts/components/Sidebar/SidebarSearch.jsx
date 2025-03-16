@@ -104,7 +104,7 @@ function SidebarSearch({ sendDataToParent }, ref) {
                   <DropDownItem
                      key={item.id}
                      item={item}
-                     type={TYPE.USER_SUGGEST}
+                     type={TYPE.USER}
                      className={cx("search-item")}
                      smallSize
                   />

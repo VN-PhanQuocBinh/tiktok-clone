@@ -140,22 +140,23 @@ const actionItems_loggedIn = [
    {
       label: "Creator tools",
       icon: Icon_CreatorTool,
-      to: "/creatortools",
-   },
-   {
-      label: "Setting",
-      icon: Icon_Gear,
-      to: "/settings",
-   },
-   {
-      label: "English",
-      icon: Icon_Earth,
-      children: actionItems_languages
-   },
-   {
-      label: "Feedback and help",
-      icon: Icon_Question,
-      to: "/feedback",
+      children: [
+         {
+            label: "LIVE shopping"
+         }, 
+         {
+            label: "Promote post"
+         },
+         {
+            label: "View Analytics"
+         },
+         {
+            label: "LIVE Creator Hub"
+         },
+         {
+            label: "LIVE Studio"
+         }
+      ]
    },
    {
       label: "Dark mode",
@@ -171,6 +172,21 @@ const actionItems_loggedIn = [
             label: "Light mode",
          },
       ],
+   },
+   {
+      label: "English",
+      icon: Icon_Earth,
+      children: actionItems_languages
+   },
+   {
+      label: "Setting",
+      icon: Icon_Gear,
+      to: "/settings",
+   },
+   {
+      label: "Feedback and help",
+      icon: Icon_Question,
+      to: "/feedback",
    },
 ];
 

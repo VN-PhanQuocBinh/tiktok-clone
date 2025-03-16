@@ -1,12 +1,13 @@
-import { Icon_XMark } from "../../../assets/Icons"
+import { useState } from "react";
 
-import classNames from "classnames/bind"
-import styles from "../../../assets/styles/components/SideMenu.module.scss"
+import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
+import classNames from "classnames/bind";
+import styles from "../../../assets/styles/components/SideMenu.module.scss";
+import React, { useEffect, useRef } from "react";
 
-const cx = classNames.bind(styles)
+const cx = classNames.bind(styles);
 
-function SideMenu({className, title, children, onClose}) {
-   
+function SideMenu({ className, title, children, onClose }) {
    return (
       <div className={cx("wrapper", { [className]: className })}>
          <div className={cx("header")}>
@@ -19,7 +20,7 @@ function SideMenu({className, title, children, onClose}) {
 
          {children}
       </div>
-   )
+   );
 }
 
-export default SideMenu
+export default SideMenu;

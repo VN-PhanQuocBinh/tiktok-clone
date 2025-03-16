@@ -9,7 +9,7 @@ import styles from "../../../assets/styles/components/Navbar.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Navbar({className, showLabel, onClose}) {
+function Navbar({className, showLabel, onClose, onOpen}) {
    return (
       <nav className={className}>
          <ul className={cx("list")}>
@@ -39,7 +39,7 @@ function Navbar({className, showLabel, onClose}) {
             />
 
             <li>
-               <button onClick={onClose} className={cx("nav-item")}>
+               <button onClick={() => onOpen("more")} className={cx("nav-item")}>
                   <span className={cx("icon-wrapper")}>
                      <Icon_EllipsisVertical className={cx("icon")}/>
                   </span>

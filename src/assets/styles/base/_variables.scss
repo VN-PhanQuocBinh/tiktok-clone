@@ -53,7 +53,7 @@ $dropdown-list-thumb-color: rgb(54, 54, 54);
 
 $dropdown-title-color: rgba(255, 255, 255, 0.75);
 $dropdown-more-title-color: $text-color;
-$dropdown-item-bg-color-hover: rgba(255, 255, 255, 0.04);
+$dropdown-item-bg-color-hover: rgba(255, 255, 255, 0.08);
 $dropdown-item-text-color: $text-color;
 $dropdown-item-cap-color: rgba(255, 255, 255, 0.75);
 $dropdown-item-icon-color: rgba(255, 255, 255, 0.34);
@@ -94,3 +94,6 @@ $sidebarSearch-bg-xmark-color: rgba(255, 255, 255, 0.08);
 $sidebarSearch-bg-xmark-color-hover: rgba(255, 255, 255, 0.13);
 $sidebarSearch-input-bg-color: rgba(255, 255, 255, 0.05);
 $sidebarSearch-input-border-color: rgba(255, 255, 255, 0.12);
+
+// User Suggested
+$userSuggested-header-text-color: rgba(255, 255, 255, 0.75);

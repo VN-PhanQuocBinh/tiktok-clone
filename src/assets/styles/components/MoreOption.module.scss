@@ -2,5 +2,63 @@
 @use "../base/mixins";
 
 .wrapper {
-   
+   width: 32rem;
+   height: 100vh;
+   border-left: variables.$border-style;
+   padding: 1.2rem 1.2rem 1rem;
+   @include mixins.flex-column;
+   gap: 1.6rem;
+
+   .header {
+      color: variables.$text-color;
+      @include mixins.flex-row;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+
+      &.back-header {
+         justify-content: flex-start;;
+         gap: 8px;
+
+         .icon-wrapper.icon-back {
+            position: static;
+         }
+      }
+
+      .title {
+         font-size: 2.4rem;
+      }
+
+      .icon-wrapper {
+         @include mixins.flex-center;
+         $rect-size: 2.8rem;
+         width: $rect-size;
+         height: $rect-size;
+         background-color: variables.$sidebarSearch-bg-xmark-color;
+         border-radius: 100rem;
+         cursor: pointer;
+
+         &:hover {
+            background-color: variables.$sidebarSearch-bg-xmark-color-hover;
+         }
+         
+         &.icon-back {
+            rotate: 180deg;
+            position: absolute;
+            left: -999px;
+         }
+
+      }
+   }
+
+   .list {
+      position: static;
+      background-color: transparent;
+      max-height: 100%;
+
+      &::-webkit-scrollbar {
+         display: none;
+      }
+   }
 }
+

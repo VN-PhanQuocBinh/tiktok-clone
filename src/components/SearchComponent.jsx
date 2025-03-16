@@ -101,7 +101,7 @@ export default function SearchComponent() {
          {searchResults.map((item, index) => (
             <DropDownItem
                key={index}
-               type={TYPE.USER_SUGGEST}
+               type={TYPE.USER}
                item={item}
                itemClick={(label) => console.log("click " + label)}
             />

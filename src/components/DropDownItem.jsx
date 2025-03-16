@@ -3,7 +3,12 @@ import { memo } from "react";
 import { DROPDOWN_ITEM_TYPE as TYPE } from "../constants";
 import Image from "../components/Image";
 
-import { Icon_Circle, Icon_EllipsisVertical, Icon_ChevronRight } from "../assets/Icons";
+import {
+   Icon_Circle,
+   Icon_EllipsisVertical,
+   Icon_ChevronRight,
+   Icon_BlueTick
+} from "../assets/Icons";
 
 import styles from "../assets/styles/components/DropDownItem.module.scss";
 import classNames from "classnames/bind";
@@ -17,12 +22,12 @@ function DropDownItem({
    itemClick = () => {},
    className,
    icon_className,
-   smallSize
+   smallSize,
 }) {
    let Component = Fragment;
    let common_Props = {};
 
-   if (item.to) {
+   if (item?.to) {
       Component = Link;
 
       common_Props = {
@@ -38,8 +43,8 @@ function DropDownItem({
       case TYPE.DEFAULT:
          props = {
             className: cx("drop-item"),
-            onClick: () => {}
-         }
+            onClick: () => {},
+         };
 
          content = <p className={cx("text")}>{item.label}</p>;
          break;
@@ -56,9 +61,9 @@ function DropDownItem({
             </>
          );
          break;
-      case TYPE.USER_SUGGEST:
+      case TYPE.USER:
          props = {
-            className: cx("drop-item", "user-suggest", {
+            className: cx("drop-item", "user", {
                [className]: className,
             }),
             onClick: () => itemClick(item.userId),
@@ -72,6 +77,27 @@ function DropDownItem({
                   <p>{item.full_name}</p>
                </div>
                <Icon_EllipsisVertical className={cx("icon")} />
+            </Link>
+         );
+         break;
+      case TYPE.USER_SUGGESTED:
+         props = {
+            className: cx("drop-item", "user-suggested", {
+               [className]: className,
+            }),
+            onClick: () => itemClick(item.userId),
+         };
+
+         content = (
+            <Link to={`/profile/${item.nickname}`}>
+               <Image src={item.avatar} className={cx("avt")} />
+               <div className={cx("user-info")}>
+                  <h4 className={cx("text")}>
+                     <span>{item.first_name + " " + item.last_name}</span>
+                     {item?.tick && <Icon_BlueTick className={cx("tick")}/>}
+                  </h4>
+                  <p>{item.nickname}</p>
+               </div>
             </Link>
          );
          break;
@@ -118,19 +144,18 @@ function DropDownItem({
       case TYPE.NAV_MORE_ITEM:
          props = {
             className: cx("nav-more-item", { [className]: className }),
-            onClick: itemClick,
+            onClick: !item.to ? itemClick : () => {},
          };
 
          content = (
             <>
                <p className={cx("text")}>{item.label}</p>
-               {item.children && <Icon_ChevronRight className={cx("icon")}/>}
+               {item.children && <Icon_ChevronRight className={cx("icon")} />}
             </>
-         )
-         break
+         );
+         break;
       default:
          throw Error("Unknown TYPE: " + type);
-      
    }
 
    props = {
