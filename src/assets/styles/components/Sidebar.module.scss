@@ -80,7 +80,9 @@
       }
 
       .search-btn {
-         $search-btn-w: calc(variables.$sidebar-w - 2 * variables.$padding-left-page);
+         $search-btn-w: calc(
+            variables.$sidebar-w - 2 * variables.$padding-left-page
+         );
          $search-icon-w: 1.6rem;
          $padding-x: 1.2rem;
          $gap: 1.2rem;
@@ -108,7 +110,7 @@
             text-align: left;
             overflow: hidden;
             text-overflow: ellipsis;
-            width: calc($search-btn-w - 2*$padding-x - $search-icon-w - $gap);
+            width: calc($search-btn-w - 2 * $padding-x - $search-icon-w - $gap);
             color: variables.$navbar-placeholder-color;
          }
       }
@@ -126,6 +128,7 @@
             gap: 0.4rem;
          }
       }
-      
    }
 }
+
+

@@ -1,9 +1,25 @@
 @use "../base/mixins";
-
+@use "../base/variables";
 
 .container {
    height: 100vh;
-   @include mixins.flex-row;
+   position: relative;
 
+   .side-bar {
+      position: absolute;
+   }
+
+   .main {
+      width: 100%;
+      padding: 0 variables.$sidebar-w;
+   }
+}
+
+@media screen and (max-width: 992px) {
+   .container {
+      .main {
+         padding: 0 variables.$sidebar-collapsed-w;
+      }
+   }
    
 }

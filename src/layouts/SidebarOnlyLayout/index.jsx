@@ -9,7 +9,7 @@ export default function SidebarOnlyLayout({children}) {
    return (
       <>
          <div className={cx("container")}>
-            <Sidebar/>
+            <Sidebar className={cx("side-bar")}/>
             <main className={cx("main")}>
                {children}
             </main>

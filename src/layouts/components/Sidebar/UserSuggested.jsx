@@ -19,8 +19,6 @@ function UserSuggested() {
    const [currentLen, setCurrentLen] = useState(5);
 
    useEffect(() => {
-      console.log("current length: ", currentLen);
-      
       const fetchAPI = async () => {
          let page = Math.ceil(currentLen / 20)
          let per_page = currentLen - (page - 1)*20

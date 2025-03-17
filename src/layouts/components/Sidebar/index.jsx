@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Link } from "react-router";
+import { useMediaQuery } from "../../../hooks";
 
+import { Link } from "react-router";
 import SidebarSearch from "./SidebarSearch";
 import Navbar from "./Navbar";
 import UserSuggested from "./UserSuggested";
@@ -24,8 +25,10 @@ const keyTabDisplay = {
    KEY_MORE: "more",
 };
 
-export default function Sidebar() {
+export default function Sidebar({className}) {
    const [showFull, setShowFull] = useState(true);
+   const isMatchQuery = useMediaQuery("(max-width: 992px)")
+
    const DOM_inputSearchArea = useRef(null);
    const DOM_sideBar = useRef(null);
    const [tabDisplay, setTabDisplay] = useState({
@@ -34,6 +37,11 @@ export default function Sidebar() {
    });
 
    const [currentQuery, setCurrentQuery] = useState("");
+
+
+   useEffect(() => {
+      setShowFull(!isMatchQuery)
+   }, [isMatchQuery])
 
    useEffect(() => {
       const handleClickOutside = (e) => {
@@ -104,7 +112,7 @@ export default function Sidebar() {
    // console.log("sidebar re-render");
    
    return (
-      <aside ref={DOM_sideBar} className={cx("aside")}>
+      <aside ref={DOM_sideBar} className={cx("aside", {[className]: className})}>
          <div
             className={cx("wrapper", {
                collapsed: !showFull,

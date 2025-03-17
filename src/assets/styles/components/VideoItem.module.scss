@@ -1,0 +1,16 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+.video-item {
+   padding: 20px;
+   display: block;
+   min-height: 100%;
+   min-width: 600px;
+   // min-width: 100%;
+   @include mixins.flex-center;
+   scroll-snap-align: center;
+
+   .video-element {
+      max-height: 100%;
+   }
+}

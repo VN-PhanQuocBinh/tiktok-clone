@@ -1,0 +1,20 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+.wrapper {
+   color: variables.$text-color;
+   height: 100vh;
+   
+   .list {
+      height: 100%;
+      width: 100%;
+      list-style: none;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      @include mixins.flex-column;
+
+      &::-webkit-scrollbar {
+         display: none;
+      }
+   }
+}
