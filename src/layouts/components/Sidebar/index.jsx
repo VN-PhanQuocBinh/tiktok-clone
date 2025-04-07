@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "../../../hooks";
 
 import { Link } from "react-router";
@@ -14,7 +14,6 @@ import config from "../../../config";
 
 import styles from "../../../assets/styles/components/Sidebar.module.scss";
 import classNames from "classnames/bind";
-import { useState } from "react";
 import SideMenu from "./SideMenu";
 import MoreOption from "./MoreOption";
 
@@ -38,15 +37,33 @@ export default function Sidebar({className}) {
 
    const [currentQuery, setCurrentQuery] = useState("");
 
+   const setFunc_showFull = (value) => {
+      if (value) {
+         if (!isMatchQuery) {
+            let change = true
+
+            // Handle when extend width (responsive)
+            for (let key in tabDisplay) {
+               if (tabDisplay[key] == true) 
+                  change = false
+            }
+
+            if (change)
+               setShowFull(value)
+         } 
+      } else {
+         setShowFull(value)
+      }
+   }
 
    useEffect(() => {
-      setShowFull(!isMatchQuery)
+      setFunc_showFull(!isMatchQuery)
    }, [isMatchQuery])
 
    useEffect(() => {
       const handleClickOutside = (e) => {
          if (!DOM_sideBar.current?.contains(e.target)) {
-            setShowFull(true);
+            setFunc_showFull(true);
          }
       };
 
@@ -58,56 +75,61 @@ export default function Sidebar({className}) {
    }, []);
 
    useEffect(() => {
-      if (showFull) {
-         setTabDisplay((pre) => {
-            Object.keys(pre).forEach((key) => {
-               pre[key] = false;
-            });
-   
-            return pre;
-         });
-      }
-   }, [showFull])
-
-   useEffect(() => {
-      if (tabDisplay[keyTabDisplay.KEY_SEARCH])
+      if (tabDisplay[keyTabDisplay.KEY_SEARCH]) {
          DOM_inputSearchArea.current?.focus()
+      }
    }, [tabDisplay])
 
    const handleCloseSideMenu = useCallback(() => {
-      setShowFull(true);
+      setFunc_showFull(true)
+
+      setTabDisplay((pre) => {
+         let newState = {...pre}
+         Object.keys(newState).forEach((key) => {
+            newState[key] = false
+         })
+
+         return newState
+      })
    }, []);
 
    const handleOpenMoreOption = () => {
-      setShowFull(false);
+      
    };
 
    const handleSendDataFromChild = useCallback((data) => {
       setCurrentQuery(data.currentQuery);
    }, []);
 
-   const handleOpenTab = useCallback((tabKey) => {
+   const handleOpenSideMenu = useCallback((tabKey) => {
       if (tabDisplay[tabKey]) {
          setTabDisplay((pre) => {
-            pre[tabKey] = false
-            console.log(pre);
+            let newState = {...pre}
+   
+            Object.keys(newState).forEach((key) => {
+               newState[key] = false;
+            });
             
-            return pre
+            return newState;
          });
-         setShowFull(true);
+
+         setFunc_showFull(true);
       } else {
-         setShowFull(false);
          setTabDisplay((pre) => {
             let newState = {...pre}
-
+   
             Object.keys(newState).forEach((key) => {
                newState[key] = (key === tabKey);
             });
             
             return newState;
          });
+
+         setFunc_showFull(false);
       }
-   }, []);
+
+      
+   }, [tabDisplay]);
 
    // console.log("sidebar re-render");
    
@@ -130,7 +152,7 @@ export default function Sidebar({className}) {
             </Link>
 
             <SideMenu
-               className={cx("side-menu", "menu-search")}
+               className={cx("side-menu", "menu-search", {visible: tabDisplay[keyTabDisplay.KEY_SEARCH]})}
                onClose={handleCloseSideMenu}
                title="Search"
             >
@@ -141,12 +163,12 @@ export default function Sidebar({className}) {
             </SideMenu>
 
             <MoreOption
-               className={cx("side-menu", "menu-more")}
+               className={cx("side-menu", "menu-more", {visible: tabDisplay[keyTabDisplay.KEY_MORE]})}
                onClose={handleCloseSideMenu}
             />
 
             <button
-               onClick={() => handleOpenTab(keyTabDisplay.KEY_SEARCH)}
+               onClick={() => handleOpenSideMenu(keyTabDisplay.KEY_SEARCH)}
                className={cx("search-btn")}
             >
                <span>
@@ -160,7 +182,7 @@ export default function Sidebar({className}) {
             <div className={cx("sections")}>
                <Navbar
                   onClose={handleOpenMoreOption}
-                  onOpen={handleOpenTab}
+                  onOpen={handleOpenSideMenu}
                   showLabel={showFull}
                   className={cx("navbar")}
                />

@@ -4,13 +4,21 @@ import { useEffect, useRef } from "react";
 
 const cx = classNames.bind(styles);
 
-function VideoPlayer({className, ...props}) {
+function VideoPlayer({className, src, ...props}) {
    const DOM_video = useRef(null)
 
    useEffect(() => {
+      DOM_video.current.play()
+
       const observer = new IntersectionObserver(
-         (args) => {
-            
+         ([entry]) => {
+
+            // console.log(entry);
+            // if (entry.isIntersecting) {
+            //    DOM_video.current.play()
+            // } else {
+            //    DOM_video.current.pause()
+            // }
          },
          {
             threshold: 0.5
@@ -26,7 +34,9 @@ function VideoPlayer({className, ...props}) {
          className={cx("video", {[className]: className})}
          ref={DOM_video}
          controls
-      ></video>
+      >
+         <source src={src} type="video/mp4" />
+      </video>
    );
 }
 
