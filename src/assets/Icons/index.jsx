@@ -36,3 +36,10 @@ export {
    Icon_ChevronRight,
    Icon_BlueTick
 } from "./components/Sidebar"
+
+export {
+   Icon_Volume,
+   Icon_VolumeXmark,
+   Icon_Play,
+   Icon_Pause
+} from "./components/VideoList"

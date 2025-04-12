@@ -11,14 +11,14 @@
 
    .main {
       width: 100%;
-      padding: 0 variables.$sidebar-w;
+      padding-left: variables.$sidebar-w;
    }
 }
 
 @media screen and (max-width: 992px) {
    .container {
       .main {
-         padding: 0 variables.$sidebar-collapsed-w;
+         padding-left: variables.$sidebar-collapsed-w;
       }
    }
    

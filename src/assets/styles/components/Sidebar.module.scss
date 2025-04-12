@@ -35,11 +35,11 @@
          //    z-index: -2;
          // }
 
-         &.more .menu-more {
-            opacity: 1;
-            left: variables.$sidebar-collapsed-w;
-            z-index: -2;
-         }
+         // &.more .menu-more {
+         //    opacity: 1;
+         //    left: variables.$sidebar-collapsed-w;
+         //    z-index: -2;
+         // }
       }
 
       &:not(.collapsed) {
@@ -75,11 +75,13 @@
          z-index: -3;
          background-color: variables.$page-bg-color;
          opacity: 0;
+         visibility: hidden;
          border-right: variables.$border-style;
          transition: all 0.4s;
 
-         &.menu-search.visible {
+         &.menu-search.visible, &.menu-more.visible {
             opacity: 1;
+            visibility: visible;
             left: variables.$sidebar-collapsed-w;
             z-index: -2;
          }

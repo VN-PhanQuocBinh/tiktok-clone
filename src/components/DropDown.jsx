@@ -1,4 +1,4 @@
-import { memo, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState, forwardRef } from "react"
 
 import styles from "../assets/styles/components/DropDown.module.scss"
 import classNames from "classnames/bind"
@@ -15,11 +15,24 @@ function DropDown({
    delay = [0, 0], 
    className, 
    children, 
-   onHide
-}) {
+   onHide,
+   style
+}, ref) {
    const [isAppear, setIsAppear] = useState(isVisible)
    const timerId = useRef()
    const DOM_container = useRef(null)
+
+   const mergeRef = (...refs) => {
+      return (DOM_element) => {
+         refs.forEach((ref) => {
+            if (typeof ref === "function") {
+               ref(DOM_element)
+            } else if (ref && typeof ref === 'object') {
+               ref.current = DOM_element
+            }
+         })
+      }
+   }
 
    useEffect(() => {
       if (!isVisible) {
@@ -44,6 +57,7 @@ function DropDown({
             if (!DOM_container.current?.contains(e.target)) 
                onBlur()
          }
+         
    
          document.addEventListener("mousedown", handleClickOutside)
    
@@ -52,6 +66,7 @@ function DropDown({
          }
       }
    }, [])
+
 
    // console.log("DropDown re-render");
    return (
@@ -66,9 +81,10 @@ function DropDown({
 
             style={{
                width: width || "100%",
+               ...style
             }}
 
-            ref={DOM_container}
+            ref={mergeRef(DOM_container, ref)}
          >
             {children}     
          </ul>
@@ -76,4 +92,4 @@ function DropDown({
    )
 }
 
-export default memo(DropDown)
+export default memo(forwardRef(DropDown))

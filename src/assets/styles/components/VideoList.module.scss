@@ -3,7 +3,9 @@
 
 .wrapper {
    color: variables.$text-color;
+   width: 100%;
    height: 100vh;
+   z-index: 0;
    
    .list {
       height: 100%;

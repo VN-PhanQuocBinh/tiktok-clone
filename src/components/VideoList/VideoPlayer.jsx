@@ -8,17 +8,29 @@ function VideoPlayer({className, src, ...props}) {
    const DOM_video = useRef(null)
 
    useEffect(() => {
-      DOM_video.current.play()
+      const handleClick = () => {
+         if (DOM_video.current?.paused) {
+            DOM_video.current?.play()
+         } else {
+            DOM_video.current?.pause()
+         }
+      }
 
+      DOM_video.current.addEventListener("click", handleClick)
+
+      return () => {
+         DOM_video.current.removeEventListener("click", handleClick)
+      }
+   }, [])
+
+   useEffect(() => {
       const observer = new IntersectionObserver(
          ([entry]) => {
-
-            // console.log(entry);
-            // if (entry.isIntersecting) {
-            //    DOM_video.current.play()
-            // } else {
-            //    DOM_video.current.pause()
-            // }
+            if (entry.isIntersecting) {
+               DOM_video.current?.play()
+            } else {
+               DOM_video.current?.pause()
+            }
          },
          {
             threshold: 0.5
@@ -26,6 +38,12 @@ function VideoPlayer({className, src, ...props}) {
       )
 
       observer.observe(DOM_video.current)
+
+      return () => {
+         if (DOM_video.current) {
+            observer.unobserve(DOM_video.current)
+         }
+      }
    }, [])
 
    return (
@@ -33,7 +51,6 @@ function VideoPlayer({className, src, ...props}) {
          {...props}
          className={cx("video", {[className]: className})}
          ref={DOM_video}
-         controls
       >
          <source src={src} type="video/mp4" />
       </video>
