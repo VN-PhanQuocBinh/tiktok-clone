@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from "react"
-import styles from "../../assets/styles/components/VolumeControl.module.scss"
+import styles from "../../assets/styles/components/TimeLine.module.scss"
 import classNames from "classnames/bind"
 
 const cx = classNames.bind(styles)
@@ -20,19 +20,15 @@ function VolumeControl({className, ...props}) {
          console.log("clear events");
          
          window.removeEventListener("pointermove", handlePointerMove)
-         DOM_wrapper.current?.removeEventListener("pointerup", handlePointerUp)
+         window.removeEventListener("pointerup", handlePointerUp)
       }
 
       const handlePointerMove = (e) => {
-         if (!DOM_wrapper.current?.contains(e.target)) {
-            clearEvents()
-         } else {
-            const rect = DOM_track.current?.getBoundingClientRect()
-            let left = Math.min(Math.max(e.clientX - rect.left - thumbWith/2, 0), trackWidth - thumbWith)
+         const rect = DOM_track.current?.getBoundingClientRect()
+         let left = Math.min(Math.max(e.clientX - rect.left - thumbWith/2, 0), trackWidth - thumbWith)
 
-            console.log(e.clientX - rect.left);
-            setLeftThumb(left)
-         }
+         console.log(e.clientX - rect.left);
+         setLeftThumb(left)
       }
 
       const handlePointerUp = (e) => {
@@ -43,7 +39,7 @@ function VolumeControl({className, ...props}) {
 
       const handlePointerDown = (e) => {
          window.addEventListener("pointermove", handlePointerMove)
-         DOM_wrapper.current?.addEventListener("pointerup", handlePointerUp)
+         window.addEventListener("pointerup", handlePointerUp)
       }
 
       DOM_thumb.current?.addEventListener("pointerdown", handlePointerDown)
@@ -66,7 +62,6 @@ function VolumeControl({className, ...props}) {
             <div ref={DOM_thumb} style={{left: `${leftThumb}px`}} className={cx("slider-thumb")}/>
          </div>
       </div>
-      
    )
 }
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import VideoPlayer from "./VideoPlayer";
 import VolumeControl from "./VolumeControl";
+import TimeLine from "./TimeLine";
 import DropDown from "../DropDown";
 import DropDownItem from "../DropDownItem";
 
@@ -13,11 +14,11 @@ import {
    Icon_EllipsisVertical,
    Icon_Play,
    Icon_Pause,
+   Icon_BlueTick
 } from "../../assets/Icons";
 
 import classNames from "classnames/bind";
 import styles from "../../assets/styles/components/VideoItem.module.scss";
-import { matchPath } from "react-router";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,10 @@ function VideoItem({ className, video }) {
    const DOM_moreMenu = useRef(null);
    const [inViewport, setInViewport] = useState(false);
    const [leftMoreMenu, setLeftMoreMenu] = useState(0);
+   const [isPlay, setIsPlay] = useState(true);
+   const [displayStateBtn, setDisplayStateBtn] = useState(false)
+
+   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
    useEffect(() => {
       const observer = new IntersectionObserver(
@@ -49,9 +54,9 @@ function VideoItem({ className, video }) {
    useEffect(() => {
       const handleResize = () => {
          if (inViewport) {
-            const rect = DOM_moreMenu.current.getBoundingClientRect()
-            let newLeft = window.innerWidth - rect.right - 12
-            setLeftMoreMenu((preLeft) => Math.min(0, preLeft + newLeft))
+            const rect = DOM_moreMenu.current.getBoundingClientRect();
+            let newLeft = window.innerWidth - rect.right - 12;
+            setLeftMoreMenu((preLeft) => Math.min(0, preLeft + newLeft));
          }
       };
 
@@ -62,6 +67,31 @@ function VideoItem({ className, video }) {
       };
    }, [inViewport]);
 
+   useEffect(() => {
+      const observer = new MutationObserver(() => {
+         if (DOM_moreMenu.current) {
+            const rect = DOM_moreMenu.current.getBoundingClientRect();
+            let newLeft = window.innerWidth - rect.right - 12;
+            setLeftMoreMenu((preLeft) => Math.min(0, preLeft + newLeft));
+         }
+      });
+
+      if (DOM_videoItem.current) {
+         observer.observe(DOM_videoItem.current, {
+            childList: true,
+            subtree: true,
+         });
+      }
+
+      return () => observer.disconnect();
+   }, []);
+
+
+   const onDisplayStateBtn = (played, displayed) => {
+      setIsPlay(played)
+      setDisplayStateBtn(displayed)
+   }
+
    return (
       <li
          ref={DOM_videoItem}
@@ -71,6 +101,7 @@ function VideoItem({ className, video }) {
             <VideoPlayer
                className={cx("video-element")}
                src={video.file_url}
+               onDisplayStateBtn={onDisplayStateBtn}
             ></VideoPlayer>
 
             <div className={cx("overlay-control")}>
@@ -81,16 +112,19 @@ function VideoItem({ className, video }) {
                   <VolumeControl className={cx("volume-control")} />
                </span>
 
-               <span className={cx("more-icon-wrapper")}>
+               <span
+                  onClick={() => setShowMoreMenu(!showMoreMenu)}
+                  className={cx("more-icon-wrapper")}
+               >
                   <Icon_EllipsisVertical className={cx("more-icon")} />
 
                   <DropDown
                      style={{
-                        left: leftMoreMenu
+                        left: leftMoreMenu,
                      }}
                      ref={DOM_moreMenu}
                      className={cx("more-menu")}
-                     isVisible={true}
+                     isVisible={showMoreMenu}
                   >
                      <DropDownItem
                         type={TYPE.ACTIONS}
@@ -123,14 +157,28 @@ function VideoItem({ className, video }) {
             </div>
 
             <div className={cx("play-pause-btn")}>
-               <Icon_Play />
-               <Icon_Pause />
+               {displayStateBtn && isPlay && (
+                  <span>
+                     <Icon_Play className={cx("icon", "play")} />
+                  </span>
+               )}
+
+               {displayStateBtn && !isPlay && (
+                  <span>
+                     <Icon_Pause className={cx("icon")} />
+                  </span>
+               )}
             </div>
 
             <div className={cx("video-info")}>
-               <h3 className={cx("user-id")}>{video?.user?.nickname}</h3>
+               <h3 className={cx("user-id")}>
+                  {video?.user?.nickname}
+                  {!video?.user?.tick && <Icon_BlueTick className={cx("tick")}/>}
+               </h3>
                <p className={cx("description")}>{video?.description}</p>
             </div>
+
+            <TimeLine className={cx("time-line")}/>
          </div>
       </li>
    );

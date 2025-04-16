@@ -1,18 +1,20 @@
 import classNames from "classnames/bind";
 import styles from "../../assets/styles/components/VideoPlayer.module.scss";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const cx = classNames.bind(styles);
 
-function VideoPlayer({className, src, ...props}) {
+function VideoPlayer({className, src, onDisplayStateBtn, ...props}) {
    const DOM_video = useRef(null)
 
    useEffect(() => {
       const handleClick = () => {
          if (DOM_video.current?.paused) {
             DOM_video.current?.play()
+            onDisplayStateBtn(!DOM_video.current.paused, true)
          } else {
             DOM_video.current?.pause()
+            onDisplayStateBtn(!DOM_video.current.paused, true)
          }
       }
 
@@ -28,8 +30,10 @@ function VideoPlayer({className, src, ...props}) {
          ([entry]) => {
             if (entry.isIntersecting) {
                DOM_video.current?.play()
+               onDisplayStateBtn(!DOM_video.current.paused, false)
             } else {
                DOM_video.current?.pause()
+               onDisplayStateBtn(!DOM_video.current.paused, false)
             }
          },
          {
