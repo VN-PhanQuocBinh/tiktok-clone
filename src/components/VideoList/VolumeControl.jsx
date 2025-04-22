@@ -5,7 +5,7 @@ import classNames from "classnames/bind"
 
 const cx = classNames.bind(styles)
 
-function VolumeControl({className, ...props}) {
+function VolumeControl({className, onChangeVolume, ...props}) {
    const DOM_wrapper = useRef(null)
    const DOM_track = useRef(null)
    const DOM_thumb = useRef(null)
@@ -30,7 +30,8 @@ function VolumeControl({className, ...props}) {
             const rect = DOM_track.current?.getBoundingClientRect()
             let left = Math.min(Math.max(e.clientX - rect.left - thumbWith/2, 0), trackWidth - thumbWith)
 
-            console.log(e.clientX - rect.left);
+            console.log(left/(trackWidth - thumbWith));
+            onChangeVolume(left/(trackWidth - thumbWith))
             setLeftThumb(left)
          }
       }

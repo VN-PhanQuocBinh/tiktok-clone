@@ -3,29 +3,46 @@
 
 .wrapper {
    position: relative;
+   display: flex;
+   align-items: flex-end;
    
    .slider-track {
       width: 100%;
-      height: 2px;
-      // background-color: rgba($color: #fff, $alpha: 0.5);
+      height: 4px;
+      background-color: rgba($color: #fff, $alpha: 0.5);
       position: relative;
       border-radius: 999px;
 
+
+      &:hover {
+         cursor: pointer;
+         height: 6px;
+         transition: height 0.3s ease;
+
+         .slider-thumb {
+            opacity: 1;
+            transition: opacity 0.5s ease, left 1s linear;
+         }
+      }
+
       .slider-fill {
          height: 100%;
-         background-color: white;
+         background-color: variables.$primary-color;
+         transition: width 1s linear;
       }
 
       .slider-thumb {
+         opacity: 0;
          transform-origin: 50% 50%;
          width: 12px;
          height: 12px;
          border-radius: 999px;
          background: white;
          position: absolute;
-         top: 0;
+         top: 50%;
          translate: 0 -50%;
          z-index: 100;
+         cursor: grab;
       }
    }
 }
