@@ -32,6 +32,7 @@ function VideoItem({ className, video }) {
    const [leftMoreMenu, setLeftMoreMenu] = useState(0);
    const [isPlay, setIsPlay] = useState(false);
    const [displayStateBtn, setDisplayStateBtn] = useState(false);
+   const [isMuted, setIsMuted] = useState(false)
 
    const [duration, setDuration] = useState(0);
 
@@ -127,6 +128,7 @@ function VideoItem({ className, video }) {
 
    const handleChangeVolume = useCallback((value) => {
       DOM_video.current?.setVolume(value);
+      setIsMuted(value == 0)
    }, []);
 
    return (
@@ -147,8 +149,7 @@ function VideoItem({ className, video }) {
 
             <div className={cx("overlay-control")}>
                <span className={cx("volume-icons")}>
-                  <Icon_Volume />
-                  {/* <Icon_VolumeXmark /> */}
+                  {isMuted ? <Icon_VolumeXmark /> : <Icon_Volume />}
 
                   <VolumeControl
                      className={cx("volume-control")}
