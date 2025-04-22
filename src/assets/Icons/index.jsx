@@ -41,5 +41,10 @@ export {
    Icon_Volume,
    Icon_VolumeXmark,
    Icon_Play,
-   Icon_Pause
+   Icon_Pause,
+   Icon_Heart,
+   Icon_Comment,
+   Icon_Flag,
+   Icon_Share,
+   Icon_Check
 } from "./components/VideoList"

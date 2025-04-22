@@ -11,6 +11,7 @@ function VideoPlayer({
    onDurationChange,
    onPlay,
    onPause,
+   onLoadedMetaData,
    ...props
 }, ref) {
    const DOM_video = useRef(null);
@@ -80,7 +81,10 @@ function VideoPlayer({
       const video = DOM_video.current;
 
       const handleLoadedMetadata = () => {
+         console.dir(video);
+         
          onDurationChange?.(video?.duration);
+         onLoadedMetaData(video?.clientWidth, video?.clientHeight)
       };
 
       video?.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -88,7 +92,7 @@ function VideoPlayer({
       return () => {
          video?.removeEventListener("loadedmetadata", handleLoadedMetadata);
       };
-   }, []);
+   }, [onLoadedMetaData]);
 
    return (
       <video

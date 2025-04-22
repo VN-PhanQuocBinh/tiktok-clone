@@ -32,7 +32,10 @@ function VideoItem({ className, video }) {
    const [leftMoreMenu, setLeftMoreMenu] = useState(0);
    const [isPlay, setIsPlay] = useState(false);
    const [displayStateBtn, setDisplayStateBtn] = useState(false);
-   const [isMuted, setIsMuted] = useState(false)
+   const [isMuted, setIsMuted] = useState(false);
+
+   const [orientation, setOrientation] = useState(true);
+   // true: landscape, false: portrait
 
    const [duration, setDuration] = useState(0);
 
@@ -128,13 +131,23 @@ function VideoItem({ className, video }) {
 
    const handleChangeVolume = useCallback((value) => {
       DOM_video.current?.setVolume(value);
-      setIsMuted(value == 0)
+      setIsMuted(value == 0);
+   }, []);
+
+   const handleLoadedMetadata = useCallback((w, h) => {
+      if (w > h) {
+         setOrientation(true);
+      } else {
+         setOrientation(false);
+      }
    }, []);
 
    return (
       <li
          ref={DOM_videoItem}
-         className={cx("video-item", { [className]: className })}
+         className={cx("video-item", {
+            [className]: className,
+         })}
       >
          <div className={cx("videoPlayer-wrapper")}>
             <VideoPlayer
@@ -144,6 +157,7 @@ function VideoItem({ className, video }) {
                onDurationChange={onDurationChange}
                onPlay={handlePlay}
                onPause={handlePause}
+               onLoadedMetaData={handleLoadedMetadata}
                ref={DOM_video}
             ></VideoPlayer>
 
@@ -234,9 +248,9 @@ function VideoItem({ className, video }) {
                duration={duration}
                className={cx("time-line")}
             />
-
-            <VideoActions className={cx("video-actions")} />
          </div>
+
+         <VideoActions landscape={orientation} portrait={!orientation} className={cx("video-actions")} />
       </li>
    );
 }
