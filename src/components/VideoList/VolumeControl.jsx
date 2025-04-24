@@ -12,9 +12,9 @@ function VolumeControl({className, onChangeVolume, ...props}) {
    const [leftThumb, setLeftThumb] = useState(0)
 
    useEffect(() => {
-      setLeftThumb(0.5 * DOM_track.current?.offsetWidth)
       const trackWidth = DOM_track.current?.offsetWidth
       const thumbWith = DOM_thumb.current?.offsetWidth
+      setLeftThumb(0.1 * (trackWidth - thumbWith))
 
       const clearEvents = () => {
          console.log("clear events");

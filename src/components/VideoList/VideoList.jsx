@@ -26,6 +26,12 @@ function VideoList() {
             {videos.map((video) => (
                <VideoItem key={video.id} video={video} />
             ))}
+
+            <div className={cx("scroll-buttons")}>
+               <button className={cx("up-btn")}> 
+                  
+               </button>
+            </div>
          </ul>
       </div>
    );

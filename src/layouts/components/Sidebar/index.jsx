@@ -37,7 +37,9 @@ export default function Sidebar({className}) {
 
    const [currentQuery, setCurrentQuery] = useState("");
 
-   const setFunc_showFull = (value) => {
+   const setFunc_showFull = useCallback((value) => {
+      console.log("check: ", isMatchQuery);
+
       if (value) {
          if (!isMatchQuery) {
             let change = true
@@ -48,13 +50,16 @@ export default function Sidebar({className}) {
                   change = false
             }
 
-            if (change)
+            if (change) {
+               // console.log("yes", isMatchQuery);
+               
                setShowFull(value)
+            }
          } 
       } else {
          setShowFull(value)
       }
-   }
+   }, [isMatchQuery])
 
    useEffect(() => {
       setFunc_showFull(!isMatchQuery)
@@ -91,7 +96,7 @@ export default function Sidebar({className}) {
 
          return newState
       })
-   }, []);
+   }, [setFunc_showFull]);
 
    const handleOpenMoreOption = () => {
       
@@ -129,9 +134,9 @@ export default function Sidebar({className}) {
       }
 
       
-   }, [tabDisplay]);
+   }, [tabDisplay, setFunc_showFull]);
 
-   // console.log("sidebar re-render");
+   console.log("sidebar re-render", isMatchQuery);
    
    return (
       <aside ref={DOM_sideBar} className={cx("aside", {[className]: className})}>

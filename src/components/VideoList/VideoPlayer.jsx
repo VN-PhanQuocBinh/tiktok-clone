@@ -33,7 +33,7 @@ function VideoPlayer({
    }, [])
 
    useEffect(() => {
-      DOM_video.current.volume = 0.3
+      DOM_video.current.volume = 0.1
 
       const handleClick = () => {
          if (DOM_video.current?.paused) {
@@ -81,7 +81,7 @@ function VideoPlayer({
       const video = DOM_video.current;
 
       const handleLoadedMetadata = () => {
-         console.dir(video);
+         // console.dir(video);
          
          onDurationChange?.(video?.duration);
          onLoadedMetaData(video?.clientWidth, video?.clientHeight)
