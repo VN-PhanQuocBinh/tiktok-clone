@@ -26,67 +26,91 @@ const keyTabDisplay = {
 
 export default function Sidebar({className}) {
    const [showFull, setShowFull] = useState(true);
+   const [showBlurArea, setShowBlurArea] = useState(false)
    const isMatchQuery = useMediaQuery("(max-width: 992px)")
-
-   const DOM_inputSearchArea = useRef(null);
-   const DOM_sideBar = useRef(null);
    const [tabDisplay, setTabDisplay] = useState({
       [keyTabDisplay.KEY_SEARCH]: false,
       [keyTabDisplay.KEY_MORE]: false,
    });
-
    const [currentQuery, setCurrentQuery] = useState("");
 
-   const setFunc_showFull = useCallback((value) => {
-      console.log("check: ", isMatchQuery);
+   const DOM_inputSearchArea = useRef(null);
+   const DOM_sideBar = useRef(null);
+   const DOM_blurArea = useRef(null)
 
-      if (value) {
-         if (!isMatchQuery) {
-            let change = true
-
-            // Handle when extend width (responsive)
-            for (let key in tabDisplay) {
-               if (tabDisplay[key] == true) 
-                  change = false
-            }
-
-            if (change) {
-               // console.log("yes", isMatchQuery);
-               
-               setShowFull(value)
-            }
-         } 
-      } else {
-         setShowFull(value)
-      }
-   }, [isMatchQuery])
-
+   // responsive
    useEffect(() => {
-      setFunc_showFull(!isMatchQuery)
+      if (!isMatchQuery) {
+         let change = true
+
+         // Handle when extend width (responsive)
+         for (let key in tabDisplay) {
+            console.log(tabDisplay[key]);
+            
+            if (tabDisplay[key] == true) 
+               change = false
+         }
+
+         if (change) 
+            setShowFull(!isMatchQuery)
+      } else {
+         setShowFull(!isMatchQuery)
+      }
+      
    }, [isMatchQuery])
 
+   // displat blur area
+   useEffect(() => {
+      let value = false
+
+      Object.keys(tabDisplay).forEach((key) => {
+         if (tabDisplay[key])
+            value = tabDisplay[key]
+      })
+
+      setShowBlurArea(value)
+   }, [tabDisplay])
+
+
+   // blur event
    useEffect(() => {
       const handleClickOutside = (e) => {
-         if (!DOM_sideBar.current?.contains(e.target)) {
-            setFunc_showFull(true);
-         }
+         console.log("click");
+         
+         if (!isMatchQuery)
+            setShowFull(true);
+
+         setTabDisplay((pre) => {
+            let newState = {...pre}
+   
+            Object.keys(newState).forEach((key) => {
+               newState[key] = false;
+            });
+            
+            return newState;
+         });
       };
 
-      document.addEventListener("pointerdown", handleClickOutside);
+      DOM_blurArea.current?.addEventListener("pointerdown", handleClickOutside);
 
       return () => {
-         document.removeEventListener("pointerdown", handleClickOutside);
+         DOM_blurArea.current?.removeEventListener("pointerdown", handleClickOutside);
       };
-   }, []);
+   }, [isMatchQuery, showBlurArea]);
 
+   // auto focus input when open sidemenu
    useEffect(() => {
       if (tabDisplay[keyTabDisplay.KEY_SEARCH]) {
          DOM_inputSearchArea.current?.focus()
       }
    }, [tabDisplay])
 
+
    const handleCloseSideMenu = useCallback(() => {
-      setFunc_showFull(true)
+      console.log("close");
+      
+      if (!isMatchQuery)
+         setShowFull(true)
 
       setTabDisplay((pre) => {
          let newState = {...pre}
@@ -96,12 +120,13 @@ export default function Sidebar({className}) {
 
          return newState
       })
-   }, [setFunc_showFull]);
+   }, [isMatchQuery]);
 
    const handleOpenMoreOption = () => {
       
    };
 
+   // binding query to parent component
    const handleSendDataFromChild = useCallback((data) => {
       setCurrentQuery(data.currentQuery);
    }, []);
@@ -118,7 +143,7 @@ export default function Sidebar({className}) {
             return newState;
          });
 
-         setFunc_showFull(true);
+         setShowFull(true);
       } else {
          setTabDisplay((pre) => {
             let newState = {...pre}
@@ -130,16 +155,18 @@ export default function Sidebar({className}) {
             return newState;
          });
 
-         setFunc_showFull(false);
+         setShowFull(false);
       }
 
       
-   }, [tabDisplay, setFunc_showFull]);
+   }, [tabDisplay]);
 
-   console.log("sidebar re-render", isMatchQuery);
+   // console.log("sidebar re-render", isMatchQuery);
    
    return (
       <aside ref={DOM_sideBar} className={cx("aside", {[className]: className})}>
+         {showBlurArea && <div ref={DOM_blurArea} className={cx("blur-area")} />}
+
          <div
             className={cx("wrapper", {
                collapsed: !showFull,

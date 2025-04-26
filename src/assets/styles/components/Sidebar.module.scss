@@ -2,6 +2,18 @@
 @use "../base/mixins";
 
 .aside {
+   position: relative;
+
+   .blur-area {
+      width: 100vw;
+      height: 100vh;
+      background-color: transparent;
+      position: absolute;
+      left: 100%;
+      top: 0;
+      z-index: 100;
+   }
+
    .wrapper {
       width: variables.$sidebar-w;
       height: 100vh;

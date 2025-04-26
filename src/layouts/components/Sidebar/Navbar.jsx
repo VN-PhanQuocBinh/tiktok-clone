@@ -10,6 +10,9 @@ import styles from "../../../assets/styles/components/Navbar.module.scss";
 const cx = classNames.bind(styles);
 
 function Navbar({className, showLabel, onOpen}) {
+   console.log("navbar re-render");
+   
+
    return (
       <nav className={className}>
          <ul className={cx("list")}>

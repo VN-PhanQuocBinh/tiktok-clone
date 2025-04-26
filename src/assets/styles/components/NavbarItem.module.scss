@@ -6,7 +6,7 @@
    width: 100%;
    @include mixins.flex-row;
    align-items: center;
-   gap: 1.2rem;
+   // gap: 1.2rem;
    padding: 0.4rem;
    border-radius: 6px;
    overflow: hidden;
@@ -24,11 +24,13 @@
    .icon-wrapper {
       @include mixins.flex-center;
       height: 100%;
+      width: 32px;
 
       .icon {
          color: variables.$text-color;
          width: 2.8rem;
          height: 2.8rem;
+         margin: 0.2rem;
 
          &.live {
             padding: 2px;
@@ -49,6 +51,7 @@
       align-items: center;
       transition: all 0.1s ease;
       min-width: max-content;
+      margin-left: 1.2rem;
 
       &.hidden {
          opacity: 0;

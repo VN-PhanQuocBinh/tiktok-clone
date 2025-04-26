@@ -12,7 +12,7 @@ nav {
       width: 100%;
       @include mixins.flex-row;
       align-items: center;
-      gap: 1.2rem;
+      // gap: 1.2rem;
       padding: 0.4rem;
       border-radius: 6px;
       overflow: hidden;
@@ -33,7 +33,7 @@ nav {
          height: 100%;
    
          .icon {
-            $icon-size: 2.8rem;
+            $icon-size: 3.2rem;
             color: variables.$text-color;
             width: $icon-size;
             height: $icon-size;
@@ -51,6 +51,7 @@ nav {
          align-items: center;
          transition: all 0.1s ease;
          min-width: max-content;
+         margin-left: 1.2rem;
    
          &.hidden {
             opacity: 0;
