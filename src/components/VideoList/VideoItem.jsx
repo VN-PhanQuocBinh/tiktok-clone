@@ -250,7 +250,12 @@ function VideoItem({ className, video }) {
             />
          </div>
 
-         <VideoActions landscape={orientation} portrait={!orientation} className={cx("video-actions")} />
+         <VideoActions
+            video={video}
+            landscape={orientation}
+            portrait={!orientation}
+            className={cx("video-actions")}
+         />
       </li>
    );
 }

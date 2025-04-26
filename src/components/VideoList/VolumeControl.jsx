@@ -17,7 +17,7 @@ function VolumeControl({className, onChangeVolume, ...props}) {
       setLeftThumb(0.1 * (trackWidth - thumbWith))
 
       const clearEvents = () => {
-         console.log("clear events");
+         // console.log("clear events");
          
          window.removeEventListener("pointermove", handlePointerMove)
          DOM_wrapper.current?.removeEventListener("pointerup", handlePointerUp)
@@ -30,14 +30,14 @@ function VolumeControl({className, onChangeVolume, ...props}) {
             const rect = DOM_track.current?.getBoundingClientRect()
             let left = Math.min(Math.max(e.clientX - rect.left - thumbWith/2, 0), trackWidth - thumbWith)
 
-            console.log(left/(trackWidth - thumbWith));
+            // console.log(left/(trackWidth - thumbWith));
             onChangeVolume(left/(trackWidth - thumbWith))
             setLeftThumb(left)
          }
       }
 
       const handlePointerUp = (e) => {
-         console.log("pointer up");
+         // console.log("pointer up");
          
          clearEvents()
       }
