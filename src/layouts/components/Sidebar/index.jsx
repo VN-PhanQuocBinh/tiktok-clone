@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "../../../hooks";
+import { useAuth } from "../../../contexts/AuthContext";
 
 import { Link } from "react-router";
 import SidebarSearch from "./SidebarSearch";
@@ -7,6 +8,7 @@ import Navbar from "./Navbar";
 import UserSuggested from "./UserSuggested";
 import Image from "../../../components/Image";
 import { Icon_Search } from "../../../assets/Icons";
+import LoginModal from "../../../components/LoginModal/LoginModal";
 
 import logo from "../../../assets/images/logo.svg";
 import logoLess from "../../../assets/images/logo-less.png";
@@ -24,69 +26,66 @@ const keyTabDisplay = {
    KEY_MORE: "more",
 };
 
-export default function Sidebar({className}) {
+export default function Sidebar({ className }) {
+   const { isLoggedIn, login, logout } = useAuth();
+
    const [showFull, setShowFull] = useState(true);
-   const [showBlurArea, setShowBlurArea] = useState(false)
-   const isMatchQuery = useMediaQuery("(max-width: 992px)")
+   const [showBlurArea, setShowBlurArea] = useState(false);
+   const isMatchQuery = useMediaQuery("(max-width: 992px)");
    const [tabDisplay, setTabDisplay] = useState({
       [keyTabDisplay.KEY_SEARCH]: false,
       [keyTabDisplay.KEY_MORE]: false,
    });
    const [currentQuery, setCurrentQuery] = useState("");
+   const [showLoginModal, setShowLoginModal] = useState(false)
 
    const DOM_inputSearchArea = useRef(null);
    const DOM_sideBar = useRef(null);
-   const DOM_blurArea = useRef(null)
+   const DOM_blurArea = useRef(null);
 
    // responsive
    useEffect(() => {
       if (!isMatchQuery) {
-         let change = true
+         let change = true;
 
          // Handle when extend width (responsive)
          for (let key in tabDisplay) {
-            console.log(tabDisplay[key]);
-            
-            if (tabDisplay[key] == true) 
-               change = false
+            // console.log(tabDisplay[key]);
+
+            if (tabDisplay[key] == true) change = false;
          }
 
-         if (change) 
-            setShowFull(!isMatchQuery)
+         if (change) setShowFull(!isMatchQuery);
       } else {
-         setShowFull(!isMatchQuery)
+         setShowFull(!isMatchQuery);
       }
-      
-   }, [isMatchQuery])
+   }, [isMatchQuery]);
 
    // displat blur area
    useEffect(() => {
-      let value = false
+      let value = false;
 
       Object.keys(tabDisplay).forEach((key) => {
-         if (tabDisplay[key])
-            value = tabDisplay[key]
-      })
+         if (tabDisplay[key]) value = tabDisplay[key];
+      });
 
-      setShowBlurArea(value)
-   }, [tabDisplay])
-
+      setShowBlurArea(value);
+   }, [tabDisplay]);
 
    // blur event
    useEffect(() => {
       const handleClickOutside = (e) => {
          console.log("click");
-         
-         if (!isMatchQuery)
-            setShowFull(true);
+
+         if (!isMatchQuery) setShowFull(true);
 
          setTabDisplay((pre) => {
-            let newState = {...pre}
-   
+            let newState = { ...pre };
+
             Object.keys(newState).forEach((key) => {
                newState[key] = false;
             });
-            
+
             return newState;
          });
       };
@@ -94,78 +93,87 @@ export default function Sidebar({className}) {
       DOM_blurArea.current?.addEventListener("pointerdown", handleClickOutside);
 
       return () => {
-         DOM_blurArea.current?.removeEventListener("pointerdown", handleClickOutside);
+         DOM_blurArea.current?.removeEventListener(
+            "pointerdown",
+            handleClickOutside
+         );
       };
    }, [isMatchQuery, showBlurArea]);
 
    // auto focus input when open sidemenu
    useEffect(() => {
       if (tabDisplay[keyTabDisplay.KEY_SEARCH]) {
-         DOM_inputSearchArea.current?.focus()
+         DOM_inputSearchArea.current?.focus();
       }
-   }, [tabDisplay])
-
+   }, [tabDisplay]);
 
    const handleCloseSideMenu = useCallback(() => {
       console.log("close");
-      
-      if (!isMatchQuery)
-         setShowFull(true)
+
+      if (!isMatchQuery) setShowFull(true);
 
       setTabDisplay((pre) => {
-         let newState = {...pre}
+         let newState = { ...pre };
          Object.keys(newState).forEach((key) => {
-            newState[key] = false
-         })
+            newState[key] = false;
+         });
 
-         return newState
-      })
+         return newState;
+      });
    }, [isMatchQuery]);
 
-   const handleOpenMoreOption = () => {
-      
-   };
+   const handleOpenMoreOption = () => {};
 
    // binding query to parent component
    const handleSendDataFromChild = useCallback((data) => {
       setCurrentQuery(data.currentQuery);
    }, []);
 
-   const handleOpenSideMenu = useCallback((tabKey) => {
-      if (tabDisplay[tabKey]) {
-         setTabDisplay((pre) => {
-            let newState = {...pre}
-   
-            Object.keys(newState).forEach((key) => {
-               newState[key] = false;
+   const handleOpenSideMenu = useCallback(
+      (tabKey) => {
+         if (tabDisplay[tabKey]) {
+            setTabDisplay((pre) => {
+               let newState = { ...pre };
+
+               Object.keys(newState).forEach((key) => {
+                  newState[key] = false;
+               });
+
+               return newState;
             });
-            
-            return newState;
-         });
 
-         setShowFull(true);
-      } else {
-         setTabDisplay((pre) => {
-            let newState = {...pre}
-   
-            Object.keys(newState).forEach((key) => {
-               newState[key] = (key === tabKey);
+            setShowFull(true);
+         } else {
+            setTabDisplay((pre) => {
+               let newState = { ...pre };
+
+               Object.keys(newState).forEach((key) => {
+                  newState[key] = key === tabKey;
+               });
+
+               return newState;
             });
-            
-            return newState;
-         });
 
-         setShowFull(false);
-      }
+            setShowFull(false);
+         }
+      },
+      [tabDisplay]
+   );
 
-      
-   }, [tabDisplay]);
+   const handleCloseLoginModal = useCallback(() => {
+      setShowLoginModal(false)
+   }, [])
 
    // console.log("sidebar re-render", isMatchQuery);
-   
+
    return (
-      <aside ref={DOM_sideBar} className={cx("aside", {[className]: className})}>
-         {showBlurArea && <div ref={DOM_blurArea} className={cx("blur-area")} />}
+      <aside
+         ref={DOM_sideBar}
+         className={cx("aside", { [className]: className })}
+      >
+         {showBlurArea && (
+            <div ref={DOM_blurArea} className={cx("blur-area")} />
+         )}
 
          <div
             className={cx("wrapper", {
@@ -184,7 +192,9 @@ export default function Sidebar({className}) {
             </Link>
 
             <SideMenu
-               className={cx("side-menu", "menu-search", {visible: tabDisplay[keyTabDisplay.KEY_SEARCH]})}
+               className={cx("side-menu", "menu-search", {
+                  visible: tabDisplay[keyTabDisplay.KEY_SEARCH],
+               })}
                onClose={handleCloseSideMenu}
                title="Search"
             >
@@ -195,7 +205,9 @@ export default function Sidebar({className}) {
             </SideMenu>
 
             <MoreOption
-               className={cx("side-menu", "menu-more", {visible: tabDisplay[keyTabDisplay.KEY_MORE]})}
+               className={cx("side-menu", "menu-more", {
+                  visible: tabDisplay[keyTabDisplay.KEY_MORE],
+               })}
                onClose={handleCloseSideMenu}
             />
 
@@ -219,9 +231,14 @@ export default function Sidebar({className}) {
                   className={cx("navbar")}
                />
 
-               {showFull && <UserSuggested/>}
+               {isLoggedIn && showFull && <UserSuggested />}
+               {!isLoggedIn && showFull && (
+                  <button onClick={() => setShowLoginModal(true)} className={cx("login-btn")}>Log in</button>
+               )}
             </div>
          </div>
+
+         {showLoginModal && <LoginModal onClose={handleCloseLoginModal} className={cx("login-modal")} />}
       </aside>
    );
 }

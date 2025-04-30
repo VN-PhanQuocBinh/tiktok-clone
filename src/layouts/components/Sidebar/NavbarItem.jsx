@@ -18,8 +18,10 @@ function NavbarItem({
       className: cx("icon", {
          live: iconProps?.className?.includes("live"),
          avt: iconProps?.className?.includes("avt"),
+         // [iconProps.className]: iconProps.className
       }),
    };
+
 
    return (
       <NavLink to={to} end>

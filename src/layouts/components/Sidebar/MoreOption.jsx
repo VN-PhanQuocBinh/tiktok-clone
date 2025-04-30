@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 
 import DropDown from "../../../components/DropDown";
@@ -8,7 +8,7 @@ import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants";
 
 import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
 
-import { actionItems_loggedIn } from "../../../fakeDB";
+import { actionItems_loggedIn, actionItems_loggedOut } from "../../../fakeDB";
 import classNames from "classnames/bind";
 import styles from "../../../assets/styles/components/MoreOption.module.scss";
 
@@ -16,26 +16,47 @@ const cx = classNames.bind(styles);
 
 function MoreOption({ className, onClose }) {
    const { isLoggedIn, login, logout } = useAuth();
-   const [currentMenu, setCurrentMenu] = useState({title: "More", list: actionItems_loggedIn});
+   const [currentMenu, setCurrentMenu] = useState({
+      title: "More",
+      list: actionItems_loggedIn,
+   });
    const [history, setHistory] = useState([]);
 
+   useEffect(() => {
+      setCurrentMenu({
+         title: "More",
+         list: isLoggedIn ? actionItems_loggedIn : actionItems_loggedOut,
+      });
+   }, [isLoggedIn]);
+
    const handleClick = (item) => {
-      if (item.children) {
-         setHistory(pre => [...pre, currentMenu]);
-         setCurrentMenu({title: item.label, list: item.children});
+      console.log(item);
+      switch (item.label) {
+         case "Log out":
+            console.log("logged out!");
+
+            break;
+         default:
+            if (item.children) {
+               setHistory((pre) => [...pre, currentMenu]);
+               setCurrentMenu({ title: item.label, list: item.children });
+            }
       }
    };
 
    const handleBack = () => {
       console.log("history: ", history);
-      setCurrentMenu(history[history.length - 1])
-      setHistory(history.splice(0, history.length - 1))
+      setCurrentMenu(history[history.length - 1]);
+      setHistory(history.splice(0, history.length - 1));
    };
 
    return (
       <div className={cx("wrapper", { [className]: className })}>
          <div className={cx("header", { "back-header": history.length >= 1 })}>
-            <span onClick={handleBack} className={cx("icon-wrapper", "icon-back")}>
+            <span
+               onClick={handleBack}
+               className={cx("icon-wrapper", "icon-back")}
+            >
                <Icon_ChevronRight className={cx("icon")} />
             </span>
 

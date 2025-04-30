@@ -147,6 +147,24 @@
             @include mixins.flex-column;
             gap: 0.4rem;
          }
+
+         .login-btn {
+            width: 100%;
+            height: 40px;
+            padding: 0 16px;
+            border-radius: 6px;
+            background-color: variables.$primary-color;
+            display: grid;
+            place-items: center;
+            font-weight: 500;
+            color: variables.$text-color;
+            cursor: pointer;
+            margin-top: 16px;
+
+            &:hover {
+               opacity: 0.9;
+            }
+         }
       }
    }
 }

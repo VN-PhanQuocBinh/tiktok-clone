@@ -36,7 +36,7 @@
          background-color: rgba($color: #fff, $alpha: 0.1);
          @include mixins.flex-center;
 
-         &:hover {
+         &:hover:not(:disabled) {
             cursor: pointer;
             background-color: rgba($color: #fff, $alpha: 0.15);
          }

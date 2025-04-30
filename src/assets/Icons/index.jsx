@@ -34,7 +34,8 @@ export {
    Icon_PlaneSolid,
    Icon_XMark,
    Icon_ChevronRight,
-   Icon_BlueTick
+   Icon_BlueTick,
+   Icon_Television
 } from "./components/Sidebar"
 
 export {
@@ -48,3 +49,15 @@ export {
    Icon_Share,
    Icon_Check
 } from "./components/VideoList"
+
+export {
+   Icon_QRcode,
+   Icon_Facebook,
+   Icon_Google,
+   Icon_LINE,
+   Icon_KakaoTalk,
+   Icon_Apple,
+   Icon_ArrowDown,
+   Icon_Eye,
+   Icon_EyeXmark
+} from "./components/LoginModal"

@@ -1,8 +1,9 @@
+import { useAuth } from "../../../contexts/AuthContext";
 import { navListData } from "../../../fakeDB";
 
 import NavbarItem from "./NavbarItem";
 import Image from "../../../components/Image";
-import { Icon_EllipsisVertical } from "../../../assets/Icons";
+import { Icon_EllipsisVertical, Icon_Television } from "../../../assets/Icons";
 
 import classNames from "classnames/bind";
 import styles from "../../../assets/styles/components/Navbar.module.scss";
@@ -10,23 +11,24 @@ import styles from "../../../assets/styles/components/Navbar.module.scss";
 const cx = classNames.bind(styles);
 
 function Navbar({className, showLabel, onOpen}) {
-   console.log("navbar re-render");
-   
+   const { isLoggedIn } = useAuth();
+   // console.log("navbar re-render");
 
    return (
       <nav className={className}>
          <ul className={cx("list")}>
             {navListData.map((nav, index) => (
-               <NavbarItem showLabel={showLabel} key={index} {...nav} />
+               !nav.loggedIn ? <NavbarItem showLabel={showLabel} key={index} {...nav} /> : 
+               (isLoggedIn && <NavbarItem showLabel={showLabel} key={index} {...nav} />)
             ))}
 
             <NavbarItem
                label={"LIVE"}
-               icon={Image}
+               icon={isLoggedIn ? Image : Icon_Television}
                to={"/live"}
                iconProps={{
                   src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHORVLY3-9bljdur2Lmf-bFufXufDUrwF92g&s",
-                  className: "live"
+                  className: isLoggedIn ? "live" : ""
                }}
                showLabel={showLabel}
             />

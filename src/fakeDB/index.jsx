@@ -1,3 +1,4 @@
+import { icon } from "@fortawesome/fontawesome-svg-core";
 import {
    Icon_Earth,
    Icon_Question,
@@ -22,6 +23,17 @@ import {
    Icon_MessageRegular,
    Icon_PlaneSolid
 } from "../assets/Icons"
+
+import {
+   Icon_QRcode,
+   Icon_Facebook,
+   Icon_Google,
+   Icon_LINE,
+   Icon_KakaoTalk,
+   Icon_Apple,
+} from "../assets/Icons"
+
+
 
 const searchItems = [
    { label: "You might like 1" },
@@ -188,6 +200,11 @@ const actionItems_loggedIn = [
       icon: Icon_Question,
       to: "/feedback",
    },
+   {
+      label: "Log out",
+      icon: Icon_Question,
+      // to: "/",
+   },
 ];
 
 const navListData = [
@@ -213,7 +230,8 @@ const navListData = [
       label: "Friends",
       icon: Icon_UserGroupSolid,
       activeIcon: Icon_UserGroupRegular,
-      to: "/friends"
+      to: "/friends",
+      loggedIn: true
    },
    {
       label: "Upload",
@@ -225,15 +243,84 @@ const navListData = [
       label: "Activity",
       icon: Icon_MessageSolid,
       activeIcon: Icon_MessageRegular,
-      to: "/activity"
+      to: "/activity",
+      loggedIn: true
    },
    {
       label: "Messages",
       icon: Icon_PlaneSolid,
       activeIcon: null,
-      to: "/messages"
+      to: "/messages",
+      loggedIn: true
    },
 ]
+
+const loginMethods = [
+   {
+      label: "Use QR code",
+      icon: Icon_QRcode,
+      type: "qr"
+   },
+   {
+      label: "Use phone / email / username",
+      icon: Icon_User,
+      type: "phone_email_name"
+   },
+   {
+      label: "Continue with Facebook",
+      icon: Icon_Facebook,
+      type: "fb"
+   },
+   {
+      label: "Continue with Google",
+      icon: Icon_Google,
+      type: "fb"
+   },
+   {
+      label: "Continue with LINE",
+      icon: Icon_LINE,
+      type: "line"
+   },
+   {
+      label: "Continue with KakaoTalk",
+      icon: Icon_KakaoTalk,
+      type: "kt"
+   },
+   {
+      label: "Continue with Apple",
+      icon: Icon_Apple,
+      type: "ap"
+   },
+]
+
+const signupMethods = [
+   {
+      label: "Use phone or email",
+      icon: Icon_User,
+      type: "phone_email"
+   },
+   {
+      label: "Continue with Facebook",
+      icon: Icon_Facebook,
+      type: "fb"
+   },
+   {
+      label: "Continue with Google",
+      icon: Icon_Google,
+      type: "gg"
+   },
+   {
+      label: "Continue with LINE",
+      icon: Icon_LINE,
+      type: "line"
+   },
+   {
+      label: "Continue with KakaoTalk",
+      icon: Icon_KakaoTalk,
+      type: "kt"
+   }
+]
+
 
 export {
    searchItems,
@@ -241,7 +328,9 @@ export {
    userDefaultSugItems,
    actionItems_loggedOut,
    actionItems_loggedIn,
-   navListData
+   navListData,
+   loginMethods,
+   signupMethods
 };
 
 

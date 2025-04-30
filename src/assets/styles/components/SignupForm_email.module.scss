@@ -1,0 +1,168 @@
+@use "../base/variables";
+@use "../base/mixins";
+
+.form {
+   color: variables.$text-color;
+   overflow: hidden;
+
+   h3 {
+      font-weight: 500;
+      font-size: 1.6rem;
+   }
+
+   .birth {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+
+      h3 {
+         grid-column: 1/4;
+      }
+
+      .day, .month, .year {
+         position: relative;
+         width: 115px;
+         height: 44px;
+         padding: 0 12px;
+         display: flex;
+         align-items: center;
+         border-radius: 4px;
+         background-color: rgba(255, 255, 255, 0.12);
+         cursor: pointer;
+
+         .placeholder {
+            color: rgba(255, 255, 255, 0.34);
+            user-select: none;
+
+            &.filled {
+               color: variables.$text-color;
+            }
+         }
+
+         .text {
+
+         }
+
+         .icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            translate: 0 -50%;
+            transition: rotate 0.3s ease;
+
+            &.active {
+               rotate: 180deg;
+            }
+         }
+
+         .drop-list {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 100%;
+            height: 320px;
+            overflow-y: scroll;
+            background-color: rgb(18, 18, 18);
+            z-index: 100;
+
+            &::-webkit-scrollbar {
+               appearance: none;
+               width: 8px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+               background-color: rgba($color: #fff, $alpha: 0.04);
+               border-radius: 999px;
+            }
+
+
+            .drop-item {
+               display: flex;
+               align-items: center;
+               height: 34px;
+               padding: 0 12px;
+               user-select: none;
+
+               &:hover {
+                  background-color: rgba($color: #fff, $alpha: 0.04);
+               }
+            }
+         }
+      }
+   }
+
+   .email {
+      margin-top: 20px;
+      @include mixins.flex-column;
+      gap: 8px;
+
+      .address, .password {
+         background-color: rgba(255, 255, 255, 0.12);
+         border-radius: 4px;
+         height: 44px;
+         width: 100%;
+         display: flex;
+         align-items: center;
+         padding: 0 12px;
+
+         input::placeholder {
+            user-select: none;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.34);
+         }
+
+         input {
+            width: 100%;
+            caret-color: variables.$primary-color;
+            color: variables.$text-color;
+            font-size: 1.6rem;
+            height: 100%;
+         }
+      }
+
+      .address {
+         
+      }  
+
+      .password {
+         position: relative;
+
+         input {
+            margin-right: 20px;
+         }
+
+         .icon {
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.34);
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            translate: 0 -50%;
+         }
+      }
+   }
+
+   .submit-btn {
+      user-select: none;
+      margin-top: 36px;
+      width: 100%;
+      height: 46px;
+      color: rgba($color: #fff, $alpha: 0.34);
+      font-weight: 500;
+      background-color:rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      
+      &.active {
+         cursor: pointer;
+         background-color: variables.$primary-color;
+         color: variables.$text-color;
+
+         &:hover {
+            opacity: 0.8;
+         }
+      }
+
+   }
+}

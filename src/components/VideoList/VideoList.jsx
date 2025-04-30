@@ -19,7 +19,7 @@ function VideoList() {
    useEffect(() => {
       const fetchAPI = async () => {
          const response = await videoService.getVideo("for-you", 1);
-         console.log(response);
+         // console.log(response);
          setVideos(response);
       };
 
@@ -69,10 +69,10 @@ function VideoList() {
          }, 250)
       }
 
-      DOM_list.current.addEventListener("scroll", hanldeScroll)
+      DOM_list.current?.addEventListener("scroll", hanldeScroll)
 
       return () => {
-         DOM_list.current.removeEventListener("scroll", hanldeScroll)
+         DOM_list.current?.removeEventListener("scroll", hanldeScroll)
       }
    }, [])
 
