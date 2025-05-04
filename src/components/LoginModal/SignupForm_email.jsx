@@ -1,10 +1,19 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
-import { Icon_ArrowDown, Icon_Eye, Icon_EyeXmark } from "../../assets/Icons";
+import { validateEmail, validatePassword } from "../../utils/validators";
+
+import { validateForm } from "../../utils/validators";
+
+import {
+   Icon_ArrowDown,
+   Icon_Eye,
+   Icon_EyeXmark,
+   Icon_Warning,
+} from "../../assets/Icons";
 
 import styles from "../../assets/styles/components/SignupForm_email.module.scss";
 import classNames from "classnames/bind";
-import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +37,14 @@ const years = Array.from(
    (_, i) => new Date().getFullYear() - i
 );
 
+const validateMethods = {
+   email_address: validateEmail,
+   password: validatePassword,
+};
+
 function SignupForm_email({ className }) {
+   const { isLoggedIn, register } = useAuth();
+
    const [showMenu, setShowMenu] = useState({
       day: false,
       month: false,
@@ -43,7 +59,46 @@ function SignupForm_email({ className }) {
       password: "",
    });
 
-   const [showPassword, setShowPassword] = useState(false)
+   const [showPassword, setShowPassword] = useState(false);
+   const [errorState, setErrorState] = useState({
+      email_address: {
+         isError: false,
+         error: null,
+      },
+      password: {
+         isError: false,
+         error: null,
+      },
+   });
+
+   const DOM_day = useRef(null);
+   const DOM_month = useRef(null);
+   const DOM_year = useRef(null);
+
+   useEffect(() => {
+      const handleClickOutside = (e) => {
+         if (
+            !DOM_day.current?.contains(e.target) &&
+            !DOM_month.current?.contains(e.target) &&
+            !DOM_year.current?.contains(e.target)
+         ) {
+            setShowMenu((prev) => {
+               let newState = { ...prev };
+
+               Object.keys(newState).forEach((key) => {
+                  newState[key] = false;
+               });
+
+               return newState;
+            });
+         }
+      };
+
+      document.addEventListener("pointerdown", handleClickOutside);
+
+      return () =>
+         document.removeEventListener("pointerdown", handleClickOutside);
+   }, [showMenu]);
 
    const openMenu = (type) => {
       setShowMenu((prev) => {
@@ -72,11 +127,58 @@ function SignupForm_email({ className }) {
       });
    };
 
+   const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      try {
+         const { isValid, errors } = validateForm({
+            ...formValue,
+            month: months.indexOf(formValue.month) + 1,
+         });
+         console.log(isValid, errors);
+
+         if (isValid) {
+            let response = await register(formValue.email_address, formValue.password);
+            console.log(response);
+         }
+      } catch (error) {
+         console.log("Please double check the information!");
+      }
+   };
+
+   const handleBlur = (field) => {
+      const error = validateMethods[field](formValue[field]);
+
+      setErrorState((prev) => {
+         let newState = { ...prev };
+
+         newState[field].isError = !!error;
+         newState[field].error = error;
+
+         return newState;
+      });
+   };
+
+   const handleFocus = (field) => {
+      setErrorState((prev) => {
+         let newState = { ...prev };
+
+         newState[field].isError = false;
+         newState[field].error = null;
+
+         return newState;
+      });
+   }
+
    return (
       <form action="" className={cx("form", { [className]: className })}>
          <div className={cx("birth")}>
             <h3>When's your birthday?</h3>
-            <div onClick={() => openMenu("month")} className={cx("month")}>
+            <div
+               ref={DOM_month}
+               onClick={() => openMenu("month")}
+               className={cx("month")}
+            >
                <span
                   className={cx("text", "placeholder", {
                      filled: formValue.month !== "",
@@ -103,7 +205,11 @@ function SignupForm_email({ className }) {
                )}
             </div>
 
-            <div onClick={() => openMenu("day")} className={cx("day")}>
+            <div
+               ref={DOM_day}
+               onClick={() => openMenu("day")}
+               className={cx("day")}
+            >
                <span
                   className={cx("text", "placeholder", {
                      filled: formValue.day !== "",
@@ -129,7 +235,11 @@ function SignupForm_email({ className }) {
                )}
             </div>
 
-            <div onClick={() => openMenu("year")} className={cx("year")}>
+            <div
+               ref={DOM_year}
+               onClick={() => openMenu("year")}
+               className={cx("year")}
+            >
                <span
                   className={cx("text", "placeholder", {
                      filled: formValue.year !== "",
@@ -159,35 +269,80 @@ function SignupForm_email({ className }) {
          <div className={cx("email")}>
             <h3>Email</h3>
 
-            <div className={cx("address")}>
-               <input
-                  onInput={(e) =>
-                     handleSelect("email_address", e.target?.value)
-                  }
-                  placeholder="Email address"
-                  type="text"
-                  name="address"
-                  value={formValue.email_address}
-               />
+            <div className={cx("field-box")}>
+               <div
+                  className={cx("address", {
+                     warning: errorState.email_address.isError,
+                  })}
+               >
+                  <input
+                     onInput={(e) =>
+                        handleSelect("email_address", e.target?.value)
+                     }
+                     onBlur={() => handleBlur("email_address")}
+                     onFocus={() => handleFocus("email_address")}
+                     placeholder="Email address"
+                     type="text"
+                     name="address"
+                     value={formValue.email_address}
+                  />
+
+                  {errorState.email_address.isError && (
+                     <Icon_Warning className={cx("icon", "warn-icon")} />
+                  )}
+               </div>
+
+               {errorState.email_address.isError && (
+                  <span className={cx("warning-text")}>
+                     {errorState.email_address.error}
+                  </span>
+               )}
             </div>
 
-            <div className={cx("password")}>
-               <input
-                  onInput={(e) => handleSelect("password", e.target?.value)}
-                  placeholder="Password"
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formValue.password}
-               />
+            <div className={cx("field-box")}>
+               <div
+                  className={cx("password", {
+                     warning: errorState.password.isError,
+                  })}
+               >
+                  <input
+                     onInput={(e) => handleSelect("password", e.target?.value)}
+                     onBlur={() => handleBlur("password")}
+                     onFocus={() => handleFocus("password")}
+                     placeholder="Password"
+                     type={showPassword ? "text" : "password"}
+                     name="password"
+                     value={formValue.password}
+                  />
 
-               {showPassword ? 
-                  <Icon_Eye onClick={() => setShowPassword(!showPassword)} className={cx("icon")} />
-                  : <Icon_EyeXmark onClick={() => setShowPassword(!showPassword)} className={cx("icon")} />
-               }
+                  {errorState.password.isError && (
+                     <Icon_Warning className={cx("icon", "warn-icon")} />
+                  )}
+
+                  {showPassword ? (
+                     <Icon_Eye
+                        onClick={() => setShowPassword(!showPassword)}
+                        className={cx("icon")}
+                     />
+                  ) : (
+                     <Icon_EyeXmark
+                        onClick={() => setShowPassword(!showPassword)}
+                        className={cx("icon")}
+                     />
+                  )}
+               </div>
+
+               {errorState.password.isError && (
+                  <span className={cx("warning-text")}>
+                     {errorState.password.error}
+                  </span>
+               )}
             </div>
          </div>
 
-         <button className={cx("submit-btn")}>Next</button>
+         <button onClick={handleSubmit} className={cx("submit-btn")}>
+            Next
+         </button>
       </form>
    );
 }

@@ -59,5 +59,6 @@ export {
    Icon_Apple,
    Icon_ArrowDown,
    Icon_Eye,
-   Icon_EyeXmark
+   Icon_EyeXmark,
+   Icon_Warning
 } from "./components/LoginModal"

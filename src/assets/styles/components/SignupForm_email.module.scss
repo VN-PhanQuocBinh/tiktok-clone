@@ -19,7 +19,9 @@
          grid-column: 1/4;
       }
 
-      .day, .month, .year {
+      .day,
+      .month,
+      .year {
          position: relative;
          width: 115px;
          height: 44px;
@@ -40,7 +42,6 @@
          }
 
          .text {
-
          }
 
          .icon {
@@ -75,7 +76,6 @@
                border-radius: 999px;
             }
 
-
             .drop-item {
                display: flex;
                align-items: center;
@@ -96,7 +96,8 @@
       @include mixins.flex-column;
       gap: 8px;
 
-      .address, .password {
+      .address,
+      .password {
          background-color: rgba(255, 255, 255, 0.12);
          border-radius: 4px;
          height: 44px;
@@ -104,6 +105,12 @@
          display: flex;
          align-items: center;
          padding: 0 12px;
+         border: 1px solid transparent;
+         position: relative;
+
+         &.warning {
+            border-color: variables.$warning-color;
+         }
 
          input::placeholder {
             user-select: none;
@@ -118,14 +125,6 @@
             font-size: 1.6rem;
             height: 100%;
          }
-      }
-
-      .address {
-         
-      }  
-
-      .password {
-         position: relative;
 
          input {
             margin-right: 20px;
@@ -140,8 +139,45 @@
             right: 12px;
             top: 50%;
             translate: 0 -50%;
+
+            &.warn-icon {
+               width: 16px;
+               height: 16px;
+            }
          }
       }
+
+      .field-box {
+         .warning-text {
+            font-size: 1.2rem;
+            color: variables.$warning-color;
+         }
+      }
+
+      .password {
+         .warn-icon {
+            right: 48px;
+         }
+      }
+
+      // .password {
+      //    position: relative;
+
+      //    input {
+      //       margin-right: 20px;
+      //    }
+
+      //    .icon {
+      //       cursor: pointer;
+      //       color: rgba(255, 255, 255, 0.34);
+      //       width: 20px;
+      //       height: 20px;
+      //       position: absolute;
+      //       right: 12px;
+      //       top: 50%;
+      //       translate: 0 -50%;
+      //    }
+      // }
    }
 
    .submit-btn {
@@ -151,9 +187,9 @@
       height: 46px;
       color: rgba($color: #fff, $alpha: 0.34);
       font-weight: 500;
-      background-color:rgba(255, 255, 255, 0.08);
+      background-color: rgba(255, 255, 255, 0.08);
       border-radius: 4px;
-      
+
       &.active {
          cursor: pointer;
          background-color: variables.$primary-color;
@@ -163,6 +199,5 @@
             opacity: 0.8;
          }
       }
-
    }
 }

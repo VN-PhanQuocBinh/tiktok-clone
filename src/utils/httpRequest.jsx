@@ -34,5 +34,15 @@ export const getVideo = async (path, option = {})=> {
    return response.data
 }
 
+export const register = async (path, option = {}) => {
+   const response = await request.post(path, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - REGISTER")
+   }
+
+   return response
+}
+
 
 export default request

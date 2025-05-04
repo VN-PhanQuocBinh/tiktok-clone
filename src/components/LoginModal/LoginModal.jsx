@@ -59,15 +59,17 @@ function LoginModal({ onClose }) {
    };
 
    const handleClick = useCallback((e, type) => {
-      if (type === "phone_email" && showForm[FORM_TYPE.SIGNUP_OPTIONS]) {
-         console.log("yes");
+      if (type == "phone_email" && showForm[FORM_TYPE.SIGNUP_OPTIONS]) {
+         handleChangeForm(FORM_TYPE.SIGNUP)
+      } else if (type == "phone_email_name" && showForm[FORM_TYPE.LOGIN_OPTIONS]) {
+         handleChangeForm(FORM_TYPE.LOGIN)
       }
-   }, []);
+   }, [showForm]);
 
    const handleToggle = () => {
-      if (showForm[FORM_TYPE.LOGIN_OPTIONS]) {
+      if (showForm[FORM_TYPE.LOGIN_OPTIONS] || showForm[FORM_TYPE.LOGIN]) {
          handleChangeForm(FORM_TYPE.SIGNUP_OPTIONS);
-      } else if (showForm[FORM_TYPE.SIGNUP_OPTIONS]) {
+      } else if (showForm[FORM_TYPE.SIGNUP_OPTIONS] || showForm[FORM_TYPE.SIGNUP]) {
          handleChangeForm(FORM_TYPE.LOGIN_OPTIONS);
       }
    };
