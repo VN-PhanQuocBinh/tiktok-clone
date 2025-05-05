@@ -15,7 +15,7 @@ import styles from "../../../assets/styles/components/MoreOption.module.scss";
 const cx = classNames.bind(styles);
 
 function MoreOption({ className, onClose }) {
-   const { isLoggedIn, login, logout } = useAuth();
+   const { isLoggedIn, setLogoutConfirm } = useAuth();
    const [currentMenu, setCurrentMenu] = useState({
       title: "More",
       list: actionItems_loggedIn,
@@ -33,7 +33,7 @@ function MoreOption({ className, onClose }) {
       console.log(item);
       switch (item.label) {
          case "Log out":
-            console.log("logged out!");
+            setLogoutConfirm(true);
 
             break;
          default:

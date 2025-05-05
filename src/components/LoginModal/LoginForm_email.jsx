@@ -1,20 +1,33 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Icon_ArrowDown, Icon_Eye, Icon_EyeXmark } from "../../assets/Icons";
+import {
+   Icon_ArrowDown,
+   Icon_Eye,
+   Icon_EyeXmark,
+   Icon_CircleNotch,
+} from "../../assets/Icons";
 
-import styles from "../../assets/styles/components/SignupForm_email.module.scss";
+import { useAuth } from "../../contexts/AuthContext";
+
+import styles from "../../assets/styles/components/LoginForm_email.module.scss";
 import classNames from "classnames/bind";
-import { faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
 function LoginForm_email({ className }) {
+   const { login, isLoggingIn } = useAuth();
+
    const [formValue, setFormValue] = useState({
       email_address: "",
       password: "",
    });
 
-   const [showPassword, setShowPassword] = useState(false)
+   const [resultSubmit, setResultSubmit] = useState({
+      success: false,
+      message: "",
+   });
+
+   const [showPassword, setShowPassword] = useState(false);
 
    const handleSelect = (type, value) => {
       setFormValue((prev) => {
@@ -24,6 +37,35 @@ function LoginForm_email({ className }) {
 
          return newState;
       });
+   };
+
+   const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      try {
+         let response = await login(
+            formValue.email_address,
+            formValue.password
+         );
+
+         console.log(response);
+
+         if (response.success) {
+            setFormValue({
+               email_address: "",
+               password: "",
+            });
+
+            setResultSubmit({
+               success: true,
+               message: "Login is successful!",
+            });
+         } else {
+            setResultSubmit(response);
+         }
+      } catch (error) {
+         console.log("Please double check the information!", error);
+      }
    };
 
    return (
@@ -52,14 +94,44 @@ function LoginForm_email({ className }) {
                   value={formValue.password}
                />
 
-               {showPassword ? 
-                  <Icon_Eye onClick={() => setShowPassword(!showPassword)} className={cx("icon")} />
-                  : <Icon_EyeXmark onClick={() => setShowPassword(!showPassword)} className={cx("icon")} />
-               }
+               {showPassword ? (
+                  <Icon_Eye
+                     onClick={() => setShowPassword(!showPassword)}
+                     className={cx("icon")}
+                  />
+               ) : (
+                  <Icon_EyeXmark
+                     onClick={() => setShowPassword(!showPassword)}
+                     className={cx("icon")}
+                  />
+               )}
             </div>
+
+            {resultSubmit.message !== "" && (
+               <span
+                  className={cx("warning-text", {
+                     success: resultSubmit.success,
+                     error: !resultSubmit.success,
+                  })}
+               >
+                  {resultSubmit.message}
+               </span>
+            )}
          </div>
 
-         <button className={cx("submit-btn")}>Log in</button>
+         <button
+            disabled={
+               !(formValue.email_address !== "" && formValue.password !== "")
+            }
+            onClick={handleSubmit}
+            className={cx("submit-btn")}
+         >
+            {isLoggingIn ? (
+               <Icon_CircleNotch className={cx("loading-icon")} />
+            ) : (
+               "Next"
+            )}
+         </button>
       </form>
    );
 }

@@ -3,7 +3,7 @@ import { navListData } from "../../../fakeDB";
 
 import NavbarItem from "./NavbarItem";
 import Image from "../../../components/Image";
-import { Icon_EllipsisVertical, Icon_Television } from "../../../assets/Icons";
+import { Icon_EllipsisVertical, Icon_TelevisionRegular, Icon_TelevisionSolid, Icon_UserSolid } from "../../../assets/Icons";
 
 import classNames from "classnames/bind";
 import styles from "../../../assets/styles/components/Navbar.module.scss";
@@ -11,7 +11,9 @@ import styles from "../../../assets/styles/components/Navbar.module.scss";
 const cx = classNames.bind(styles);
 
 function Navbar({className, showLabel, onOpen}) {
-   const { isLoggedIn } = useAuth();
+   const { isLoggedIn, user } = useAuth();
+   // console.log(user);
+   
    // console.log("navbar re-render");
 
    return (
@@ -24,7 +26,8 @@ function Navbar({className, showLabel, onOpen}) {
 
             <NavbarItem
                label={"LIVE"}
-               icon={isLoggedIn ? Image : Icon_Television}
+               icon={isLoggedIn ? Image : Icon_TelevisionSolid}
+               activeIcon={Icon_TelevisionRegular}
                to={"/live"}
                iconProps={{
                   src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHORVLY3-9bljdur2Lmf-bFufXufDUrwF92g&s",
@@ -34,10 +37,11 @@ function Navbar({className, showLabel, onOpen}) {
             />
             <NavbarItem
                label={"Profile"}
-               icon={Image}
+               icon={isLoggedIn ? Image : Icon_UserSolid}
+               activeIcon={Icon_UserSolid}
                to={"/profile"}
                iconProps={{
-                  src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHORVLY3-9bljdur2Lmf-bFufXufDUrwF92g&s",
+                  src: user?.avatar,
                   className: "avt"
                }}
                showLabel={showLabel}

@@ -17,7 +17,7 @@
       margin-bottom: 0.8rem;
 
       &.back-header {
-         justify-content: flex-start;;
+         justify-content: flex-start;
          gap: 8px;
 
          .icon-wrapper.icon-back {
@@ -41,13 +41,12 @@
          &:hover {
             background-color: variables.$sidebarSearch-bg-xmark-color-hover;
          }
-         
+
          &.icon-back {
             rotate: 180deg;
             position: absolute;
             left: -999px;
          }
-
       }
    }
 
@@ -61,4 +60,3 @@
       }
    }
 }
-

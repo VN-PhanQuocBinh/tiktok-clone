@@ -37,11 +37,15 @@ export default function Sidebar({ className }) {
       [keyTabDisplay.KEY_MORE]: false,
    });
    const [currentQuery, setCurrentQuery] = useState("");
-   const [showLoginModal, setShowLoginModal] = useState(false)
+   const [showLoginModal, setShowLoginModal] = useState(false);
 
    const DOM_inputSearchArea = useRef(null);
    const DOM_sideBar = useRef(null);
    const DOM_blurArea = useRef(null);
+
+   useEffect(() => {
+      setShowLoginModal(false)
+   }, [isLoggedIn])
 
    // responsive
    useEffect(() => {
@@ -161,8 +165,8 @@ export default function Sidebar({ className }) {
    );
 
    const handleCloseLoginModal = useCallback(() => {
-      setShowLoginModal(false)
-   }, [])
+      setShowLoginModal(false);
+   }, []);
 
    // console.log("sidebar re-render", isMatchQuery);
 
@@ -233,12 +237,22 @@ export default function Sidebar({ className }) {
 
                {isLoggedIn && showFull && <UserSuggested />}
                {!isLoggedIn && showFull && (
-                  <button onClick={() => setShowLoginModal(true)} className={cx("login-btn")}>Log in</button>
+                  <button
+                     onClick={() => setShowLoginModal(true)}
+                     className={cx("login-btn")}
+                  >
+                     Log in
+                  </button>
                )}
             </div>
          </div>
 
-         {showLoginModal && <LoginModal onClose={handleCloseLoginModal} className={cx("login-modal")} />}
+         {showLoginModal && (
+            <LoginModal
+               onClose={handleCloseLoginModal}
+               className={cx("login-modal")}
+            />
+         )}
       </aside>
    );
 }

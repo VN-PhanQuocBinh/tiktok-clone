@@ -10,7 +10,7 @@ export const getVideo = async (type, page = 1) => {
          },
       });
 
-      console.log(response);
+      // console.log(response);
       
 
       return response.data;

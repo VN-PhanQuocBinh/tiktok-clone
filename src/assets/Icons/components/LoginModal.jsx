@@ -1,3 +1,6 @@
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const Icon_QRcode = (props) => {
    return (
       <svg
@@ -236,6 +239,12 @@ const Icon_Warning = (props) => {
    );
 };
 
+const Icon_CircleNotch = (props) => {
+   return (
+      <FontAwesomeIcon {...props} icon={faCircleNotch}/>
+   )
+}
+
 export {
    Icon_QRcode,
    Icon_Facebook,
@@ -246,5 +255,6 @@ export {
    Icon_ArrowDown,
    Icon_Eye,
    Icon_EyeXmark,
-   Icon_Warning
+   Icon_Warning,
+   Icon_CircleNotch
 };

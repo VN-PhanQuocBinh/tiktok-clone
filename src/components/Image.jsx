@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fallback } from "../assets/images";
 
 export default function Image({
@@ -7,6 +7,12 @@ export default function Image({
    ...props
 }) {
    const [fallback, setFallback] = useState("");
+
+   useEffect(() => {
+      if (!src) {
+         setFallback(errorImg)
+      }
+   }, [])
 
    const HandleError = () => {
       setFallback(errorImg);

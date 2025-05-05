@@ -1,77 +1,124 @@
 @use "../base/variables";
 @use "../base/mixins";
 
-.email {
-   margin-top: 20px;
-   @include mixins.flex-column;
-   gap: 8px;
+.form {
+   
 
-   .address, .password {
-      background-color: rgba(255, 255, 255, 0.12);
-      border-radius: 4px;
-      height: 44px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
+   .warning-text {
+      font-size: 1.4rem;
 
-      input::placeholder {
-         user-select: none;
-         font-weight: 500;
-         color: rgba(255, 255, 255, 0.34);
+      &.success {
+         color: variables.$success-color;
       }
 
-      input {
-         width: 100%;
-         caret-color: variables.$primary-color;
-         color: variables.$text-color;
-         font-size: 1.6rem;
-         height: 100%;
+      &.error {
+         color: variables.$warning-color;
       }
    }
 
-   .address {
-      
-   }  
+   .email {
+      margin-top: 20px;
+      @include mixins.flex-column;
+      gap: 8px;
 
-   .password {
-      position: relative;
-
-      input {
-         margin-right: 20px;
+      h3 {
+         font-weight: 500;
+         font-size: 1.6rem;
+         color: variables.$text-color;
       }
 
-      .icon {
+      .address,
+      .password {
+         background-color: rgba(255, 255, 255, 0.12);
+         border-radius: 4px;
+         height: 44px;
+         width: 100%;
+         display: flex;
+         align-items: center;
+         padding: 0 12px;
+
+         input::placeholder {
+            user-select: none;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.34);
+         }
+
+         input {
+            width: 100%;
+            caret-color: variables.$primary-color;
+            color: variables.$text-color;
+            font-size: 1.6rem;
+            height: 100%;
+         }
+      }
+
+      .address {
+      }
+
+      .password {
+         position: relative;
+
+         input {
+            margin-right: 20px;
+         }
+
+         .icon {
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.34);
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            translate: 0 -50%;
+         }
+      }
+   }
+
+   .submit-btn {
+      user-select: none;
+      margin-top: 36px;
+      width: 100%;
+      height: 46px;
+      color: variables.$text-color;
+      font-weight: 500;
+      background-color: variables.$primary-color;
+      border-radius: 4px;
+
+      &:not(:disabled) {
          cursor: pointer;
-         color: rgba(255, 255, 255, 0.34);
-         width: 20px;
-         height: 20px;
-         position: absolute;
-         right: 12px;
-         top: 50%;
-         translate: 0 -50%;
+
+         &:hover {
+            opacity: 0.9;
+         }
+      }
+
+      &:disabled {
+         background-color: rgba(255, 255, 255, 0.08);
+         color: rgba($color: #fff, $alpha: 0.34);
+      }
+
+      &.active {
+         cursor: pointer;
+         background-color: variables.$primary-color;
+         color: variables.$text-color;
+
+         &:hover {
+            opacity: 0.8;
+         }
+      }
+
+      .loading-icon {
+         animation: rotateAnimation 1s linear infinite;
       }
    }
 }
 
-.submit-btn {
-   user-select: none;
-   margin-top: 36px;
-   width: 100%;
-   height: 46px;
-   color: rgba($color: #fff, $alpha: 0.34);
-   font-weight: 500;
-   background-color:rgba(255, 255, 255, 0.08);
-   border-radius: 4px;
-   
-   &.active {
-      cursor: pointer;
-      background-color: variables.$primary-color;
-      color: variables.$text-color;
-
-      &:hover {
-         opacity: 0.8;
-      }
+@keyframes rotateAnimation {
+   from {
+      rotate: 0deg;
    }
-
+   to {
+      rotate: 360deg;
+   }
 }

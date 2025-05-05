@@ -21,7 +21,10 @@ import {
    Icon_PlusSolid,
    Icon_MessageSolid,
    Icon_MessageRegular,
-   Icon_PlaneSolid
+   Icon_PlaneSolid,
+   Icon_TelevisionSolid,
+   Icon_TelevisionRegular,
+   Icon_UserSolid
 } from "../assets/Icons"
 
 import {
@@ -253,6 +256,20 @@ const navListData = [
       to: "/messages",
       loggedIn: true
    },
+   // {
+   //    label: "LIVE",
+   //    icon: Icon_TelevisionSolid,
+   //    activeIcon: Icon_TelevisionRegular,
+   //    to: "/live",
+   //    loggedIn: false
+   // },
+   // {
+   //    label: "Profile",
+   //    icon: Icon_UserSolid,
+   //    activeIcon: Icon_UserSolid,
+   //    to: "/profile",
+   //    loggedIn: false
+   // }
 ]
 
 const loginMethods = [

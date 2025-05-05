@@ -1,15 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
-import { validateEmail, validatePassword } from "../../utils/validators";
-
-import { validateForm } from "../../utils/validators";
+import {
+   validateForm,
+   validateFullDate,
+   validateEmail,
+   validatePassword,
+   validateDay,
+   validateMonth,
+   validateYear,
+} from "../../utils/validators";
 
 import {
    Icon_ArrowDown,
    Icon_Eye,
    Icon_EyeXmark,
    Icon_Warning,
+   Icon_CircleNotch,
 } from "../../assets/Icons";
 
 import styles from "../../assets/styles/components/SignupForm_email.module.scss";
@@ -38,12 +45,15 @@ const years = Array.from(
 );
 
 const validateMethods = {
+   day: validateDay,
+   month: validateMonth,
+   year: validateYear,
    email_address: validateEmail,
    password: validatePassword,
 };
 
 function SignupForm_email({ className }) {
-   const { isLoggedIn, register } = useAuth();
+   const { isLoggedIn, isRegistering, register } = useAuth();
 
    const [showMenu, setShowMenu] = useState({
       day: false,
@@ -61,6 +71,18 @@ function SignupForm_email({ className }) {
 
    const [showPassword, setShowPassword] = useState(false);
    const [errorState, setErrorState] = useState({
+      day: {
+         isError: false,
+         error: null,
+      },
+      month: {
+         isError: false,
+         error: null,
+      },
+      year: {
+         isError: false,
+         error: null,
+      },
       email_address: {
          isError: false,
          error: null,
@@ -69,6 +91,11 @@ function SignupForm_email({ className }) {
          isError: false,
          error: null,
       },
+   });
+   const [isInValidForm, setIsInvalidForm] = useState(true);
+   const [resultSubmit, setResultSubmit] = useState({
+      success: false,
+      message: "",
    });
 
    const DOM_day = useRef(null);
@@ -99,6 +126,23 @@ function SignupForm_email({ className }) {
       return () =>
          document.removeEventListener("pointerdown", handleClickOutside);
    }, [showMenu]);
+
+   useEffect(() => {
+      let validForm = true;
+
+      Object.keys(errorState).forEach((key) => {
+         if (errorState[key].isError || formValue[key] == "") validForm = false;
+      });
+
+      setIsInvalidForm(!validForm);
+   }, [errorState]);
+
+   useEffect(() => {
+      setResultSubmit({
+         success: false,
+         message: "",
+      });
+   }, [formValue])
 
    const openMenu = (type) => {
       setShowMenu((prev) => {
@@ -131,32 +175,55 @@ function SignupForm_email({ className }) {
       e.preventDefault();
 
       try {
-         const { isValid, errors } = validateForm({
+         const { valid, error } = validateForm({
             ...formValue,
             month: months.indexOf(formValue.month) + 1,
          });
-         console.log(isValid, errors);
+         console.log(valid, error);
 
-         if (isValid) {
-            let response = await register(formValue.email_address, formValue.password);
+         if (valid) {
+            let response = await register(
+               formValue.email_address,
+               formValue.password
+            );
+
             console.log(response);
+
+            if (response.success) {
+               setFormValue({
+                  day: "",
+                  month: "",
+                  year: "",
+                  email_address: "",
+                  password: "",
+               })
+
+               setResultSubmit({
+                  success: true,
+                  message: "Registration is successful. Let's log in now!",
+               });
+            } else {
+               setResultSubmit(response);
+            }
          }
       } catch (error) {
-         console.log("Please double check the information!");
+         console.log("Please double check the information!", error);
       }
    };
 
    const handleBlur = (field) => {
-      const error = validateMethods[field](formValue[field]);
+      if (formValue[field] !== "") {
+         const { valid, error } = validateMethods[field](formValue[field]);
 
-      setErrorState((prev) => {
-         let newState = { ...prev };
+         setErrorState((prev) => {
+            let newState = { ...prev };
 
-         newState[field].isError = !!error;
-         newState[field].error = error;
+            newState[field].isError = !valid;
+            newState[field].error = error;
 
-         return newState;
-      });
+            return newState;
+         });
+      }
    };
 
    const handleFocus = (field) => {
@@ -168,7 +235,7 @@ function SignupForm_email({ className }) {
 
          return newState;
       });
-   }
+   };
 
    return (
       <form action="" className={cx("form", { [className]: className })}>
@@ -264,6 +331,16 @@ function SignupForm_email({ className }) {
                   </div>
                )}
             </div>
+
+            {(errorState.day.isError ||
+               errorState.month.isError ||
+               errorState.year.isError) && (
+               <span className={cx("warning-text")}>
+                  {errorState.day.error &&
+                     errorState.month.error &&
+                     errorState.year.error}
+               </span>
+            )}
          </div>
 
          <div className={cx("email")}>
@@ -340,9 +417,28 @@ function SignupForm_email({ className }) {
             </div>
          </div>
 
-         <button onClick={handleSubmit} className={cx("submit-btn")}>
-            Next
+         <button
+            onClick={handleSubmit}
+            className={cx("submit-btn")}
+            disabled={isInValidForm}
+         >
+            {isRegistering ? (
+               <Icon_CircleNotch className={cx("loading-icon")} />
+            ) : (
+               "Next"
+            )}
          </button>
+
+         {resultSubmit.message !== "" && (
+            <span
+               className={cx("submit-message", {
+                  success: resultSubmit.success,
+                  error: !resultSubmit.success,
+               })}
+            >
+               {resultSubmit.message}
+            </span>
+         )}
       </form>
    );
 }

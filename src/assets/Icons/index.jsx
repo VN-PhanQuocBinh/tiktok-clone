@@ -35,7 +35,9 @@ export {
    Icon_XMark,
    Icon_ChevronRight,
    Icon_BlueTick,
-   Icon_Television
+   Icon_TelevisionSolid,
+   Icon_TelevisionRegular,
+   Icon_UserSolid
 } from "./components/Sidebar"
 
 export {
@@ -60,5 +62,6 @@ export {
    Icon_ArrowDown,
    Icon_Eye,
    Icon_EyeXmark,
-   Icon_Warning
+   Icon_Warning,
+   Icon_CircleNotch
 } from "./components/LoginModal"
