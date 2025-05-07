@@ -122,6 +122,67 @@
       }
    }
 
+   .black-bg {
+      z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba($color: #000000, $alpha: 0.8);
+      @include mixins.flex-center;
+   
+      .logout-confirm {
+         width: 400px;
+         padding: 32px;
+         background-color: rgb(37, 37, 37);
+         border-radius: 8px;
+         display: grid;
+         grid-template-columns: repeat(2, 1fr);
+         gap: 12px;
+         animation: zoomIn 0.3s ease forwards;
+   
+         &.closing {
+            animation: zoomOut 0.2s ease-in forwards;
+         }
+   
+         span {
+            padding: 0 32px;
+            grid-column: 1/3;
+            font-size: 2.4rem;
+            color: variables.$text-color;
+            font-weight: 600;
+            text-align: center;
+         }
+   
+         button {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            height: 48px;
+            color: variables.$text-color;
+            font-size: 1.6rem;
+            font-weight: 500;
+            cursor: pointer;
+   
+            &.cancel {
+   
+               &:hover {
+                  background-color: rgba(0, 0, 0, 0.1);
+                  border: 1px solid variables.$text-color;
+               }
+            }
+   
+            &.logout {
+               color: variables.$primary-color;
+               border: 1px solid variables.$primary-color;
+   
+               &:hover {
+                  background-color: rgba($color: variables.$primary-color, $alpha: 0.05);
+               }
+            }
+         }
+      }
+   }
    
 }
 
@@ -148,3 +209,4 @@
       opacity: 0;
    }
 }
+

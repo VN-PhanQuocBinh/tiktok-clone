@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "../../../hooks";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useAuthModal } from "../../../contexts/AuthModalContext";
 
 import { Link } from "react-router";
 import SidebarSearch from "./SidebarSearch";
@@ -8,7 +9,10 @@ import Navbar from "./Navbar";
 import UserSuggested from "./UserSuggested";
 import Image from "../../../components/Image";
 import { Icon_Search } from "../../../assets/Icons";
-import LoginModal from "../../../components/LoginModal/LoginModal";
+import SideMenu from "./SideMenu";
+import MoreOption from "./MoreOption";
+
+import { AUTH_TYPE } from "../../../constants";
 
 import logo from "../../../assets/images/logo.svg";
 import logoLess from "../../../assets/images/logo-less.png";
@@ -16,8 +20,6 @@ import config from "../../../config";
 
 import styles from "../../../assets/styles/components/Sidebar.module.scss";
 import classNames from "classnames/bind";
-import SideMenu from "./SideMenu";
-import MoreOption from "./MoreOption";
 
 let cx = classNames.bind(styles);
 
@@ -27,7 +29,8 @@ const keyTabDisplay = {
 };
 
 export default function Sidebar({ className }) {
-   const { isLoggedIn, login, logout } = useAuth();
+   const { isLoggedIn } = useAuth();
+   const { authModal, openAuthModal, closeAuthModal } = useAuthModal()
 
    const [showFull, setShowFull] = useState(true);
    const [showBlurArea, setShowBlurArea] = useState(false);
@@ -37,15 +40,10 @@ export default function Sidebar({ className }) {
       [keyTabDisplay.KEY_MORE]: false,
    });
    const [currentQuery, setCurrentQuery] = useState("");
-   const [showLoginModal, setShowLoginModal] = useState(false);
 
    const DOM_inputSearchArea = useRef(null);
    const DOM_sideBar = useRef(null);
    const DOM_blurArea = useRef(null);
-
-   useEffect(() => {
-      setShowLoginModal(false)
-   }, [isLoggedIn])
 
    // responsive
    useEffect(() => {
@@ -164,10 +162,6 @@ export default function Sidebar({ className }) {
       [tabDisplay]
    );
 
-   const handleCloseLoginModal = useCallback(() => {
-      setShowLoginModal(false);
-   }, []);
-
    // console.log("sidebar re-render", isMatchQuery);
 
    return (
@@ -238,7 +232,7 @@ export default function Sidebar({ className }) {
                {isLoggedIn && showFull && <UserSuggested />}
                {!isLoggedIn && showFull && (
                   <button
-                     onClick={() => setShowLoginModal(true)}
+                     onClick={() => openAuthModal(AUTH_TYPE.LOGIN_OPTIONS)}
                      className={cx("login-btn")}
                   >
                      Log in
@@ -246,13 +240,6 @@ export default function Sidebar({ className }) {
                )}
             </div>
          </div>
-
-         {showLoginModal && (
-            <LoginModal
-               onClose={handleCloseLoginModal}
-               className={cx("login-modal")}
-            />
-         )}
       </aside>
    );
 }

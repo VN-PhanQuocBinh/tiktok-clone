@@ -16,7 +16,16 @@ const DROPDOWN_ITEM_TYPE = {
    NAV_MORE_ITEM: "nav-more-item"
 }
 
+const AUTH_TYPE = {
+   LOGIN_OPTIONS: "login_options",
+   SIGNUP_OPTIONS: "signup_options",
+   LOGIN: "login",
+   SIGNUP: "signup",
+   LOGOUT_CONFIRM: "logout_confirm"
+};
+
 export { 
    LAYOUT_TYPE,
-   DROPDOWN_ITEM_TYPE
+   DROPDOWN_ITEM_TYPE,
+   AUTH_TYPE
 }

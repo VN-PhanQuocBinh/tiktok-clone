@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useAuthModal } from "../../../contexts/AuthModalContext";
 
 import DropDown from "../../../components/DropDown";
 import DropDownItem from "../../../components/DropDownItem";
 
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants";
+import { DROPDOWN_ITEM_TYPE as TYPE, AUTH_TYPE } from "../../../constants";
 
 import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
 
@@ -15,7 +16,9 @@ import styles from "../../../assets/styles/components/MoreOption.module.scss";
 const cx = classNames.bind(styles);
 
 function MoreOption({ className, onClose }) {
-   const { isLoggedIn, setLogoutConfirm } = useAuth();
+   const { isLoggedIn } = useAuth();
+   const { openAuthModal } = useAuthModal()
+
    const [currentMenu, setCurrentMenu] = useState({
       title: "More",
       list: actionItems_loggedIn,
@@ -29,12 +32,11 @@ function MoreOption({ className, onClose }) {
       });
    }, [isLoggedIn]);
 
-   const handleClick = (item) => {
+   const handleClick = useCallback((item) => {
       console.log(item);
       switch (item.label) {
          case "Log out":
-            setLogoutConfirm(true);
-
+            openAuthModal(AUTH_TYPE.LOGOUT_CONFIRM)
             break;
          default:
             if (item.children) {
@@ -42,7 +44,7 @@ function MoreOption({ className, onClose }) {
                setCurrentMenu({ title: item.label, list: item.children });
             }
       }
-   };
+   }, [currentMenu])
 
    const handleBack = () => {
       console.log("history: ", history);

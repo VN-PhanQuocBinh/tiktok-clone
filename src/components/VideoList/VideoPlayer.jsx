@@ -52,30 +52,30 @@ function VideoPlayer({
       };
    }, []);
 
-   useEffect(() => {
-      const observer = new IntersectionObserver(
-         ([entry]) => {
-            if (entry.isIntersecting) {
-               DOM_video.current?.play();
-               onDisplayStateBtn(!DOM_video.current.paused, false);
-            } else {
-               DOM_video.current?.pause();
-               onDisplayStateBtn(!DOM_video.current.paused, false);
-            }
-         },
-         {
-            threshold: 0.5,
-         }
-      );
+   // useEffect(() => {
+   //    const observer = new IntersectionObserver(
+   //       ([entry]) => {
+   //          if (entry.isIntersecting) {
+   //             DOM_video.current?.play();
+   //             onDisplayStateBtn(!DOM_video.current.paused, false);
+   //          } else {
+   //             DOM_video.current?.pause();
+   //             onDisplayStateBtn(!DOM_video.current.paused, false);
+   //          }
+   //       },
+   //       {
+   //          threshold: 0.5,
+   //       }
+   //    );
 
-      observer.observe(DOM_video.current);
+   //    observer.observe(DOM_video.current);
 
-      return () => {
-         if (DOM_video.current) {
-            observer.unobserve(DOM_video.current);
-         }
-      };
-   }, []);
+   //    return () => {
+   //       if (DOM_video.current) {
+   //          observer.unobserve(DOM_video.current);
+   //       }
+   //    };
+   // }, []);
 
    useEffect(() => {
       const video = DOM_video.current;

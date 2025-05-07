@@ -2,22 +2,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import * as authService from "../services/authService/authService";
 import { getToken, removeToken, saveToken } from "../utils/token";
 
-import classNames from "classnames/bind";
-import styles from "../assets/styles/components/AuthContext.module.scss";
-
-const cx = classNames.bind(styles);
-
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
    const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const [isLoggedOut, setIsLoggedOut] = useState(true);
    const [isRegistering, setIsRegistering] = useState(false);
    const [isLoggingIn, setLoggingIn] = useState(false);
    const [user, setUser] = useState({});
-
-   const [logoutConfirm, setLogoutConfirm] = useState(false);
-
-   const [isClosing, setIsClosing] = useState(false)
 
    useEffect(() => {
       const token = getToken();
@@ -33,11 +25,12 @@ const AuthProvider = ({ children }) => {
       };
 
       if (token) {
-         // console.log(token);
          fetchAPI();
+         setIsLoggedOut(false)
          setIsLoggedIn(true);
       } else {
          setIsLoggedIn(false);
+         setIsLoggedOut(true)
       }
    }, []);
 
@@ -46,7 +39,6 @@ const AuthProvider = ({ children }) => {
 
       try {
          const data = await authService.register(email, password);
-         const token = await data?.meta?.token;
          console.log(data);
 
          return {
@@ -122,20 +114,6 @@ const AuthProvider = ({ children }) => {
       removeToken();
    };
 
-   const handleCancel = () => {
-      setIsClosing(true)
-
-      setTimeout(() => {
-         setLogoutConfirm(false)
-         setIsClosing(false)
-      }, 200);
-   }
-
-   const handleConfirm = () => {
-      setLogoutConfirm(false)
-      logout()
-   }
-
    return (
       <AuthContext.Provider
          value={{
@@ -144,25 +122,13 @@ const AuthProvider = ({ children }) => {
             logout,
             register,
             isLoggedIn,
+            isLoggedOut,
             isRegistering,
             isLoggingIn,
-            logoutConfirm,
-            setLogoutConfirm,
          }}
       >
          {/* CHILDREND */}
          {children}
-
-         {/* CONFIRM MODAL */}
-         {logoutConfirm && (
-            <div className={cx("black-bg")}>
-               <div className={cx("logout-confirm", {closing: isClosing})}>
-                  <span>Are you sure you want to log out?</span>
-                  <button onClick={handleCancel} className={cx("cancel")}>Cancel</button>
-                  <button onClick={handleConfirm} className={cx("logout")}>Log out</button>
-               </div>
-            </div>
-         )}
       </AuthContext.Provider>
    );
 };

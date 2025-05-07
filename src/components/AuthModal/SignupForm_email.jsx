@@ -138,11 +138,18 @@ function SignupForm_email({ className }) {
    }, [errorState]);
 
    useEffect(() => {
-      setResultSubmit({
-         success: false,
-         message: "",
+      let hideMessage = false;
+      Object.keys(formValue).forEach((key) => {
+         if (String(formValue[key]).trim() !== "") hideMessage = true;
       });
-   }, [formValue])
+
+      if (hideMessage) {
+         setResultSubmit({
+            success: false,
+            message: "",
+         });
+      }
+   }, [formValue]);
 
    const openMenu = (type) => {
       setShowMenu((prev) => {
@@ -196,7 +203,7 @@ function SignupForm_email({ className }) {
                   year: "",
                   email_address: "",
                   password: "",
-               })
+               });
 
                setResultSubmit({
                   success: true,

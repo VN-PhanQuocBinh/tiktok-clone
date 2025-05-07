@@ -7,49 +7,52 @@ import { DefaultLayout, HeaderOnlyLayout, SidebarOnlyLayout } from "./layouts";
 import { LAYOUT_TYPE } from "./constants";
 
 import { AuthProvider } from "./contexts/AuthContext";
+import { AuthModalProvider } from "./contexts/AuthModalContext";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          {publicRoutes.map((route, index) => {
-            let Layout;
+   return (
+      <BrowserRouter>
+         <AuthProvider>
+            <AuthModalProvider>
+               <Routes>
+                  {publicRoutes.map((route, index) => {
+                     let Layout;
 
-            switch (route.layout) {
-              case LAYOUT_TYPE.NO_LAYOUT:
-                Layout = Fragment;
-                break;
-              case LAYOUT_TYPE.HEADER_ONLY:
-                Layout = HeaderOnlyLayout;
-                break;
-              case LAYOUT_TYPE.DEFAULT:
-                Layout = DefaultLayout;
-                break;
-              case LAYOUT_TYPE.SIDEBAR_ONLY:
-                Layout = SidebarOnlyLayout
-                break;
-              default:
-                throw Error("Unknown Layout: " + route.layout);
-            }
+                     switch (route.layout) {
+                        case LAYOUT_TYPE.NO_LAYOUT:
+                           Layout = Fragment;
+                           break;
+                        case LAYOUT_TYPE.HEADER_ONLY:
+                           Layout = HeaderOnlyLayout;
+                           break;
+                        case LAYOUT_TYPE.DEFAULT:
+                           Layout = DefaultLayout;
+                           break;
+                        case LAYOUT_TYPE.SIDEBAR_ONLY:
+                           Layout = SidebarOnlyLayout;
+                           break;
+                        default:
+                           throw Error("Unknown Layout: " + route.layout);
+                     }
 
-            const Page = route.element;
-            return (
-              <Route
-                key={index}
-                path={route.path}
-                element={
-                  <Layout>
-                    <Page />
-                  </Layout>
-                }
-              />
-            );
-          })}
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
-  );
+                     const Page = route.element;
+                     return (
+                        <Route
+                           key={index}
+                           path={route.path}
+                           element={
+                              <Layout>
+                                 <Page />
+                              </Layout>
+                           }
+                        />
+                     );
+                  })}
+               </Routes>
+            </AuthModalProvider>
+         </AuthProvider>
+      </BrowserRouter>
+   );
 }
 
 export default App;
