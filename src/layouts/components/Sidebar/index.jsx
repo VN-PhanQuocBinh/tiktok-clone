@@ -144,7 +144,8 @@ export default function Sidebar({ className }) {
                return newState;
             });
 
-            setShowFull(true);
+            if (!isMatchQuery) 
+               setShowFull(true);
          } else {
             setTabDisplay((pre) => {
                let newState = { ...pre };
