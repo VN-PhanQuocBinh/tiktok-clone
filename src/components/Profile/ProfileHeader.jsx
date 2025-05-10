@@ -17,7 +17,7 @@ function ProfileHeader({ user, isOwnProfile }) {
    const [displayUser, setDisplayUser] = useState({});
 
    useEffect(() => {
-      console.log(user);
+      // console.log(user);
 
       setDisplayUser(user);
    }, [user]);

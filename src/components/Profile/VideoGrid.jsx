@@ -1,12 +1,13 @@
 // src/components/Profile/VideoGrid.jsx
 import { useState, useEffect, useLayoutEffect, memo } from "react";
-import classNames from "classnames/bind";
-import styles from "../../assets/styles/components/Profile/VideoGrid.module.scss";
 import VideoItem from "./VideoItem";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { getUserVideo } from "../../services/videoService/userVideo";
+import sortVideosMethods from "../../utils/sortVideo";
 
+import styles from "../../assets/styles/components/Profile/VideoGrid.module.scss";
+import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
 const TABS = {
@@ -27,7 +28,7 @@ function VideoGrid({ userId, activeTab, sortOption }) {
    const [videos, setVideos] = useState([]);
    const [loading, setLoading] = useState(true);
 
-   const [playingVideo, setPlayingVideo] = useState(0);
+   const [playingVideo, setPlayingVideo] = useState(-1);
 
    useEffect(() => {
       const fetchVideo = async () => {
@@ -35,7 +36,7 @@ function VideoGrid({ userId, activeTab, sortOption }) {
             setLoading(true);
             const response = await getUserVideo(userId);
             // console.log(response);
-            setVideos(response);
+            setVideos(sortVideosMethods[sortOption](response));
             setLoading(false);
          } catch (error) {
             console.log("Video Grid: ", error);
@@ -43,12 +44,28 @@ function VideoGrid({ userId, activeTab, sortOption }) {
       };
 
       if (userId) fetchVideo();
-   }, [userId, activeTab, sortOption]);
+   }, [userId]);
+
+   useEffect(() => {
+      setPlayingVideo(-1)
+   }, [userId, activeTab, sortOption])
+
+   useEffect(() => {
+      console.log(sortOption);
+      
+      setVideos(prev => {
+         let newVideos = [...prev]
+         return sortVideosMethods[sortOption](newVideos)
+      })
+   }, [sortOption])
 
    const handlePointerEnter = (id) => {
       console.log(id);
       setPlayingVideo(id)
    };
+
+   console.log("re-render");
+   
 
    return (
       <div className={cx("wrapper")}>

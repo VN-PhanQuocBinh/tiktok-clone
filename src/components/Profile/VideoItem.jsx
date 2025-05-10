@@ -34,7 +34,7 @@ function VideoItem({ video, className, isPlay = false, onPointerEnter }) {
             <span className={cx("icon")}>
                <Icon_PlaySolid />
             </span>
-            <span className={cx("views")}>{video.views || "3.5M"}</span>
+            <span className={cx("views")}>{video.views_count}</span>
          </div>
       </div>
    );
