@@ -18,7 +18,7 @@ const AuthProvider = ({ children }) => {
          try {
             const response = await authService.getCurrentUser(token);
             setUser(response.data);
-            console.log(response);
+            // console.log(response);
          } catch (error) {
             console.log("GET CURRENT USER: ", error);
          }
@@ -39,14 +39,14 @@ const AuthProvider = ({ children }) => {
 
       try {
          const data = await authService.register(email, password);
-         console.log(data);
+         // console.log(data);
 
          return {
             success: true,
             message: "",
          };
       } catch (error) {
-         console.log(error);
+         // console.log(error);
 
          let message = "";
 
@@ -71,10 +71,10 @@ const AuthProvider = ({ children }) => {
       setLoggingIn(true);
 
       try {
-         const data = await authService.login(email, password);
-         const token = await data?.meta?.token;
-         console.log(token);
+         const response = await authService.login(email, password);
+         const token = await response?.meta?.token;
 
+         setUser(response?.data)
          setIsLoggedIn(true);
          saveToken(token);
 
@@ -110,7 +110,7 @@ const AuthProvider = ({ children }) => {
 
    const logout = () => {
       setIsLoggedIn(false);
-      setUser(null);
+      setUser({});
       removeToken();
    };
 

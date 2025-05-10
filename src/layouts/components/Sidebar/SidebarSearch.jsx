@@ -65,7 +65,9 @@ function SidebarSearch({ sendDataToParent }, ref) {
       () => {
          return {
             focus() {
-               DOM_input?.current?.focus();
+               // console.log("focus");
+               
+               DOM_input.current?.focus();
             },
             currentQuery: debounceQuery
          };

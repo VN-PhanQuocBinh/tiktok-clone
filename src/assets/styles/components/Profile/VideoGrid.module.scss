@@ -1,0 +1,35 @@
+@use "../../base/variables";
+@use "../../base/mixins";
+
+// src/assets/styles/components/VideoGrid.module.scss
+.wrapper {
+   padding: 20px;
+
+   .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+
+      .video-item {
+         aspect-ratio: 75 / 100;
+      }
+   }
+
+   .locked {
+      text-align: center;
+      padding: 20px;
+      color: variables.$text-color;
+   }
+
+   .not-found {
+      color: variables.$text-color;
+      text-align: center;
+   }
+}
+
+
+@media screen and (min-width: 1024px) {
+   .video-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+   }
+}

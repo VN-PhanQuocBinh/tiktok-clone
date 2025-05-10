@@ -57,10 +57,10 @@ function VideoPlayer({
    //       ([entry]) => {
    //          if (entry.isIntersecting) {
    //             DOM_video.current?.play();
-   //             onDisplayStateBtn(!DOM_video.current.paused, false);
+   //             onDisplayStateBtn(!DOM_video.current?.paused, false);
    //          } else {
    //             DOM_video.current?.pause();
-   //             onDisplayStateBtn(!DOM_video.current.paused, false);
+   //             onDisplayStateBtn(!DOM_video.current?.paused, false);
    //          }
    //       },
    //       {

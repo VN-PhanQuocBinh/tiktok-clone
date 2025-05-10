@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router";
 import { useMediaQuery } from "../../../hooks";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useAuthModal } from "../../../contexts/AuthModalContext";
@@ -29,6 +30,8 @@ const keyTabDisplay = {
 };
 
 export default function Sidebar({ className }) {
+   const location = useLocation()
+
    const { isLoggedIn } = useAuth();
    const { authModal, openAuthModal, closeAuthModal } = useAuthModal()
 
@@ -44,6 +47,10 @@ export default function Sidebar({ className }) {
    const DOM_inputSearchArea = useRef(null);
    const DOM_sideBar = useRef(null);
    const DOM_blurArea = useRef(null);
+
+   useEffect(() => {
+      handleCloseSideMenu()
+   }, [location])
 
    // responsive
    useEffect(() => {
@@ -63,7 +70,7 @@ export default function Sidebar({ className }) {
       }
    }, [isMatchQuery]);
 
-   // displat blur area
+   // display blur area
    useEffect(() => {
       let value = false;
 
@@ -104,8 +111,12 @@ export default function Sidebar({ className }) {
 
    // auto focus input when open sidemenu
    useEffect(() => {
+      // console.log(DOM_inputSearchArea.current.focus);
+      
       if (tabDisplay[keyTabDisplay.KEY_SEARCH]) {
-         DOM_inputSearchArea.current?.focus();
+         setTimeout(() => {
+            DOM_inputSearchArea.current.focus();
+         }, 0)
       }
    }, [tabDisplay]);
 

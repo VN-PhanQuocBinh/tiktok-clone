@@ -15,9 +15,8 @@ export {
    Icon_User,
    Icon_Circle,
    Icon_AngleLeft,
-   Icon_ArrowRightToBracket
+   Icon_ArrowRightToBracket,
 } from "./components/Header";
-
 
 export {
    Icon_HomeRegular,
@@ -37,8 +36,8 @@ export {
    Icon_BlueTick,
    Icon_TelevisionSolid,
    Icon_TelevisionRegular,
-   Icon_UserSolid
-} from "./components/Sidebar"
+   Icon_UserSolid,
+} from "./components/Sidebar";
 
 export {
    Icon_Volume,
@@ -49,8 +48,8 @@ export {
    Icon_Comment,
    Icon_Flag,
    Icon_Share,
-   Icon_Check
-} from "./components/VideoList"
+   Icon_Check,
+} from "./components/VideoList";
 
 export {
    Icon_QRcode,
@@ -63,5 +62,15 @@ export {
    Icon_Eye,
    Icon_EyeXmark,
    Icon_Warning,
-   Icon_CircleNotch
-} from "./components/LoginModal"
+   Icon_CircleNotch,
+} from "./components/LoginModal";
+
+export {
+   Icon_Setting,
+   Icon_ShareSolid,
+   Icon_Videos,
+   Icon_Repost,
+   Icon_Favourites,
+   Icon_Liked,
+   Icon_PlaySolid
+} from "./components/Profile";

@@ -7,14 +7,12 @@ import { Icon_EllipsisVertical, Icon_TelevisionRegular, Icon_TelevisionSolid, Ic
 
 import classNames from "classnames/bind";
 import styles from "../../../assets/styles/components/Navbar.module.scss";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
 function Navbar({className, showLabel, onOpen}) {
    const { isLoggedIn, user } = useAuth();
-   // console.log(user);
-   
-   // console.log("navbar re-render");
 
    return (
       <nav className={className}>
@@ -38,8 +36,8 @@ function Navbar({className, showLabel, onOpen}) {
             <NavbarItem
                label={"Profile"}
                icon={isLoggedIn ? Image : Icon_UserSolid}
-               activeIcon={Icon_UserSolid}
-               to={"/profile"}
+               activeIcon={ isLoggedIn ? Image : Icon_UserSolid}
+               to={`/profile/${user?.nickname}`}
                iconProps={{
                   src: user?.avatar,
                   className: "avt"

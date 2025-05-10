@@ -1,0 +1,165 @@
+@use "../../base/variables";
+@use "../../base/mixins";
+
+// src/assets/styles/components/ProfileHeader.module.scss
+.wrapper {
+   display: flex;
+   align-items: center;
+   padding: 32px 20px 32px;
+   color: variables.$text-color;
+
+   .avatar-section {
+      margin-right: 20px;
+      width: 212px;
+      height: 212px;
+
+      .avatar {
+         width: 100%;
+         height: 100%;
+         border-radius: 50%;
+         object-fit: cover;
+      }
+   }
+
+   .info-section {
+      flex: 1;
+      @include mixins.flex-column;
+      gap: 12px;
+
+      .username-section {
+         font-size: 1.8rem;
+         align-items: center;
+         @include mixins.flex-row;
+         align-items: center;
+         gap: 12px;
+
+         .nickname {
+            font-size: 2.4rem;
+            font-weight: 700;
+
+            .tick {
+               margin-left: 8px;
+               width: 20px;
+               height: 20px;
+            }
+         }
+
+         .username {
+            font-weight: 500;
+            font-size: 1.8rem;
+         }
+      }
+
+      .actions {
+         @include mixins.flex-row;
+         gap: 12px;
+
+         button {
+            height: 40px;
+            min-width: 40px;
+            border-radius: 6px;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            @include mixins.flex-center;
+
+            &.edit, &.promote {
+               min-width: 108px;
+            }
+
+            &.edit {
+               background-color: variables.$primary-color;
+               padding: 0 16px;
+
+               &:hover {
+                  background-color: rgba($color: variables.$primary-color, $alpha: 0.9);
+               }
+            }
+
+            &.promote {
+               padding: 0 16px;
+            }
+
+            &.promote, &.setting, &.share {
+               background-color: rgba($color: variables.$text-color, $alpha: 0.08);
+
+               &:hover {
+                  background-color: rgba($color: variables.$text-color, $alpha: 0.1);
+               }
+            }
+         }
+
+
+      }
+
+      .stats {
+         display: flex;
+         gap: 20px;
+         font-size: 14px;
+         color: #ccc;
+
+         span {
+            font-size: 1.6rem;
+
+            strong {
+               font-size: 1.8rem;
+               color: variables.$text-color;
+               margin-right: 5px;
+            }
+         }
+      }
+
+      .bio {
+         font-size: 1.6rem;
+         color: variables.$text-color;
+         position: relative;
+
+         .edit-btn {
+            margin-left: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #fe2c55;
+         }
+      }
+
+      .bio-edit {
+         margin-top: 10px;
+
+         .bio-input {
+            width: 100%;
+            min-height: 60px;
+            padding: 5px;
+            background: #222;
+            color: variables.$text-color;
+            border: 1px solid #333;
+            border-radius: 4px;
+            resize: vertical;
+         }
+
+         .bio-actions {
+            margin-top: 10px;
+
+            .save-btn,
+            .cancel-btn {
+               padding: 5px 10px;
+               margin-right: 10px;
+               border: none;
+               border-radius: 4px;
+               cursor: pointer;
+            }
+
+            .save-btn {
+               background: #00a1f1;
+               color: variables.$text-color;
+            }
+
+            .cancel-btn {
+               background: #666;
+               color: variables.$text-color;
+            }
+         }
+      }
+   }
+}

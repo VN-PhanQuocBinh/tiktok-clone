@@ -47,7 +47,7 @@ export const register = async (path, option = {}) => {
 export const login = async (path, option = {}) => {
    const response = await request.post(path, option)
 
-   console.log(response);
+   // console.log(response);
    
 
    if (response.status !== 200) {
@@ -68,6 +68,28 @@ export const getCurrentUser = async (path, option = {}) => {
 
    return response
 }
+
+export const getUser = async (path, option = {}) => {
+   const response = await request.get(path, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - GET USER")
+   }
+
+   return response.data
+}
+
+
+export const getUserVideo = async (path, option = {}) => {
+   const response = await request.get(path, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - GET USER")
+   }
+
+   return response.data
+}
+ 
 
 
 export default request
