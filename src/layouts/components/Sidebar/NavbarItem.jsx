@@ -12,6 +12,7 @@ function NavbarItem({
    activeIcon: ActiveIcon = null,
    iconProps = {},
    showLabel = true,
+   onClick
 }) {
    const _iconProps = {
       ...iconProps,
@@ -22,9 +23,8 @@ function NavbarItem({
       }),
    };
 
-
    return (
-      <NavLink to={to} end>
+      <NavLink onClick={onClick} to={to} end>
          {({ isActive }) => (
             <li className={cx("nav-item", { active: isActive })}>
                <span className={cx("icon-wrapper")}>

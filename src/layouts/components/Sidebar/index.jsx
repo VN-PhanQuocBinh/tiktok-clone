@@ -84,7 +84,7 @@ export default function Sidebar({ className }) {
    // blur event
    useEffect(() => {
       const handleClickOutside = (e) => {
-         console.log("click");
+         // console.log("click");
 
          if (!isMatchQuery) setShowFull(true);
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { checkFollowed } from "../../utils/checkFollowed";
 
 import Image from "../../components/Image";
 import {
@@ -7,6 +7,7 @@ import {
    Icon_ShareSolid,
    Icon_EllipsisVertical,
    Icon_BlueTick,
+   Icon_Following,
 } from "../../assets/Icons";
 
 import styles from "../../assets/styles/components/Profile/ProfileHeader.module.scss";
@@ -15,12 +16,32 @@ const cx = classNames.bind(styles);
 
 function ProfileHeader({ user, isOwnProfile }) {
    const [displayUser, setDisplayUser] = useState({});
+   const [isFollowed, setIsFollowed] = useState(false);
 
    useEffect(() => {
-      // console.log(user);
+      console.log(user);
 
       setDisplayUser(user);
-   }, [user]);
+   }, [user, isOwnProfile]);
+
+   useEffect(() => {
+      // if (user.id) {
+      //    console.log("user id:", user.id);
+         
+      //    const checkFollowStatus = async () => {
+      //       if (!isOwnProfile) {
+      //          const _isFollowed = await checkFollowed(user.id);
+      //          console.log(isOwnProfile);
+
+      //          setIsFollowed(_isFollowed);
+      //       } else {
+      //          setIsFollowed(false);
+      //       }
+      //    };
+
+      //    checkFollowStatus();
+      // }
+   }, [user, isOwnProfile]);
 
    return (
       <div className={cx("wrapper")}>
@@ -45,8 +66,17 @@ function ProfileHeader({ user, isOwnProfile }) {
             </div>
 
             <div className={cx("actions")}>
-               <button className={cx("edit")}>
-                  {isOwnProfile ? "Edit profile" : "Follow"}
+               <button className={cx("edit", { following: isFollowed })}>
+                  {isOwnProfile ? (
+                     "Edit profile"
+                  ) : !isFollowed ? (
+                     "Follow"
+                  ) : (
+                     <>
+                        <Icon_Following />
+                        Following
+                     </>
+                  )}
                </button>
                <button className={cx("promote")}>
                   {isOwnProfile ? "Promote post" : "Message"}
@@ -75,6 +105,7 @@ function ProfileHeader({ user, isOwnProfile }) {
                   <strong>{displayUser?.likes_count || 0}</strong> Likes
                </span>
             </div>
+
             <div className={cx("bio")}>{displayUser?.bio || "No bio yet."}</div>
          </div>
       </div>

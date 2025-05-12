@@ -108,6 +108,26 @@ const Icon_PlaySolid = (props) => {
    );
 };
 
+const Icon_Following = (props) => {
+   return (
+      <svg
+         {...props}
+         fill="currentColor"
+         viewBox="0 0 48 48"
+         xmlns="http://www.w3.org/2000/svg"
+         width="1em"
+         height="1em"
+      >
+         <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M19 2.5a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-6 10a6 6 0 1 1 12 0 6 6 0 0 1-12 0Z"
+         ></path>
+         <path d="M5 43.5c.55 0 1-.45 1.02-1 .18-4.33 1.56-7.46 3.6-9.53 2.2-2.23 5.4-3.47 9.38-3.47 2.54 0 4.76.5 6.6 1.45l.85-.74a4.47 4.47 0 0 1 3.68-1.06C27.14 26.7 23.27 25.5 19 25.5c-4.82 0-9.12 1.51-12.22 4.66-2.92 2.96-4.57 7.16-4.76 12.34-.02.55.43 1 .98 1h2ZM45.85 26.03l-1.69-1.06a1 1 0 0 0-1.38.32l-8.04 12.87-4.57-5.22a1 1 0 0 0-1.41-.1l-1.51 1.32a1 1 0 0 0-.09 1.41l6.34 7.25a1.99 1.99 0 0 0 3.2-.26l9.47-15.15a1 1 0 0 0-.32-1.38Z"></path>
+      </svg>
+   );
+};
+
 export {
    Icon_Setting,
    Icon_ShareSolid,
@@ -115,5 +135,6 @@ export {
    Icon_Repost,
    Icon_Favourites,
    Icon_Liked,
-   Icon_PlaySolid
+   Icon_PlaySolid,
+   Icon_Following
 };

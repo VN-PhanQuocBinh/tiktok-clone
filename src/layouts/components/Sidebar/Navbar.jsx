@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router";
 import { useAuth } from "../../../contexts/AuthContext";
+import { useAuthModal } from "../../../contexts/AuthModalContext";
+
 import { navListData } from "../../../fakeDB";
+import { AUTH_TYPE } from "../../../constants";
 
 import NavbarItem from "./NavbarItem";
 import Image from "../../../components/Image";
@@ -7,12 +11,19 @@ import { Icon_EllipsisVertical, Icon_TelevisionRegular, Icon_TelevisionSolid, Ic
 
 import classNames from "classnames/bind";
 import styles from "../../../assets/styles/components/Navbar.module.scss";
-import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
 function Navbar({className, showLabel, onOpen}) {
    const { isLoggedIn, user } = useAuth();
+   const { openAuthModal } = useAuthModal()
+
+   const handleClickProfile = (e) => {
+      if (!isLoggedIn) {
+         e.preventDefault()
+         openAuthModal(AUTH_TYPE.LOGIN_OPTIONS)
+      }
+   }
 
    return (
       <nav className={className}>
@@ -43,6 +54,7 @@ function Navbar({className, showLabel, onOpen}) {
                   className: "avt"
                }}
                showLabel={showLabel}
+               onClick={handleClickProfile}
             />
 
             <li>

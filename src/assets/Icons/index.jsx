@@ -72,5 +72,6 @@ export {
    Icon_Repost,
    Icon_Favourites,
    Icon_Liked,
-   Icon_PlaySolid
+   Icon_PlaySolid,
+   Icon_Following
 } from "./components/Profile";

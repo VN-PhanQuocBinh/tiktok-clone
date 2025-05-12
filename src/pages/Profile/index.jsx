@@ -19,7 +19,6 @@ import { formatLabel } from "../../utils/formatString";
 
 import styles from "./Profile.module.scss";
 import classNames from "classnames/bind";
-import { width } from "@fortawesome/free-regular-svg-icons/faAddressBook";
 
 let cx = classNames.bind(styles);
 
@@ -81,9 +80,6 @@ export default function Profile() {
          } catch (error) {}
       };
 
-
-      
-
       fetchAPI();
    }, [nickname]);
 
@@ -120,7 +116,7 @@ export default function Profile() {
       <div className={cx("wrapper")}>
          <ProfileHeader
             user={displayUser}
-            isOwnProfile={isLoggedIn && user?.nickname === nickname}
+            isOwnProfile={isLoggedIn && isMyProfile}
          />
          <div className={cx("content")}>
             <div className={cx("content-header")}>

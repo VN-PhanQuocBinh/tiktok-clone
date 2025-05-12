@@ -64,7 +64,7 @@ function VideoGrid({ userId, activeTab, sortOption }) {
       setPlayingVideo(id)
    };
 
-   console.log("re-render");
+   // console.log("re-render");
    
 
    return (

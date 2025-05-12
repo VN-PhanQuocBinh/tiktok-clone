@@ -1,6 +1,14 @@
 @use "../../base/variables";
 @use "../../base/mixins";
 
+.primary-button-style {
+   background-color: rgba($color: variables.$text-color, $alpha: 0.08);
+
+   &:hover {
+      background-color: rgba($color: variables.$text-color, $alpha: 0.1);
+   }
+}
+
 // src/assets/styles/components/ProfileHeader.module.scss
 .wrapper {
    display: flex;
@@ -72,8 +80,12 @@
                background-color: variables.$primary-color;
                padding: 0 16px;
 
-               &:hover {
-                  background-color: rgba($color: variables.$primary-color, $alpha: 0.9);
+               // &:hover {
+               //    background-color: rgba($color: variables.$primary-color, $alpha: 0.9);
+               // }
+
+               &.following {
+                  @extend .primary-button-style;
                }
             }
 
@@ -82,11 +94,12 @@
             }
 
             &.promote, &.setting, &.share {
-               background-color: rgba($color: variables.$text-color, $alpha: 0.08);
+               @extend .primary-button-style;
+               // background-color: rgba($color: variables.$text-color, $alpha: 0.08);
 
-               &:hover {
-                  background-color: rgba($color: variables.$text-color, $alpha: 0.1);
-               }
+               // &:hover {
+               //    background-color: rgba($color: variables.$text-color, $alpha: 0.1);
+               // }
             }
          }
 
@@ -160,6 +173,17 @@
                color: variables.$text-color;
             }
          }
+      }
+   }
+}
+
+@media screen and (max-width: 768px) {
+   .wrapper {
+      @include mixins.flex-column;
+      justify-content: center;
+
+      .info-section {
+         align-items: center;
       }
    }
 }

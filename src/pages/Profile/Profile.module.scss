@@ -20,8 +20,6 @@
 
    .content {
       .content-header {
-         display: flex;
-         flex-direction: column;
          padding: 0 20px 4px;
          @include mixins.flex-row;
          justify-content: space-between;
@@ -95,5 +93,13 @@
             }
          }
       }
+   }
+}
+
+
+@media screen and (max-width: 768px) {
+   .wrapper .content .content-header {
+      flex-direction: column;
+      gap: 16px;
    }
 }
