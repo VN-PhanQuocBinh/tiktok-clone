@@ -80,12 +80,18 @@
                background-color: variables.$primary-color;
                padding: 0 16px;
 
-               // &:hover {
-               //    background-color: rgba($color: variables.$primary-color, $alpha: 0.9);
-               // }
-
+               &:not(.following) {
+                  &:hover {
+                     background-color: rgba($color: variables.$primary-color, $alpha: 0.9);
+                  }
+               }
+               
                &.following {
                   @extend .primary-button-style;
+
+                  .icon {
+                     margin-right: 4px;
+                  }
                }
             }
 
@@ -181,6 +187,10 @@
    .wrapper {
       @include mixins.flex-column;
       justify-content: center;
+
+      .avatar-section {
+         margin-right: 0;
+      }
 
       .info-section {
          align-items: center;

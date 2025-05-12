@@ -9,12 +9,12 @@ export const checkFollowed = async (userId) => {
    
    
    while (page <= pageSize && !isFound) {
-      console.log(userId);
+      // console.log(userId);
       const token = getToken();
 
       if (token) {
          const response = await getFollowingList(token, page);
-         console.log(response?.data);
+         // console.log(response?.data);
          
          const list = response?.data || []
          isFound = list.some(user => user.id === userId)

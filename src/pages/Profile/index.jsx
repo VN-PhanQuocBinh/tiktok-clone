@@ -65,8 +65,12 @@ export default function Profile() {
    // }, [nickname]);
 
    useEffect(() => {
+      setSortOption(SORT_OPTIONS.LATEST)
+
       let _isMyProfile = nickname === user?.nickname
       setIsMyProfile(_isMyProfile)
+      // console.log(nickname, user.nickname);
+      
 
       const fetchAPI = async () => {
          try {

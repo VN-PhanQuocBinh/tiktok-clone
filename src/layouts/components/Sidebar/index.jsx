@@ -121,7 +121,7 @@ export default function Sidebar({ className }) {
    }, [tabDisplay]);
 
    const handleCloseSideMenu = useCallback(() => {
-      console.log("close");
+      // console.log("close");
 
       if (!isMatchQuery) setShowFull(true);
 

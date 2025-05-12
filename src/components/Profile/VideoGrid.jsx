@@ -24,7 +24,6 @@ const SORT_OPTIONS = {
 };
 
 function VideoGrid({ userId, activeTab, sortOption }) {
-   const { user, isLoggedIn } = useAuth();
    const [videos, setVideos] = useState([]);
    const [loading, setLoading] = useState(true);
 
@@ -51,7 +50,7 @@ function VideoGrid({ userId, activeTab, sortOption }) {
    }, [userId, activeTab, sortOption])
 
    useEffect(() => {
-      console.log(sortOption);
+      // console.log(sortOption);
       
       setVideos(prev => {
          let newVideos = [...prev]
@@ -60,7 +59,7 @@ function VideoGrid({ userId, activeTab, sortOption }) {
    }, [sortOption])
 
    const handlePointerEnter = (id) => {
-      console.log(id);
+      // console.log(id);
       setPlayingVideo(id)
    };
 

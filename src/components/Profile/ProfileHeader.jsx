@@ -1,5 +1,7 @@
 import { useState, useEffect, useLayoutEffect } from "react";
 import { checkFollowed } from "../../utils/checkFollowed";
+import { follow, unfollow } from "../../services/userService/followingService";
+import { getToken } from "../../utils/token";
 
 import Image from "../../components/Image";
 import {
@@ -7,14 +9,16 @@ import {
    Icon_ShareSolid,
    Icon_EllipsisVertical,
    Icon_BlueTick,
-   Icon_Following,
+   Icon_Following
 } from "../../assets/Icons";
 
 import styles from "../../assets/styles/components/Profile/ProfileHeader.module.scss";
 import classNames from "classnames/bind";
+import { useAuth } from "../../contexts/AuthContext";
 const cx = classNames.bind(styles);
 
 function ProfileHeader({ user, isOwnProfile }) {
+   const { user: authUser } = useAuth();
    const [displayUser, setDisplayUser] = useState({});
    const [isFollowed, setIsFollowed] = useState(false);
 
@@ -25,23 +29,44 @@ function ProfileHeader({ user, isOwnProfile }) {
    }, [user, isOwnProfile]);
 
    useEffect(() => {
-      // if (user.id) {
-      //    console.log("user id:", user.id);
-         
-      //    const checkFollowStatus = async () => {
-      //       if (!isOwnProfile) {
-      //          const _isFollowed = await checkFollowed(user.id);
-      //          console.log(isOwnProfile);
+      if (user.id) {
+         const checkFollowStatus = async () => {
+            if (user.id !== authUser?.id) {
+               const _isFollowed = await checkFollowed(user.id);
 
-      //          setIsFollowed(_isFollowed);
-      //       } else {
-      //          setIsFollowed(false);
-      //       }
-      //    };
+               setIsFollowed(_isFollowed);
+            } else {
+               setIsFollowed(false);
+            }
+         };
 
-      //    checkFollowStatus();
-      // }
-   }, [user, isOwnProfile]);
+         checkFollowStatus();
+      }
+   }, [user, isOwnProfile, isFollowed]);
+
+   const handleToggleFollow = () => {
+      const handleFollow = async () => {
+         if (!isOwnProfile) {
+            if (!isFollowed) {
+               setIsFollowed(true)
+               const response = await follow(getToken(), user?.id)
+               console.log(response);
+
+               if (!response.success) setIsFollowed(false)
+            } else {
+               setIsFollowed(false)
+               const response = await unfollow(getToken(), user?.id)
+               console.log(response);
+
+               if (!response.success) setIsFollowed(true)
+            }
+         }
+      }
+      
+      handleFollow()
+   };
+
+   // console.log("re-render");
 
    return (
       <div className={cx("wrapper")}>
@@ -66,14 +91,17 @@ function ProfileHeader({ user, isOwnProfile }) {
             </div>
 
             <div className={cx("actions")}>
-               <button className={cx("edit", { following: isFollowed })}>
+               <button
+                  onClick={handleToggleFollow}
+                  className={cx("edit", { following: isFollowed })}
+               >
                   {isOwnProfile ? (
                      "Edit profile"
                   ) : !isFollowed ? (
                      "Follow"
                   ) : (
                      <>
-                        <Icon_Following />
+                        <Icon_Following className={cx("icon")} />
                         Following
                      </>
                   )}
