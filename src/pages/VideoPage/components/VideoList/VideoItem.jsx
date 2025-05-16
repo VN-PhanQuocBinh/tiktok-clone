@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import VideoPlayer from "./VideoPlayer";
-import VolumeControl from "./VolumeControl";
-import TimeLine from "./TimeLine";
-import VideoActions from "./VideoActions";
-import DropDown from "../DropDown";
-import DropDownItem from "../DropDownItem";
+import VideoPlayer from "../../../../components/VideoList/VideoPlayer";
+import VolumeControl from "../../../../components/VideoList/VolumeControl";
+import TimeLine from "../../../../components/VideoList/TimeLine";
+import DropDown from "../../../../components/DropDown";
+import DropDownItem from "../../../../components/DropDownItem";
+import Image from "../../../../components/Image";
 
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../../constants";
+import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../../constants";
 
 import {
    Icon_VolumeSolid,
@@ -16,10 +16,10 @@ import {
    Icon_Play,
    Icon_Pause,
    Icon_BlueTick,
-} from "../../assets/Icons";
+} from "../../../../assets/Icons";
 
 import classNames from "classnames/bind";
-import styles from "../../assets/styles/components/VideoItem.module.scss";
+import styles from "../../../../assets/styles/pages/VideoPage/VideoList/VideoItem.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -33,9 +33,6 @@ function VideoItem({ className, video }) {
    const [isPlay, setIsPlay] = useState(false);
    const [displayStateBtn, setDisplayStateBtn] = useState(false);
    const [isMuted, setIsMuted] = useState(false);
-
-   const [orientation, setOrientation] = useState(true);
-   // true: landscape, false: portrait
 
    const [duration, setDuration] = useState(0);
 
@@ -134,14 +131,6 @@ function VideoItem({ className, video }) {
       setIsMuted(value == 0);
    }, []);
 
-   const handleLoadedMetadata = useCallback((w, h) => {
-      if (w > h) {
-         setOrientation(true);
-      } else {
-         setOrientation(false);
-      }
-   }, []);
-
    return (
       <li
          ref={DOM_videoItem}
@@ -149,6 +138,55 @@ function VideoItem({ className, video }) {
             [className]: className,
          })}
       >
+         <div className={cx("blur-background")}>
+            <Image className={cx("img")} src={video?.thumb_url} />
+         </div>
+
+         <div className={cx("overlay-control")}>
+            <span
+               onClick={() => setShowMoreMenu(!showMoreMenu)}
+               className={cx("more-icon-wrapper")}
+            >
+               <Icon_EllipsisVertical className={cx("more-icon")} />
+
+               <DropDown
+                  style={{
+                     left: leftMoreMenu,
+                  }}
+                  ref={DOM_moreMenu}
+                  className={cx("more-menu")}
+                  isVisible={showMoreMenu}
+               >
+                  <DropDownItem
+                     type={TYPE.ACTIONS}
+                     item={{
+                        label: "No interested",
+                        icon: Icon_Play,
+                     }}
+                     className={cx("more-item")}
+                  />
+
+                  <DropDownItem
+                     type={TYPE.ACTIONS}
+                     item={{
+                        label: "No interested",
+                        icon: Icon_Play,
+                     }}
+                     className={cx("more-item")}
+                  />
+
+                  <DropDownItem
+                     type={TYPE.ACTIONS}
+                     item={{
+                        label: "No interested",
+                        icon: Icon_Play,
+                     }}
+                     className={cx("more-item")}
+                  />
+               </DropDown>
+            </span>
+         </div>
+
          <div className={cx("videoPlayer-wrapper")}>
             <VideoPlayer
                className={cx("video-element")}
@@ -157,63 +195,8 @@ function VideoItem({ className, video }) {
                onDurationChange={onDurationChange}
                onPlay={handlePlay}
                onPause={handlePause}
-               onLoadedMetaData={handleLoadedMetadata}
                ref={DOM_video}
             ></VideoPlayer>
-
-            <div className={cx("overlay-control")}>
-               <span className={cx("volume-icons")}>
-                  {isMuted ? <Icon_VolumeSolidXmark /> : <Icon_VolumeSolid />}
-
-                  <VolumeControl
-                     className={cx("volume-control")}
-                     onChangeVolume={handleChangeVolume}
-                  />
-               </span>
-
-               <span
-                  onClick={() => setShowMoreMenu(!showMoreMenu)}
-                  className={cx("more-icon-wrapper")}
-               >
-                  <Icon_EllipsisVertical className={cx("more-icon")} />
-
-                  <DropDown
-                     style={{
-                        left: leftMoreMenu,
-                     }}
-                     ref={DOM_moreMenu}
-                     className={cx("more-menu")}
-                     isVisible={showMoreMenu}
-                  >
-                     <DropDownItem
-                        type={TYPE.ACTIONS}
-                        item={{
-                           label: "No interested",
-                           icon: Icon_Play,
-                        }}
-                        className={cx("more-item")}
-                     />
-
-                     <DropDownItem
-                        type={TYPE.ACTIONS}
-                        item={{
-                           label: "No interested",
-                           icon: Icon_Play,
-                        }}
-                        className={cx("more-item")}
-                     />
-
-                     <DropDownItem
-                        type={TYPE.ACTIONS}
-                        item={{
-                           label: "No interested",
-                           icon: Icon_Play,
-                        }}
-                        className={cx("more-item")}
-                     />
-                  </DropDown>
-               </span>
-            </div>
 
             <div className={cx("play-pause-btn")}>
                {displayStateBtn && isPlay && (
@@ -229,33 +212,27 @@ function VideoItem({ className, video }) {
                )}
             </div>
 
-            <div className={cx("video-info")}>
-               <h3 className={cx("user-id")}>
-                  {video?.user?.nickname}
-                  {!video?.user?.tick && (
-                     <Icon_BlueTick className={cx("tick")} />
-                  )}
-               </h3>
-               <p className={cx("description")}>{video?.description}</p>
+            <div className={cx("bot-overlay-control")}>
+               <TimeLine
+                  onSeek={handleSeek}
+                  onPlay={DOM_video.current?.play}
+                  onPause={DOM_video.current?.pause}
+                  onDisplayStateBtn={onDisplayStateBtn}
+                  counting={isPlay}
+                  duration={duration}
+                  className={cx("time-line")}
+               />
+
+               <span className={cx("volume-icons")}>
+                  {isMuted ? <Icon_VolumeSolidXmark /> : <Icon_VolumeSolid />}
+
+                  <VolumeControl
+                     className={cx("volume-control")}
+                     onChangeVolume={handleChangeVolume}
+                  />
+               </span>
             </div>
-
-            <TimeLine
-               onSeek={handleSeek}
-               onPlay={DOM_video.current?.play}
-               onPause={DOM_video.current?.pause}
-               onDisplayStateBtn={onDisplayStateBtn}
-               counting={isPlay}
-               duration={duration}
-               className={cx("time-line")}
-            />
          </div>
-
-         <VideoActions
-            video={video}
-            landscape={orientation}
-            portrait={!orientation}
-            className={cx("video-actions")}
-         />
       </li>
    );
 }

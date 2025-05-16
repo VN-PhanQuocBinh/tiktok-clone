@@ -1,14 +1,19 @@
-import VideoList from "../../components/VideoList/VideoList"
+import { VideoProvider } from "../../contexts/VideoContext/VideoContext";
+import VideoList from "../../components/VideoList/VideoList";
+import CommentSide from "../../components/CommentSide/CommentSide";
 
-import styles from "./Home.module.scss"
-import classNames from "classnames/bind"
+import styles from "./Home.module.scss";
+import classNames from "classnames/bind";
 
-let cx = classNames.bind(styles)
+let cx = classNames.bind(styles);
 
 export default function Home() {
    return (
-      <div className={cx("wrapper")}>
-         <VideoList/>
-      </div>
-   )
+      <VideoProvider>
+         <div className={cx("wrapper")}>
+            <VideoList className={cx("video-list")} />
+            <CommentSide />
+         </div>
+      </VideoProvider>
+   );
 }

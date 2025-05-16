@@ -40,11 +40,11 @@ export {
 } from "./components/Sidebar";
 
 export {
-   Icon_Volume,
-   Icon_VolumeXmark,
+   Icon_VolumeSolid,
+   Icon_VolumeSolidXmark,
    Icon_Play,
    Icon_Pause,
-   Icon_Heart,
+   Icon_HeartRegular,
    Icon_Comment,
    Icon_Flag,
    Icon_Share,
@@ -75,3 +75,9 @@ export {
    Icon_PlaySolid,
    Icon_Following,
 } from "./components/Profile";
+
+export {
+   Icon_HeartSolid,
+   Icon_Emoji,
+   Icon_Tag
+} from "../Icons/components/CommentSide"

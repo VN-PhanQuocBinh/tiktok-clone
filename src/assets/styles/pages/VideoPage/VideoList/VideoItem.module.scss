@@ -1,0 +1,207 @@
+@use "../../../base/variables";
+@use "../../../base/mixins";
+
+$padding: 16px;
+
+.video-item {
+   position: relative;
+   align-items: center;
+
+   display: block;
+   width: 100%;
+   min-height: 100%;
+   scroll-snap-align: center;
+   @include mixins.flex-center;
+
+   .blur-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10%;
+      height: 100%;
+      scale: 3;
+      filter: blur(20px);
+      z-index: -1;
+      opacity: 0.3;
+      @include mixins.flex-center;
+
+      img {
+         height: 100%;
+         background-size: cover;
+      }
+   }
+
+   .overlay-control {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 16px;
+      @include mixins.flex-row;
+      justify-content: flex-end;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1;
+
+      .more-icon-wrapper {
+         z-index: 0;
+         border-radius: 999px;
+         position: relative;
+         user-select: none;
+         background-color: rgba($color: #fff, $alpha: 0.1);
+
+         .more-icon {
+            display: block;
+            rotate: 90deg;
+            width: 24px;
+            height: 24px;
+            margin: 8px;
+         }
+
+         .more-menu {
+            padding: 4px;
+            width: 200px !important;
+            background-color: rgba(58, 58, 58, 1);
+            position: absolute;
+            // left: 0;
+            top: 100%;
+            border: 1px solid rgba(235, 235, 235, 0.2);
+
+            .more-item {
+               height: 50px;
+               border-radius: 4px;
+               font-size: 1.6rem;
+               font-weight: 500;
+            }
+         }
+      }
+   }
+
+   .videoPlayer-wrapper {
+      position: relative;
+      @include mixins.flex-center;
+
+      &:hover {
+         .volume-icons {
+            visibility: visible !important;
+            opacity: 1 !important;
+            transition: opacity 0.3s ease;
+         }
+      }
+
+      .video-element {
+         height: 100vh;
+         min-width: 300px;
+         max-width: 100%;
+         // box-shadow: 0 0 20px 0 #fff;
+      }
+
+      .overlay-control,
+      .play-pause-btn,
+      .video-info {
+         position: absolute;
+      }
+
+      .play-pause-btn {
+         pointer-events: none;
+         position: absolute;
+         left: 50%;
+         top: 50%;
+         translate: -50% -50%;
+
+         span {
+            display: block;
+            background-color: rgba($color: #000000, $alpha: 0.3);
+            width: 84px;
+            height: 84px;
+            padding: 20px;
+            border-radius: 999px;
+            animation: zoomIn 0.75s ease-out forwards;
+            @include mixins.flex-center;
+
+            .icon {
+               width: 42px;
+               height: 42px;
+
+               &.play {
+                  margin-left: 6px;
+               }
+            }
+         }
+      }
+
+      .bot-overlay-control {
+         position: absolute;
+         bottom: 0;
+         width: 100%;
+         @include mixins.flex-row;
+         align-items: center;
+         gap: 64px;
+
+         .volume-icons {
+            padding: 12px;
+            position: relative;
+            top: 0;
+            left: 0;
+            display: grid;
+            place-items: center;
+            visibility: hidden;
+            opacity: 0;
+            @include mixins.flex-row;
+
+            &:hover {
+               .volume-control {
+                  visibility: visible;
+                  opacity: 1;
+                  transition: opacity 0.1s ease;
+               }
+            }
+
+            .volume-control {
+               position: absolute;
+               margin-left: 8px;
+               bottom: calc(100% + 12px);
+               left: -16px;
+               width: 64px;
+               visibility: hidden;
+               opacity: 0;
+               rotate: -90deg;
+            }
+         }
+
+         .time-line {
+            width: 100%;
+            height: 12px;
+         }
+      }
+   }
+
+   .video-actions {
+      margin-right: calc(variables.$sidebar-w - $padding);
+      left: 100%;
+      bottom: 0;
+   }
+}
+
+@media screen and (max-width: 1300px) {
+   .video-actions {
+      margin-right: calc(variables.$sidebar-collapsed-w - $padding) !important;
+   }
+}
+
+@keyframes zoomIn {
+   0% {
+      scale: 0.3;
+      opacity: 0.5;
+   }
+
+   50% {
+      scale: 1;
+      opacity: 1;
+   }
+
+   100% {
+      scale: 1.2;
+      opacity: 0;
+      visibility: hidden;
+   }
+}

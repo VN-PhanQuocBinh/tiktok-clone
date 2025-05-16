@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { useVideo } from "../../contexts/VideoContext/VideoContext";
+import { ACTION_TYPE } from "../../contexts/VideoContext/VideoReducer";
 
 import {
-   Icon_Heart,
+   Icon_HeartRegular,
    Icon_Comment,
    Icon_Flag,
    Icon_Share,
@@ -26,10 +29,13 @@ function VideoActions({
    const [isLiked, setIsLiked] = useState(false);
    const [isFavorite, setIsFavorite] = useState(false);
    const [followed, setFollowed] = useState(false);
+   const navigate = useNavigate()
+   const { state, dispatch } = useVideo()
 
    const isMatchQuery = useMediaQuery("(max-width: 768px)");
 
    useEffect(() => {
+      // console.log(video);
       if (video) {
          setIsLiked(video.is_liked);
          setFollowed(video?.user?.is_followed);
@@ -47,6 +53,15 @@ function VideoActions({
    const handleFollow = () => {
       setFollowed((prev) => !prev);
    };
+
+   const handleComment = () => {
+      // navigate(`${video?.user?.nickname}/video/${video?.id}`)
+      if (state.isCommentVisible) {
+         dispatch({type: ACTION_TYPE.CLOSE_COMMENT})
+      } else {
+         dispatch({type: ACTION_TYPE.OPEN_COMMENT})
+      }
+   }
 
    return (
       <div
@@ -80,12 +95,12 @@ function VideoActions({
             className={cx("action-btn", "like-btn", { active: isLiked })}
          >
             <span className={cx("like-icon")}>
-               <Icon_Heart className={cx("icon")} />
+               <Icon_HeartRegular className={cx("icon")} />
             </span>
             <span className={cx("count")}>{video.likes_count}</span>
          </button>
 
-         <button className={cx("action-btn", "comment-btn")}>
+         <button onClick={handleComment} className={cx("action-btn", "comment-btn")}>
             <span className={cx("comment-icon")}>
                <Icon_Comment className={cx("icon")} />
             </span>

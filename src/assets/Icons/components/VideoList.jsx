@@ -1,7 +1,7 @@
 import { faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Icon_Volume = (props) => {
+const Icon_VolumeSolid = (props) => {
    return (
       <svg
          {...props}
@@ -20,7 +20,7 @@ const Icon_Volume = (props) => {
    );
 };
 
-const Icon_VolumeXmark = (props) => {
+const Icon_VolumeSolidXmark = (props) => {
    return (
       <svg
          {...props}
@@ -47,7 +47,7 @@ const Icon_Pause = (props) => {
    return <FontAwesomeIcon {...props} icon={faPause} />;
 };
 
-const Icon_Heart = (props) => {
+const Icon_HeartRegular = (props) => {
    return (
       <svg
          {...props}
@@ -223,11 +223,11 @@ const Icon_Check = (props) => {
 };
 
 export {
-   Icon_Volume,
-   Icon_VolumeXmark,
+   Icon_VolumeSolid,
+   Icon_VolumeSolidXmark,
    Icon_Play,
    Icon_Pause,
-   Icon_Heart,
+   Icon_HeartRegular,
    Icon_Comment,
    Icon_Flag,
    Icon_Share,
