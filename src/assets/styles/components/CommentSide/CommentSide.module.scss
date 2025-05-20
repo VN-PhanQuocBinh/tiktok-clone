@@ -2,7 +2,6 @@
 @use "../../base/mixins";
 
 .animation-wrapper {
-   background-color: #fff;
    display: flex;
    justify-content: flex-start;
    width: 0;
@@ -13,15 +12,45 @@
    }
 
    .wrapper {
+      background-color: rgba(30, 30, 30, 1);
+      padding: 12px;
       height: 100%;
       flex-shrink: 0;
       flex-basis: 384px;
       width: 384px;
+      @include mixins.flex-column;
 
       .header {
+         @include mixins.flex-row;
+         justify-content: space-between;
+
+         h4 {
+            font-size: 1.6rem;
+            color: variables.$text-color;
+         }
+
+         .close-btn {
+            width: 28px;
+            height: 28px;
+            background-color: rgba(255, 255, 255, 0.13);
+            border-radius: 999px;
+            cursor: pointer;
+
+            &:hover {
+               background-color: rgba(255, 255, 255, 0.2);
+            }
+
+            .icon {
+               svg {
+                  color: variables.$text-color;
+               }
+            }
+         }
       }
 
       .inner {
+         flex: 1;
+
          ul {
             height: 100%;
             @include mixins.flex-center;
@@ -29,7 +58,100 @@
       }
 
       .footer {
-         
+         background-color: rgba(30, 30, 30, 1);
+         @include mixins.flex-row;
+
+         .input-box {
+            background-color: rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 8px;
+            @include mixins.flex-row;
+            align-items: center;
+            justify-content: flex-start;
+            width: max-content;
+            height: max-content;
+
+            .input-wrapper {
+               
+               .input {
+                  position: relative;
+                  // @include mixins.flex-column;
+                  width: 212px !important;
+                  background-color: transparent;
+                  caret-color: variables.$primary-color;
+
+                  height: max-content;
+                  min-height: 24px;
+                  max-height: 96px;
+                  overflow-y: scroll;
+
+                  &::-webkit-scrollbar {
+                     appearance: none;
+                     width: 2px;
+                  }
+                  &::-webkit-scrollbar-thumb {
+                     background-color: rgba(255, 255, 255, 0.19);
+                  }
+
+                  .content {
+                     width: 100%;
+                     border: none;
+                     outline: none;
+                     color: variables.$text-color;
+                  }
+
+                  .placeholder {
+                     pointer-events: none;
+                     position: absolute;
+                     left: 0;
+                     top: 0;
+                     color: rgba(255, 255, 255, 0.34);
+                     font-weight: 500;
+                  }
+               }
+
+               .character-count {
+                  color: rgba(255, 255, 255, 0.5);
+                  font-size: 1.4rem;
+
+                  &.active {
+                     color: variables.$primary-color;
+                  }
+               }
+            }
+
+            button {
+               width: 32px;
+               height: 32px;
+               border-radius: 8px;
+
+               &:hover {
+                  background-color: rgba(255, 255, 255, 0.19);
+               }
+
+               span {
+                  @include mixins.flex-center;
+                  color: variables.$text-color;
+
+                  svg {
+                     width: 24px;
+                     height: 24px;
+                  }
+               }
+            }
+         }
+
+         .submit-btn {
+            color: rgba(255, 255, 255, 0.34);
+            flex: 1;
+            font-weight: 500;
+
+            &:not(:disabled) {
+               color: variables.$primary-color;
+            }
+
+   
+         }
       }
    }
 }
@@ -39,6 +161,10 @@
       .wrapper {
          flex-basis: 336px;
          width: 336px;
+
+         .footer .input-box .input-wrapper .input {
+            width: 164px !important;
+         }
       }
    }
 }
@@ -48,6 +174,10 @@
       .wrapper {
          flex-basis: 288px;
          width: 288px;
+
+         .footer .input-box .input-wrapper .input {
+            width: 134px !important;
+         }
       }
    }
 }

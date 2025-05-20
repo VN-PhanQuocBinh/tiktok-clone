@@ -2,7 +2,6 @@ import Home from "../pages/Home";
 import Following from "../pages/Following";
 import Chat from "../pages/Chat";
 import Profile from "../pages/Profile";
-import VideoPage from "../pages/VideoPage";
 
 import { LAYOUT_TYPE } from "../constants";
 
@@ -29,11 +28,6 @@ const publicRoutes = [
     element: Profile,
     layout: LAYOUT_TYPE.SIDEBAR_ONLY
   },
-  {
-    path: config.routes.videoPage,
-    element: VideoPage,
-    layout: LAYOUT_TYPE.NO_LAYOUT
-  }
 ];
 
 const privateRoutes = [];
