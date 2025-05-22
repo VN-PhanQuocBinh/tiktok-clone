@@ -124,4 +124,36 @@ export const unfollow = async (path, option = {}) => {
    return response.data
 }
 
+
+export const getComments = async (path, option = {}) => {
+   const response = await request.get(path, {}, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - GET COMMENTS")
+   }
+
+   return response.data
+}
+
+export const likeComment = async (path, option = {}) => {
+   const response = await request.post(path, {}, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - LIKE COMMENT")
+   }
+
+   return response.data
+}
+
+export const unlikeComment = async (path, option = {}) => {
+   const response = await request.post(path, {}, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - LIKE COMMENT")
+   }
+
+   return response.data
+}
+
 export default request
+

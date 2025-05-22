@@ -1,36 +1,31 @@
 const ACTION_TYPE = {
    UPDATE_VIDEOID: "update_videoid",
    CLOSE_COMMENT: "close_comment",
-   OPEN_COMMENT: "open_comment"
-}
+   OPEN_COMMENT: "open_comment",
+};
 
 const initState = {
    videoId: null,
-   isCommentVisible: false
-}
+   isCommentVisible: false,
+};
 
 const videoReducer = (state, action) => {
    switch (action.type) {
       case ACTION_TYPE.UPDATE_VIDEOID:
          return {
-
-         }
+            ...state,
+            videoId: action.payload,
+         };
       case ACTION_TYPE.CLOSE_COMMENT:
-         return {
-
-         }
+         return {};
       case ACTION_TYPE.OPEN_COMMENT:
          return {
             ...state,
-            isCommentVisible: true
-         }
-      default:   
-         return state
+            isCommentVisible: true,
+         };
+      default:
+         return state;
    }
-} 
+};
 
-export {
-   ACTION_TYPE,
-   initState,
-   videoReducer
-}
+export { ACTION_TYPE, initState, videoReducer };

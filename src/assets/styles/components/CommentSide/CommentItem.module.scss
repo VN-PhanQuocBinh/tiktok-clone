@@ -1,2 +1,132 @@
 @use "../../base/variables";
 @use "../../base/mixins";
+
+.wrapper {
+   width: 100%;
+   @include mixins.flex-row;
+   gap: 12px;
+
+   &:hover {
+      .more-btn {
+         display: block !important;
+      }
+   }
+
+   .avt-wrapper {
+
+      .img {
+         width: 40px;
+      }
+   }
+
+   .inner {
+      color: variables.$text-color;
+      flex: 1;
+
+      .inner-header {
+         @include mixins.flex-row;
+         justify-content: space-between;
+
+         .username {
+            font-size: 1.4rem;
+         }
+
+         .more-btn {
+            rotate: 90deg;
+            display: none;
+
+            svg {
+               color: variables.$text-color;
+               width: 18px;
+               height: 18px;
+            }
+         }
+      }
+
+      .content {
+         span {
+            font-weight: 500
+         }
+      }
+
+      .inner-footer {
+         @include mixins.flex-row;
+         justify-content: space-between;
+         color: rgba(255, 255, 255, .6);
+         font-size: 1.4rem;
+
+         .left-part, .right-part {
+            @include mixins.flex-row;
+            align-items: center;
+            
+         }
+
+         .left-part {
+            gap: 20px;
+
+            .created-time, .reply-btn {
+               font-weight: 500;
+            }
+
+            .reply-btn {
+               color: rgba(255, 255, 255, .6);
+            }
+         }
+
+         .right-part {
+            gap: 2px;
+
+            button span {
+               color: rgba(255, 255, 255, .6);
+               @include mixins.flex-center;
+
+               svg {
+                  width: 20px;
+                  height: 20px;
+               }
+            }
+
+            button.liked span {
+               color: variables.$primary-color;
+            }
+         }
+      }
+   }
+}
+
+// <div className={cx("wrapper", {[clasName]: clasName})}>
+//    <div className={cx("avt-wrapper")}>
+//       <Image />
+//    </div>
+//    <div className={cx("inner")}>
+//       <div className={cx("inner-header")}>
+//          <h4 className={cx("username")}>Full name</h4>
+
+//          <button clasName={cx("more-btn")}>
+//             <span>
+//                <Icon_EllipsisVertical />
+//             </span>
+//          </button>
+//       </div>
+
+//       <div className={cx("content")}>
+//          <span>Content</span>
+//       </div>
+
+//       <div className={cx("inner-footer")}>
+//          <div className={cx("left-part")}>
+//             <span className={cx("created-tine")}>17 hours ago</span>
+//             <button className={cx("reply-btn")}>Reply</button>
+//          </div>
+
+//          <div className={cx("right-part")}>
+//             <button>
+//                <span>
+//                   <Icon_HeartSolid/>
+//                </span>
+//             </button>
+//             <span className={cx("liked-count")}>20</span>
+//          </div>
+//       </div>
+//    </div>
+// </div>

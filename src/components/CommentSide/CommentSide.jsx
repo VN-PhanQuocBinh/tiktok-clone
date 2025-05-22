@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 
+import { getComments } from "../../services/commentsService/commentsService";
+import { getToken } from "../../utils/token";
+
 import CommentItem from "./CommentItem";
 
 import { Icon_XMark, Icon_Tag, Icon_Emoji } from "../../assets/Icons";
@@ -13,19 +16,32 @@ const cx = classNames.bind(styles);
 const MAX_LENGTH = 150;
 
 function CommentSide({ className }) {
-   const { state, dispatch } = useVideo();
-   const [animation, setAnimation] = useState(false);
+   const { state: videoState, dispatch } = useVideo();
    const [commentValue, setCommentValue] = useState("");
+   const [originalHeight, setOriginalHeight] = useState(0);
+   const [comments, setComments] = useState([])
+
+   const [animation, setAnimation] = useState(false);
    const [hidePlaceholder, setHidePlaceholder] = useState(false);
    const [hideCount, setHideCount] = useState(true);
-   const [originalHeight, setOriginalHeight] = useState(0);
+
    const DOM_input = useRef(null);
 
    useEffect(() => {
+      if (videoState.videoId) {
+         (async () => {
+            const response = await getComments(getToken(), videoState?.videoId);
+            console.log(response);
+            setComments(response?.data)
+         })();
+      }
+   }, [videoState]);
+
+   useEffect(() => {
       setTimeout(() => {
-         setAnimation(state.isCommentVisible);
+         setAnimation(videoState.isCommentVisible);
       }, 100);
-   }, [state]);
+   }, [videoState]);
 
    useEffect(() => {
       if (commentValue) {
@@ -44,12 +60,10 @@ function CommentSide({ className }) {
    }, [commentValue]);
 
    useEffect(() => {
-      console.dir(DOM_input.current);
-
       if (DOM_input.current) {
          setOriginalHeight(DOM_input.current.clientHeight);
       }
-   }, [state.isCommentVisible]);
+   }, [videoState.isCommentVisible]);
 
    const handleChangeValue = (e) => {
       const value = e.target.textContent;
@@ -64,13 +78,13 @@ function CommentSide({ className }) {
    };
 
    const handleSubmit = (e) => {
-      e.preventDefault()
-      console.log("submit");
-   }
+      e.preventDefault();
+      console.log("submit value: ", commentValue);
+   };
 
    return (
       <div className={cx("animation-wrapper", { animation: animation })}>
-         {state.isCommentVisible && (
+         {videoState.isCommentVisible && (
             <div className={cx("wrapper", { [className]: className })}>
                <div className={cx("header")}>
                   <h4>Comments (24)</h4>
@@ -82,7 +96,13 @@ function CommentSide({ className }) {
                </div>
 
                <div className={cx("inner")}>
-                  <ul>Comment Side</ul>
+                  <ul>
+                     {comments.map(comment => (
+                        <li className={cx("comment-item")} key={comment.id}>
+                           <CommentItem commentData={comment} />
+                        </li>
+                     ))}
+                  </ul>
                </div>
 
                <form className={cx("footer")}>
@@ -92,7 +112,6 @@ function CommentSide({ className }) {
                            <div
                               onInput={handleChangeValue}
                               onBeforeInput={handleBeforeInput}
-                              // value={commentValue}
                               contentEditable={true}
                               className={cx("content")}
                               ref={DOM_input}
@@ -127,7 +146,13 @@ function CommentSide({ className }) {
                      </button>
                   </div>
 
-                  <button onClick={handleSubmit} className={cx("submit-btn")} disabled={!hidePlaceholder}>Post</button>
+                  <button
+                     onClick={handleSubmit}
+                     className={cx("submit-btn")}
+                     disabled={!hidePlaceholder}
+                  >
+                     Post
+                  </button>
                </form>
             </div>
          )}

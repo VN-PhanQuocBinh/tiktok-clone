@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useVideo } from "../../contexts/VideoContext/VideoContext";
+import { ACTION_TYPE as VIDEO_ACTION } from "../../contexts/VideoContext/VideoReducer";
 
 import VideoPlayer from "./VideoPlayer";
 import VolumeControl from "./VolumeControl";
@@ -24,6 +26,8 @@ import styles from "../../assets/styles/components/VideoItem.module.scss";
 const cx = classNames.bind(styles);
 
 function VideoItem({ className, video }) {
+   const { state: videoState, dispatch } = useVideo();
+
    const DOM_videoItem = useRef(null);
    const DOM_moreMenu = useRef(null);
    const DOM_video = useRef(null);
@@ -61,6 +65,12 @@ function VideoItem({ className, video }) {
    }, []);
 
    useEffect(() => {
+      // update video id
+      if (inViewport) {
+         dispatch({ type: VIDEO_ACTION.UPDATE_VIDEOID, payload: video?.uuid });
+      }
+
+      // Move more menu (responsive)
       const handleResize = () => {
          if (inViewport) {
             const rect = DOM_moreMenu.current?.getBoundingClientRect();

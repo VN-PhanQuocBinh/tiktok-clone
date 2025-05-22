@@ -5,6 +5,7 @@
    display: flex;
    justify-content: flex-start;
    width: 0;
+   height: 100vh;
 
    &.animation {
       width: 384px;
@@ -50,14 +51,29 @@
 
       .inner {
          flex: 1;
+         padding-top: 24px;
+         width: 100%;
 
          ul {
-            height: 100%;
-            @include mixins.flex-center;
+            height: calc(100vh - 60px - 28px - 2*12px - 24px);
+            width: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            @include mixins.flex-column;
+            gap: 24px;
+
+            &::-webkit-scrollbar {
+               appearance: none;
+               background-color: transparent;
+            }
+
+            .comment-item {
+            }
          }
       }
 
       .footer {
+         padding-top: 12px;
          background-color: rgba(30, 30, 30, 1);
          @include mixins.flex-row;
 
