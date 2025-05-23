@@ -4,12 +4,15 @@ import { useUI } from "../../contexts/UIContext/UIContext";
 
 import styles from "../../assets/styles/components/Modals/ModalRenderer.module.scss";
 import classNames from "classnames/bind";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
 function ModalRenderer({ modalType }) {
-   const { state: { isOpen } } = useUI();
+   const { state: { isOpen, modalProps } } = useUI();
+
    if (!isOpen) return null
+   
 
    const ModalComponent = MODAL_COMPONENTS[modalType]
 
@@ -17,7 +20,7 @@ function ModalRenderer({ modalType }) {
 
    return (
       <div className={cx("modal-wrapper")}>
-         <ModalComponent />
+         <ModalComponent {...modalProps} />
       </div>
    );
 }

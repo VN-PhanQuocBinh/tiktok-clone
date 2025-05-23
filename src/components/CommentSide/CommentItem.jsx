@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useUI } from "../../contexts/UIContext/UIContext";
-import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../constants";
+import { ACTION_MODAL_TYPES } from "../../constants";
 
 import Image from "../../components/Image";
 import {
@@ -13,6 +13,7 @@ import getTimeAgo from "../../utils/getTimeAgo";
 import {
    likeComment,
    unlikeComment,
+   deleteComment
 } from "../../services/commentsService/commentsService";
 import { getToken } from "../../utils/token";
 
@@ -21,10 +22,11 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function CommentItem({ className, commentData }) {
+function CommentItem({ className, commentData, onDelete }) {
    const { state: uiState, dispatch: uiDispatch } = useUI();
    const [isLiked, setIsLiked] = useState(!!commentData?.is_liked);
    const [likeCount, setLikeCount] = useState(commentData?.likes_count || 0);
+   const [createdTime, setCreatedTime] = useState("")
 
    const [moreBtnVisible, setMoreBtnVisible] = useState(false);
    const [moreVisible, setMoreVisible] = useState(false);
@@ -32,10 +34,10 @@ function CommentItem({ className, commentData }) {
    const DOM_wrapper = useRef(null);
 
    useEffect(() => {
-      console.log(commentData);
-
+      // console.log(commentData);
+      setCreatedTime(getTimeAgo(commentData.created_at))
       setIsLiked(commentData?.is_liked);
-   }, []);
+   }, [commentData]);
 
    useEffect(() => {
       const handlePointerEnter = (e) => {
@@ -98,10 +100,24 @@ function CommentItem({ className, commentData }) {
    };
 
    const handleDeleteComment = () => {
+      const handleDelete = async () => {
+         const token = getToken();
+         const commentId = commentData.id;
+
+         const response = await deleteComment(token, commentId);
+
+         onDelete && onDelete(commentData.id);
+
+         console.log(response);
+      }
+
       uiDispatch({
          type: ACTION_MODAL_TYPES.OPEN_CONFIRM_DELETE_COMMENT,
-         payload: MODAL_TYPES.CONFIRM_DELETE_COMMENT,
+         modalProps: {
+            actions: [handleDelete]
+         }
       });
+      
    };
 
    return (
@@ -149,7 +165,7 @@ function CommentItem({ className, commentData }) {
             <div className={cx("inner-footer")}>
                <div className={cx("left-part")}>
                   <span className={cx("created-time")}>
-                     {getTimeAgo(commentData.created_at)}
+                     {createdTime}
                   </span>
                   <button className={cx("reply-btn")}>Reply</button>
                </div>

@@ -2,10 +2,12 @@ import { MODAL_TYPES, ACTION_MODAL_TYPES } from "../../constants"
 
 const initState = {
    isOpen: false,
-   modalType: null
+   modalType: null,
+   modalProps: null
 }
 
 const uiReducer = (state, action) => {
+
    switch (action.type) {
       case ACTION_MODAL_TYPES.CLOSE_MODAL:
          return {
@@ -13,12 +15,14 @@ const uiReducer = (state, action) => {
             isOpen: false
          }
       case ACTION_MODAL_TYPES.OPEN_CONFIRM_DELETE_COMMENT:
-         console.log(ACTION_MODAL_TYPES.OPEN_CONFIRM_DELETE_COMMENT);
 
          return {
             ...state,
             isOpen: true,
-            modalType: action?.payload
+            modalType: MODAL_TYPES.CONFIRM_DELETE_COMMENT,
+            modalProps: {
+               actions: [...action.modalProps.actions],
+            }
          }
       default:
          return state

@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 
-import { getComments, createComment } from "../../services/commentsService/commentsService";
+import {
+   getComments,
+   createComment,
+} from "../../services/commentsService/commentsService";
 import { getToken } from "../../utils/token";
 
 import CommentItem from "./CommentItem";
@@ -19,7 +22,7 @@ function CommentSide({ className }) {
    const { state: videoState, dispatch } = useVideo();
    const [commentValue, setCommentValue] = useState("");
    const [originalHeight, setOriginalHeight] = useState(0);
-   const [comments, setComments] = useState([])
+   const [comments, setComments] = useState([]);
 
    const [animation, setAnimation] = useState(false);
    const [hidePlaceholder, setHidePlaceholder] = useState(false);
@@ -32,7 +35,7 @@ function CommentSide({ className }) {
          (async () => {
             const response = await getComments(getToken(), videoState?.videoId);
             console.log(response);
-            setComments(response?.data)
+            setComments(response?.data);
          })();
       }
    }, [videoState]);
@@ -80,13 +83,26 @@ function CommentSide({ className }) {
    const handleSubmit = (e) => {
       e.preventDefault();
 
-      console.log("submit value: ", commentValue);
-      const token = getToken()
+      const token = getToken();
+      const videoId = videoState?.videoId;
 
-      ;(async () => {
+      (async () => {
+         const response = await createComment(token, videoId, commentValue);
+         console.log(response);
 
-      })()
-      
+         // reset input value
+         DOM_input.current.textContent = "";
+         setCommentValue("");
+
+         // update comments list
+         if (response.success) {
+            setComments((prev) => [response.data, ...prev]);
+         }
+      })();
+   };
+
+   const handleDeleteComment = (commentId) => {
+      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
    };
 
    return (
@@ -104,9 +120,12 @@ function CommentSide({ className }) {
 
                <div className={cx("inner")}>
                   <ul>
-                     {comments.map(comment => (
+                     {comments.map((comment) => (
                         <li className={cx("comment-item")} key={comment.id}>
-                           <CommentItem commentData={comment} />
+                           <CommentItem
+                              onDelete={handleDeleteComment}
+                              commentData={comment}
+                           />
                         </li>
                      ))}
                   </ul>

@@ -165,5 +165,16 @@ export const createComment = async (path, data = {}, config = {}) => {
    return response.data
 }
 
+export const deleteComment = async (path, config = {}) => {
+   const response = await request.delete(path, config)
+   
+
+   if (![200, 204].includes(response.status)) {
+      throw Error("Network response was not ok! - DELETE COMMENT")
+   }
+
+   return response.data
+}
+
 export default request
 

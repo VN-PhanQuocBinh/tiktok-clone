@@ -57,11 +57,31 @@ export const createComment = async (token, id, comment) => {
    let result = { success: false, message: "", data: null };
 
    try {
-      const API_query = `comments/${id}/unlike`;
+      const API_query = `videos/${id}/comments`;
 
       const response = await request.createComment(API_query, {
          comment
       }, {
+         headers: {
+            Authorization: `Bearer ${token}`,
+         },
+      });
+
+      result = { ...result, success: true, data: response.data };
+   } catch (error) {
+      result = { ...result, success: false, message: error };
+   }
+
+   return result;
+};
+
+export const deleteComment = async (token, id) => {
+   let result = { success: false, message: "", data: null };
+   
+   try {
+      const API_query = `comments/${id}`;
+
+      const response = await request.deleteComment(API_query, {
          headers: {
             Authorization: `Bearer ${token}`,
          },
