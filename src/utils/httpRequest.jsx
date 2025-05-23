@@ -155,5 +155,15 @@ export const unlikeComment = async (path, option = {}) => {
    return response.data
 }
 
+export const createComment = async (path, data = {}, config = {}) => {
+   const response = await request.post(path, data, config)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - CREATE COMMENT")
+   }
+
+   return response.data
+}
+
 export default request
 

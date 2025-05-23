@@ -43,22 +43,19 @@
          font-weight: 500;
          cursor: pointer;
 
-         &.cancel {
+         &.delete {
+            background-color: variables.$primary-color;
+
             &:hover {
-               background-color: rgba(0, 0, 0, 0.1);
-               border: 1px solid variables.$text-color;
+               background-color: rgba($color: variables.$primary-color, $alpha: 0.8);
             }
          }
 
-         &.logout {
-            color: variables.$primary-color;
-            border: 1px solid variables.$primary-color;
+         &.cancel {
+            color: variables.$text-color;
 
             &:hover {
-               background-color: rgba(
-                  $color: variables.$primary-color,
-                  $alpha: 0.05
-               );
+               background-color: rgba(255, 255, 255, 0.15);
             }
          }
       }

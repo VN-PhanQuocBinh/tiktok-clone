@@ -6,12 +6,6 @@
    @include mixins.flex-row;
    gap: 12px;
 
-   &:hover {
-      .more-btn {
-         display: block !important;
-      }
-   }
-
    .avt-wrapper {
 
       .img {
@@ -32,13 +26,35 @@
          }
 
          .more-btn {
-            rotate: 90deg;
-            display: none;
-
+            position: relative;
+            
+            &.hide {
+               display: none;
+            }
+            
             svg {
+               rotate: 90deg;
                color: variables.$text-color;
                width: 18px;
                height: 18px;
+            }
+
+            .more-dropdown {
+               background-color: rgba(58, 58, 58, 1);
+               position: absolute;
+               top: 100%;
+               right: 0;
+               border-radius: 4px;
+               padding: 12px 20px;
+
+               span {
+                  color: variables.$text-color;
+                  font-weight: 500;
+
+                  &:hover {
+                     color: variables.$primary-color;
+                  }
+               }
             }
          }
       }

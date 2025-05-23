@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useUI } from "../../contexts/UIContext/UIContext";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../constants";
 
 import Image from "../../components/Image";
 import {
@@ -8,7 +10,10 @@ import {
 } from "../../assets/Icons";
 
 import getTimeAgo from "../../utils/getTimeAgo";
-import { likeComment, unlikeComment } from "../../services/commentsService/commentsService";
+import {
+   likeComment,
+   unlikeComment,
+} from "../../services/commentsService/commentsService";
 import { getToken } from "../../utils/token";
 
 import styles from "../../assets/styles/components/CommentSide/CommentItem.module.scss";
@@ -16,48 +21,94 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function CommentItem({ clasName, commentData }) {
+function CommentItem({ className, commentData }) {
+   const { state: uiState, dispatch: uiDispatch } = useUI();
    const [isLiked, setIsLiked] = useState(!!commentData?.is_liked);
-   const [likeCount, setLikeCount] = useState(commentData?.likes_count || 0)
+   const [likeCount, setLikeCount] = useState(commentData?.likes_count || 0);
+
+   const [moreBtnVisible, setMoreBtnVisible] = useState(false);
+   const [moreVisible, setMoreVisible] = useState(false);
+
+   const DOM_wrapper = useRef(null);
 
    useEffect(() => {
       console.log(commentData);
 
-      setIsLiked(commentData?.is_liked)
+      setIsLiked(commentData?.is_liked);
    }, []);
+
+   useEffect(() => {
+      const handlePointerEnter = (e) => {
+         setMoreBtnVisible(true);
+      };
+
+      const handlePointerLeave = (e) => {
+         if (!moreVisible) {
+            setMoreBtnVisible(false);
+         }
+      };
+
+      DOM_wrapper.current?.addEventListener("pointerenter", handlePointerEnter);
+      DOM_wrapper.current?.addEventListener("pointerleave", handlePointerLeave);
+
+      return () => {
+         DOM_wrapper.current?.removeEventListener(
+            "pointerenter",
+            handlePointerEnter
+         );
+         DOM_wrapper.current?.removeEventListener(
+            "pointerleave",
+            handlePointerLeave
+         );
+      };
+   }, [moreVisible]);
 
    const toggleLike = () => {
       setIsLiked(!isLiked);
 
-      ;(async () => {
-         const token = getToken()
-         const commentId = commentData.id
-         let response
+      (async () => {
+         const token = getToken();
+         const commentId = commentData.id;
+         let response;
 
-         const oldIsLiked = isLiked
-         const oldLikeCount = likeCount
+         const oldIsLiked = isLiked;
+         const oldLikeCount = likeCount;
 
-         setIsLiked(!oldIsLiked)
-         setLikeCount(oldLikeCount + (oldIsLiked ? -1 : 1))
+         setIsLiked(!oldIsLiked);
+         setLikeCount(oldLikeCount + (oldIsLiked ? -1 : 1));
          if (!isLiked) {
-            response = await likeComment(token, commentId)
+            response = await likeComment(token, commentId);
          } else {
-            response = await unlikeComment(token, commentId)
+            response = await unlikeComment(token, commentId);
          }
-         
+
          console.log(response);
-         
+
          if (response.success) {
-            setLikeCount(response?.data?.likes_count || 0)
+            setLikeCount(response?.data?.likes_count || 0);
          } else {
-            setIsLiked(oldIsLiked)
-            setLikeCount(oldLikeCount)
+            setIsLiked(oldIsLiked);
+            setLikeCount(oldLikeCount);
          }
-      })()
+      })();
+   };
+
+   const handleToggleMore = () => {
+      setMoreVisible((prev) => !prev);
+   };
+
+   const handleDeleteComment = () => {
+      uiDispatch({
+         type: ACTION_MODAL_TYPES.OPEN_CONFIRM_DELETE_COMMENT,
+         payload: MODAL_TYPES.CONFIRM_DELETE_COMMENT,
+      });
    };
 
    return (
-      <div className={cx("wrapper", { [clasName]: clasName })}>
+      <div
+         ref={DOM_wrapper}
+         className={cx("wrapper", { [className]: className })}
+      >
          <div className={cx("avt-wrapper")}>
             <Image className={cx("img")} />
          </div>
@@ -75,22 +126,31 @@ function CommentItem({ clasName, commentData }) {
                      : "user" + commentData?.user?.id}
                </h4>
 
-               <button className={cx("more-btn")}>
-                  <span>
+               <button className={cx("more-btn", { hide: !moreBtnVisible })}>
+                  <span onClick={handleToggleMore}>
                      <Icon_EllipsisVertical />
                   </span>
+
+                  {moreVisible && (
+                     <div
+                        onClick={handleDeleteComment}
+                        className={cx("more-dropdown")}
+                     >
+                        <span>Delete</span>
+                     </div>
+                  )}
                </button>
             </div>
 
             <div className={cx("content")}>
-               <span>
-                  {commentData?.comment}
-               </span>
+               <span>{commentData?.comment}</span>
             </div>
 
             <div className={cx("inner-footer")}>
                <div className={cx("left-part")}>
-                  <span className={cx("created-time")}>{getTimeAgo(commentData.created_at)}</span>
+                  <span className={cx("created-time")}>
+                     {getTimeAgo(commentData.created_at)}
+                  </span>
                   <button className={cx("reply-btn")}>Reply</button>
                </div>
 

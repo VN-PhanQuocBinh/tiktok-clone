@@ -24,13 +24,20 @@ const AUTH_TYPE = {
    LOGOUT_CONFIRM: "logout_confirm"
 };
 
+
 const MODAL_TYPES = {
    CONFIRM_DELETE_COMMENT: "confirm_delete_comment",
+}
+
+const ACTION_MODAL_TYPES = {
+   CLOSE_MODAL: "close_modal",
+   OPEN_CONFIRM_DELETE_COMMENT: "open_confirm_delete_comment",
 }
 
 export { 
    LAYOUT_TYPE,
    DROPDOWN_ITEM_TYPE,
    AUTH_TYPE,
-   MODAL_TYPES
+   MODAL_TYPES,
+   ACTION_MODAL_TYPES
 }

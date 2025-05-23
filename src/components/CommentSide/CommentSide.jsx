@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 
-import { getComments } from "../../services/commentsService/commentsService";
+import { getComments, createComment } from "../../services/commentsService/commentsService";
 import { getToken } from "../../utils/token";
 
 import CommentItem from "./CommentItem";
@@ -79,7 +79,14 @@ function CommentSide({ className }) {
 
    const handleSubmit = (e) => {
       e.preventDefault();
+
       console.log("submit value: ", commentValue);
+      const token = getToken()
+
+      ;(async () => {
+
+      })()
+      
    };
 
    return (
