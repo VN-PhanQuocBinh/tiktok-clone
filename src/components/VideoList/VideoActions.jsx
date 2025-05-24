@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
-import { ACTION_TYPE } from "../../contexts/VideoContext/VideoReducer";
+import { ACTION_VIDEOS_TYPE } from "../../constants";
 
 import {
    Icon_HeartRegular,
@@ -57,9 +57,9 @@ function VideoActions({
    const handleComment = () => {
       // navigate(`${video?.user?.nickname}/video/${video?.id}`)
       if (state.isCommentVisible) {
-         dispatch({type: ACTION_TYPE.CLOSE_COMMENT})
+         dispatch({type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT})
       } else {
-         dispatch({type: ACTION_TYPE.OPEN_COMMENT})
+         dispatch({type: ACTION_VIDEOS_TYPE.OPEN_COMMENT})
       }
    }
 

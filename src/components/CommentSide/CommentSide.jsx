@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
+import { useUI } from "../../contexts/UIContext/UIContext";
+
+import CommentItem from "./CommentItem";
 
 import {
    getComments,
@@ -7,7 +10,7 @@ import {
 } from "../../services/commentsService/commentsService";
 import { getToken } from "../../utils/token";
 
-import CommentItem from "./CommentItem";
+import { ACTION_MODAL_TYPES, ACTION_VIDEOS_TYPE } from "../../constants";
 
 import { Icon_XMark, Icon_Tag, Icon_Emoji } from "../../assets/Icons";
 
@@ -19,32 +22,97 @@ const cx = classNames.bind(styles);
 const MAX_LENGTH = 150;
 
 function CommentSide({ className }) {
-   const { state: videoState, dispatch } = useVideo();
+   const { state: videoState, dispatch: videoDispatch } = useVideo();
+   const { dispatch: uiDispatch } = useUI();
+
+   const [visible, setVisible] = useState(videoState.isCommentVisible);
+
+   const [comments, setComments] = useState([]);
+   const [commentPage, setCommentPage] = useState({ page: 1, limit: 1 });
+
    const [commentValue, setCommentValue] = useState("");
    const [originalHeight, setOriginalHeight] = useState(0);
-   const [comments, setComments] = useState([]);
 
    const [animation, setAnimation] = useState(false);
    const [hidePlaceholder, setHidePlaceholder] = useState(false);
    const [hideCount, setHideCount] = useState(true);
 
+   const DOM_loader = useRef(null);
+   const DOM_list = useRef(null);
    const DOM_input = useRef(null);
 
+   const fetchComments = useCallback(
+      async (page = 1) => {
+         const response = await getComments(
+            getToken(),
+            videoState?.videoId,
+            page
+         );
+
+         const { success: isSuccess, data: {commentData, meta} } = response;
+
+         if (isSuccess) {
+            setCommentPage((prev) => {
+               return {
+                  ...prev,
+                  page,
+                  limit: meta?.pagination?.total_pages || prev.limit,
+               };
+            });
+         }
+
+         console.log();
+         
+         return response?.success ? commentData : [];
+      },
+      [commentPage, videoState]
+   );
+
    useEffect(() => {
+      // Get comments when the videoId changes
       if (videoState.videoId) {
          (async () => {
-            const response = await getComments(getToken(), videoState?.videoId);
+            const response = await fetchComments();
+
             console.log(response);
-            setComments(response?.data);
+            
+
+            if (response.length > 0)
+               setComments(response);
          })();
+      }
+
+      // Handle Animation
+      if (videoState.isCommentVisible) {
+         setVisible(true);
+         setAnimation(true);
+      } else {
+         setAnimation(false);
+         setTimeout(() => {
+            setVisible(false);
+         }, 200); // delay 300ms to allow the animation to finish
       }
    }, [videoState]);
 
+   const handleLoadMoreComments = useCallback(async ([entries]) => {
+      console.log(entries);
+   });
+
    useEffect(() => {
-      setTimeout(() => {
-         setAnimation(videoState.isCommentVisible);
-      }, 100);
-   }, [videoState]);
+      let observer;
+
+      if (visible) {
+         observer = new IntersectionObserver(handleLoadMoreComments, {
+            root: DOM_list.current,
+            rootMargin: "300px",
+            threshold: 0.1,
+         });
+
+         observer.observe(DOM_loader.current);
+      }
+
+      return () => observer?.unobserve(DOM_loader);
+   }, [visible]);
 
    useEffect(() => {
       if (commentValue) {
@@ -94,9 +162,29 @@ function CommentSide({ className }) {
          DOM_input.current.textContent = "";
          setCommentValue("");
 
-         // update comments list
          if (response.success) {
+            // update comments list
             setComments((prev) => [response.data, ...prev]);
+
+            // notify comment created successfully
+            const handleClose = () => {
+               setTimeout(() => {
+                  uiDispatch({
+                     type: ACTION_MODAL_TYPES.CLOSE_MODAL,
+                  });
+               }, 300); // delay 300ms to allow the animation to finish
+            };
+
+            uiDispatch({
+               type: ACTION_MODAL_TYPES.OPEN_ALERT,
+               modalProps: {
+                  message: "Comment created successfully!",
+                  openClassName: "slide-down",
+                  closeClassName: "slide-up",
+                  duration: 3000,
+                  onClose: handleClose,
+               },
+            });
          }
       })();
    };
@@ -105,13 +193,25 @@ function CommentSide({ className }) {
       setComments((prev) => prev.filter((comment) => comment.id !== commentId));
    };
 
+   const handleClose = () => {
+      setAnimation(false);
+      videoDispatch({
+         type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT,
+      });
+   };
+
    return (
-      <div className={cx("animation-wrapper", { animation: animation })}>
-         {videoState.isCommentVisible && (
+      <div
+         className={cx("animation-wrapper", {
+            open: animation,
+            close: !animation,
+         })}
+      >
+         {visible && (
             <div className={cx("wrapper", { [className]: className })}>
                <div className={cx("header")}>
                   <h4>Comments (24)</h4>
-                  <button className={cx("close-btn")}>
+                  <button onClick={handleClose} className={cx("close-btn")}>
                      <span className={cx("icon")}>
                         <Icon_XMark />
                      </span>
@@ -119,7 +219,7 @@ function CommentSide({ className }) {
                </div>
 
                <div className={cx("inner")}>
-                  <ul>
+                  <ul ref={DOM_list}>
                      {comments.map((comment) => (
                         <li className={cx("comment-item")} key={comment.id}>
                            <CommentItem
@@ -128,6 +228,8 @@ function CommentSide({ className }) {
                            />
                         </li>
                      ))}
+
+                     <li ref={DOM_loader} className={cx("loader")}></li>
                   </ul>
                </div>
 

@@ -39,12 +39,6 @@ function DeleteConfirmComment({actions}) {
                Cancel
             </button>
          </div>
-
-         <div className={cx("alert")}>
-            <span>
-               Comment posted
-            </span>
-         </div>
       </div>
    );
 }

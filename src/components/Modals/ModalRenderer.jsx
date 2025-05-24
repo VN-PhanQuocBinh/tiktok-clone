@@ -4,7 +4,6 @@ import { useUI } from "../../contexts/UIContext/UIContext";
 
 import styles from "../../assets/styles/components/Modals/ModalRenderer.module.scss";
 import classNames from "classnames/bind";
-import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 

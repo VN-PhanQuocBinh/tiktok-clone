@@ -1,8 +1,4 @@
-const ACTION_TYPE = {
-   UPDATE_VIDEOID: "update_videoid",
-   CLOSE_COMMENT: "close_comment",
-   OPEN_COMMENT: "open_comment",
-};
+import { ACTION_VIDEOS_TYPE as ACTION_TYPES } from "../../constants";
 
 const initState = {
    videoId: null,
@@ -11,14 +7,17 @@ const initState = {
 
 const videoReducer = (state, action) => {
    switch (action.type) {
-      case ACTION_TYPE.UPDATE_VIDEOID:
+      case ACTION_TYPES.UPDATE_VIDEOID:
          return {
             ...state,
             videoId: action.payload,
          };
-      case ACTION_TYPE.CLOSE_COMMENT:
-         return {};
-      case ACTION_TYPE.OPEN_COMMENT:
+      case ACTION_TYPES.CLOSE_COMMENT:
+         return {
+            ...state,
+            isCommentVisible: false,
+         };
+      case ACTION_TYPES.OPEN_COMMENT:
          return {
             ...state,
             isCommentVisible: true,
@@ -28,4 +27,4 @@ const videoReducer = (state, action) => {
    }
 };
 
-export { ACTION_TYPE, initState, videoReducer };
+export { ACTION_TYPES, initState, videoReducer };

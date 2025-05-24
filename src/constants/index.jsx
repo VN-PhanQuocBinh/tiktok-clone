@@ -24,20 +24,29 @@ const AUTH_TYPE = {
    LOGOUT_CONFIRM: "logout_confirm"
 };
 
+const ACTION_VIDEOS_TYPE = {
+   UPDATE_VIDEOID: "update_videoid",
+   CLOSE_COMMENT: "close_comment",
+   OPEN_COMMENT: "open_comment",
+};
+
 
 const MODAL_TYPES = {
    CONFIRM_DELETE_COMMENT: "confirm_delete_comment",
+   ALERT: "alert",
 }
 
 const ACTION_MODAL_TYPES = {
    CLOSE_MODAL: "close_modal",
    OPEN_CONFIRM_DELETE_COMMENT: "open_confirm_delete_comment",
+   OPEN_ALERT: "open_alert",
 }
 
 export { 
    LAYOUT_TYPE,
    DROPDOWN_ITEM_TYPE,
    AUTH_TYPE,
+   ACTION_VIDEOS_TYPE,
    MODAL_TYPES,
-   ACTION_MODAL_TYPES
+   ACTION_MODAL_TYPES,
 }
