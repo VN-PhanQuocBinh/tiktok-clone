@@ -28,6 +28,7 @@ const ACTION_VIDEOS_TYPE = {
    UPDATE_VIDEOID: "update_videoid",
    CLOSE_COMMENT: "close_comment",
    OPEN_COMMENT: "open_comment",
+   CACHING_COMMENTS: "caching_comments",
 };
 
 

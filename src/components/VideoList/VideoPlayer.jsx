@@ -76,7 +76,7 @@ function VideoPlayer(
             }
          },
          {
-            threshold: 0.5,
+            threshold: 1,
          }
       );
 

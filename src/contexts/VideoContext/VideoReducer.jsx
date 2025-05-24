@@ -2,6 +2,7 @@ import { ACTION_VIDEOS_TYPE as ACTION_TYPES } from "../../constants";
 
 const initState = {
    videoId: null,
+   commentsCache: {},
    isCommentVisible: false,
 };
 
@@ -22,6 +23,14 @@ const videoReducer = (state, action) => {
             ...state,
             isCommentVisible: true,
          };
+      case ACTION_TYPES.CACHING_COMMENTS:
+         return {
+            ...state,
+            commentsCache: {
+               ...state.commentsCache,
+               [action.payload.videoId]: action.payload.comments,
+            },
+         }
       default:
          return state;
    }
