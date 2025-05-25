@@ -11,6 +11,7 @@ import {
 import { getToken } from "../../utils/token";
 
 import _ from "lodash";
+import { get, set } from "idb-keyval";
 
 import { ACTION_MODAL_TYPES, ACTION_VIDEOS_TYPE } from "../../constants";
 
@@ -43,6 +44,8 @@ function CommentSide({ className }) {
    const DOM_list = useRef(null);
    const DOM_input = useRef(null);
 
+   const currentVideoId = useRef(-1);
+
    const fetchComments = useCallback(
       async (page = 1) => {
          const response = await getComments(
@@ -64,32 +67,24 @@ function CommentSide({ className }) {
    );
 
    // Caching comments when the component unmounts
-   // useEffect(() => {
-   //    // console.log(videoState.videoId);
+   useEffect(() => {
+      if (
+         comments.length > 0 &&
+         !_.isEqual(videoState.commentsCache[videoState.videoId], comments)
+      ) {
+         // console.warn("cleanup", videoState.commentsCache[videoState.videoId], comments);
 
-   //    return () => {
-   //       // console.log(videoState.videoId, comments);
-
-   //       if (
-   //          comments.length > 0 &&
-   //          !_.isEqual(videoState.commentsCache[videoState.videoId], comments)
-   //       ) {
-   //          console.warn("cleanup", videoState.commentsCache[videoState.videoId], comments);
-            
-   //          videoDispatch({
-   //             type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
-   //             payload: {
-   //                videoId: videoState.videoId,
-   //                comments: comments,
-   //             },
-   //          });
-   //       }
-   //    };
-   // }, [comments, videoState]);
+         videoDispatch({
+            type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
+            payload: {
+               videoId: videoState.videoId,
+               comments: comments,
+            },
+         });
+      }
+   }, [comments, videoState]);
 
    useEffect(() => {
-      console.log("init", !videoState.commentsCache[videoState.videoId]);
-
       // Get comments when the videoId changes
       if (videoState.videoId && !videoState.commentsCache[videoState.videoId]) {
          console.log("load more");
@@ -102,10 +97,17 @@ function CommentSide({ className }) {
             setCommentPage((prev) => ({ ...prev, limit: maxPage }));
             if (commentData.length > 0) setComments(commentData);
          })();
-      } else if (videoState.commentsCache[videoState.videoId]) {
+      } else if (
+         currentVideoId.current != videoState.videoId &&
+         videoState.commentsCache[videoState.videoId]
+      ) {
          console.log("pre: ", videoState.commentsCache[videoState.videoId]);
 
          setComments(videoState.commentsCache[videoState.videoId]);
+      }
+
+      if (currentVideoId.current != videoState.videoId) {
+         currentVideoId.current = videoState.videoId;
       }
 
       // Handle Animation
@@ -132,6 +134,8 @@ function CommentSide({ className }) {
             );
 
             if (success) {
+               console.log("success", newComments);
+
                setCommentPage((prev) => ({ ...prev, page: nextPage }));
                setComments((prev) => [...prev, ...newComments]);
             }
@@ -144,7 +148,7 @@ function CommentSide({ className }) {
    useEffect(() => {
       let observer;
 
-      if (videoState.isCommentVisible && DOM_loader.current) {
+      if (visible && DOM_loader.current) {
          observer = new IntersectionObserver(handleLoadMoreComments, {
             root: DOM_list.current,
             rootMargin: "300px",
@@ -155,7 +159,7 @@ function CommentSide({ className }) {
       }
 
       return () => observer?.unobserve(DOM_loader.current);
-   }, [videoState, handleLoadMoreComments]);
+   }, [visible, handleLoadMoreComments]);
 
    useEffect(() => {
       if (commentValue) {
