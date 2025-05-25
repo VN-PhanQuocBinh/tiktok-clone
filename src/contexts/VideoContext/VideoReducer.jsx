@@ -30,7 +30,25 @@ const videoReducer = (state, action) => {
                ...state.commentsCache,
                [action.payload.videoId]: action.payload.comments,
             },
-         }
+         };
+      case ACTION_TYPES.TOGGLE_LIKE_COMMENT:
+         const newCommentsCache = state.commentsCache[
+            action.payload.videoId
+         ].map((comment) => {
+            if (comment.id === action.payload.commentId) {
+               return {
+                  ...comment,
+                  is_liked: !comment.is_liked,
+                  likes_count: comment.likes_count + (comment.likes_count ? 1 : -1),
+               };
+            }
+            return comment;
+         });
+
+         return {
+            ...state,
+            commentsCache: newCommentsCache,
+         };
       default:
          return state;
    }

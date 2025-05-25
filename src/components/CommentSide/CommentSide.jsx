@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+   createRef,
+   useCallback,
+   useEffect,
+   useLayoutEffect,
+   useRef,
+   useState,
+} from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useUI } from "../../contexts/UIContext/UIContext";
 
@@ -23,6 +30,7 @@ import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
 const MAX_LENGTH = 150;
+const initCommentPage = { page: 1, limit: 1, total: 0 };
 
 function CommentSide({ className }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
@@ -31,7 +39,7 @@ function CommentSide({ className }) {
    const [visible, setVisible] = useState(videoState.isCommentVisible);
 
    const [comments, setComments] = useState([]);
-   const [commentPage, setCommentPage] = useState({ page: 1, limit: 1 });
+   const [commentPage, setCommentPage] = useState(initCommentPage);
 
    const [commentValue, setCommentValue] = useState("");
    const [originalHeight, setOriginalHeight] = useState(0);
@@ -40,6 +48,7 @@ function CommentSide({ className }) {
    const [hidePlaceholder, setHidePlaceholder] = useState(false);
    const [hideCount, setHideCount] = useState(true);
 
+   const DOM_comments = useRef([])
    const DOM_loader = useRef(null);
    const DOM_list = useRef(null);
    const DOM_input = useRef(null);
@@ -61,10 +70,24 @@ function CommentSide({ className }) {
             success,
             commentData: success ? commentData : [],
             maxPage: meta?.pagination?.total_pages || 1,
+            totalComments: meta?.pagination?.total || 0,
          };
       },
       [commentPage, videoState]
    );
+
+   useEffect(() => {
+      const handleClickOutside = (e) => {
+         DOM_comments.current?.forEach(comment => {
+            comment?.handleClickOutside(e)
+         })
+      }
+
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+         document.removeEventListener("click", handleClickOutside);
+      }
+   }, [visible, comments])
 
    // Caching comments when the component unmounts
    useEffect(() => {
@@ -72,8 +95,6 @@ function CommentSide({ className }) {
          comments.length > 0 &&
          !_.isEqual(videoState.commentsCache[videoState.videoId], comments)
       ) {
-         // console.warn("cleanup", videoState.commentsCache[videoState.videoId], comments);
-
          videoDispatch({
             type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
             payload: {
@@ -84,34 +105,42 @@ function CommentSide({ className }) {
       }
    }, [comments, videoState]);
 
-   useEffect(() => {
+   useLayoutEffect(() => {
+      const { videoId, commentsCache, isCommentVisible } = videoState;
+
       // Get comments when the videoId changes
-      if (videoState.videoId && !videoState.commentsCache[videoState.videoId]) {
-         console.log("load more");
+      if (currentVideoId.current != videoId) {
+         console.log("init");
+         DOM_list.current?.scrollTo({
+            top: 0,
+            behavior: "instant",
+         });
 
-         (async () => {
-            const { commentData, maxPage } = await fetchComments(
-               commentPage?.page
-            );
+         if (videoId && !commentsCache[videoId]) {
+            (async () => {
+               const { commentData, maxPage, totalComments } =
+                  await fetchComments(1);
 
-            setCommentPage((prev) => ({ ...prev, limit: maxPage }));
-            if (commentData.length > 0) setComments(commentData);
-         })();
-      } else if (
-         currentVideoId.current != videoState.videoId &&
-         videoState.commentsCache[videoState.videoId]
-      ) {
-         console.log("pre: ", videoState.commentsCache[videoState.videoId]);
-
-         setComments(videoState.commentsCache[videoState.videoId]);
+               setCommentPage((prev) => ({
+                  ...prev,
+                  limit: maxPage,
+                  total: totalComments,
+               }));
+               if (commentData.length > 0) setComments(commentData);
+            })();
+         } else if (commentsCache[videoId]) {
+            setComments(commentsCache[videoId]);
+         }
       }
 
-      if (currentVideoId.current != videoState.videoId) {
-         currentVideoId.current = videoState.videoId;
+      // Update and reset states
+      if (currentVideoId.current != videoId) {
+         currentVideoId.current = videoId;
+         setCommentPage(initCommentPage);
       }
 
       // Handle Animation
-      if (videoState.isCommentVisible) {
+      if (isCommentVisible) {
          setVisible(true);
          setAnimation(true);
       } else {
@@ -158,7 +187,8 @@ function CommentSide({ className }) {
          observer.observe(DOM_loader.current);
       }
 
-      return () => observer?.unobserve(DOM_loader.current);
+      return () =>
+         DOM_loader.current && observer?.unobserve(DOM_loader.current);
    }, [visible, handleLoadMoreComments]);
 
    useEffect(() => {
@@ -182,6 +212,25 @@ function CommentSide({ className }) {
          setOriginalHeight(DOM_input.current.clientHeight);
       }
    }, [videoState.isCommentVisible]);
+
+   const handleToggleLikeComment = useCallback(
+      (commentId) => {
+         const newComments = comments.map((comment) => {
+            if (comment.id === commentId) {
+               return {
+                  ...comment,
+                  is_liked: !comment.is_liked,
+                  likes_count:
+                     comment.likes_count + (comment.is_liked ? -1 : 1),
+               };
+            }
+            return comment;
+         });
+
+         setComments(newComments);
+      },
+      [comments]
+   );
 
    const handleChangeValue = (e) => {
       const value = e.target.textContent;
@@ -257,7 +306,7 @@ function CommentSide({ className }) {
          {visible && (
             <div className={cx("wrapper", { [className]: className })}>
                <div className={cx("header")}>
-                  <h4>Comments (24)</h4>
+                  <h4>Comments ({commentPage.total})</h4>
                   <button onClick={handleClose} className={cx("close-btn")}>
                      <span className={cx("icon")}>
                         <Icon_XMark />
@@ -266,10 +315,12 @@ function CommentSide({ className }) {
                </div>
 
                <div className={cx("inner")}>
-                  <ul ref={DOM_list}>
-                     {comments.map((comment) => (
+                  <ul ref={DOM_list} className="list">
+                     {comments.map((comment, index) => (
                         <li className={cx("comment-item")} key={comment.id}>
                            <CommentItem
+                              ref={ref => DOM_comments.current[index] = ref}
+                              onToggleLikeComment={handleToggleLikeComment}
                               onDelete={handleDeleteComment}
                               commentData={comment}
                            />
@@ -335,4 +386,4 @@ function CommentSide({ className }) {
    );
 }
 
-export default CommentSide;
+export default CommentSide; 

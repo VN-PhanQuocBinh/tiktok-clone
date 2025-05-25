@@ -26,21 +26,6 @@ function VideoList() {
       fetchAPI();
    }, []);
 
-
-   // useEffect(() => {
-   //    if (!DOM_list.current) return
-
-   //    const hanldeScroll = () => {
-   //       console.log("scroll ", DOM_list.current.scrollTop);
-         
-         
-   //    }
-
-   //    DOM_list.current.addEventListener("scroll", hanldeScroll)
-
-   //    return () => DOM_list.current.removeEventListener("scroll", hanldeScroll)
-   // }, [])
-
    const scrollByItem = (direction) => {
       if (!DOM_list.current) return
 

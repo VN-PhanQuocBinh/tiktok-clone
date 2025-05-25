@@ -1,6 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, memo, forwardRef, useImperativeHandle, useCallback } from "react";
 import { useUI } from "../../contexts/UIContext/UIContext";
+import { useVideo } from "../../contexts/VideoContext/VideoContext";
+import { useAuth } from "../../contexts/AuthContext";
+
 import { ACTION_MODAL_TYPES } from "../../constants";
+import { ACTION_VIDEOS_TYPE } from "../../constants";
 
 import Image from "../../components/Image";
 import {
@@ -13,29 +17,48 @@ import getTimeAgo from "../../utils/getTimeAgo";
 import {
    likeComment,
    unlikeComment,
-   deleteComment
+   deleteComment,
 } from "../../services/commentsService/commentsService";
 import { getToken } from "../../utils/token";
 
 import styles from "../../assets/styles/components/CommentSide/CommentItem.module.scss";
 import classNames from "classnames/bind";
+import { use } from "react";
 
 const cx = classNames.bind(styles);
 
-function CommentItem({ className, commentData, onDelete }) {
+function CommentItem({
+   className,
+   commentData,
+   onDelete,
+   onToggleLikeComment,
+}, ref) {
    const { state: uiState, dispatch: uiDispatch } = useUI();
+   const { state: videoState, dispatch: videoDispatch } = useVideo();
+   const { user } = useAuth();
+
    const [isLiked, setIsLiked] = useState(!!commentData?.is_liked);
    const [likeCount, setLikeCount] = useState(commentData?.likes_count || 0);
-   const [createdTime, setCreatedTime] = useState("")
+   const [createdTime, setCreatedTime] = useState("");
 
    const [moreBtnVisible, setMoreBtnVisible] = useState(false);
    const [moreVisible, setMoreVisible] = useState(false);
 
    const DOM_wrapper = useRef(null);
 
+   const handleClickOutside = useCallback((e) => {
+      if (!DOM_wrapper.current?.contains(e.target)) {
+         setMoreVisible(false)
+      }
+   }, [])
+
+   useImperativeHandle(ref, () => ({
+      handleClickOutside
+   }), [handleClickOutside])
+
    useEffect(() => {
       // console.log(commentData);
-      setCreatedTime(getTimeAgo(commentData.created_at))
+      setCreatedTime(getTimeAgo(commentData.created_at));
       setIsLiked(commentData?.is_liked);
    }, [commentData]);
 
@@ -87,7 +110,15 @@ function CommentItem({ className, commentData, onDelete }) {
          console.log(response);
 
          if (response.success) {
-            setLikeCount(response?.data?.likes_count || 0);
+            onToggleLikeComment(commentData.id);
+
+            videoDispatch({
+               type: ACTION_VIDEOS_TYPE.TOGGLE_LIKE_COMMENT,
+               payload: {
+                  videoId: videoState.videoId,
+                  commentId: commentData.id,
+               },
+            });
          } else {
             setIsLiked(oldIsLiked);
             setLikeCount(oldLikeCount);
@@ -109,15 +140,14 @@ function CommentItem({ className, commentData, onDelete }) {
          onDelete && onDelete(commentData.id);
 
          console.log(response);
-      }
+      };
 
       uiDispatch({
          type: ACTION_MODAL_TYPES.OPEN_CONFIRM_DELETE_COMMENT,
          modalProps: {
-            actions: [handleDelete]
-         }
+            actions: [handleDelete],
+         },
       });
-      
    };
 
    return (
@@ -147,14 +177,19 @@ function CommentItem({ className, commentData, onDelete }) {
                      <Icon_EllipsisVertical />
                   </span>
 
-                  {moreVisible && (
-                     <div
-                        onClick={handleDeleteComment}
-                        className={cx("more-dropdown")}
-                     >
-                        <span>Delete</span>
-                     </div>
-                  )}
+                  {moreVisible &&
+                     (user.id === commentData?.user?.id ? (
+                        <div
+                           onClick={handleDeleteComment}
+                           className={cx("more-dropdown")}
+                        >
+                           <span>Delete</span>
+                        </div>
+                     ) : (
+                        <div className={cx("more-dropdown")}>
+                           <span>Report</span>
+                        </div>
+                     ))}
                </button>
             </div>
 
@@ -164,9 +199,7 @@ function CommentItem({ className, commentData, onDelete }) {
 
             <div className={cx("inner-footer")}>
                <div className={cx("left-part")}>
-                  <span className={cx("created-time")}>
-                     {createdTime}
-                  </span>
+                  <span className={cx("created-time")}>{createdTime}</span>
                   <button className={cx("reply-btn")}>Reply</button>
                </div>
 
@@ -187,4 +220,4 @@ function CommentItem({ className, commentData, onDelete }) {
    );
 }
 
-export default CommentItem;
+export default memo(forwardRef(CommentItem));

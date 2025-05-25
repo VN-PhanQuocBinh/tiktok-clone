@@ -29,6 +29,7 @@ const ACTION_VIDEOS_TYPE = {
    CLOSE_COMMENT: "close_comment",
    OPEN_COMMENT: "open_comment",
    CACHING_COMMENTS: "caching_comments",
+   TOGGLE_LIKE_COMMENT: "like_comment",
 };
 
 

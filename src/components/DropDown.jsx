@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState, forwardRef } from "react"
+import mergeRef from "../utils/mergeRefs"
 
 import styles from "../assets/styles/components/DropDown.module.scss"
 import classNames from "classnames/bind"
@@ -22,17 +23,17 @@ function DropDown({
    const timerId = useRef()
    const DOM_container = useRef(null)
 
-   const mergeRef = (...refs) => {
-      return (DOM_element) => {
-         refs.forEach((ref) => {
-            if (typeof ref === "function") {
-               ref(DOM_element)
-            } else if (ref && typeof ref === 'object') {
-               ref.current = DOM_element
-            }
-         })
-      }
-   }
+   // const mergeRef = (...refs) => {
+   //    return (DOM_element) => {
+   //       refs.forEach((ref) => {
+   //          if (typeof ref === "function") {
+   //             ref(DOM_element)
+   //          } else if (ref && typeof ref === 'object') {
+   //             ref.current = DOM_element
+   //          }
+   //       })
+   //    }
+   // }
 
    useEffect(() => {
       if (!isVisible) {
