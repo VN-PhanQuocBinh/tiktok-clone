@@ -183,6 +183,10 @@ $padding: 16px;
       margin-right: calc(variables.$sidebar-w - $padding);
       left: 100%;
       bottom: 0;
+
+      &.comment-visible {
+         margin-right: calc(variables.$sidebar-collapsed-w - $padding) !important;
+      }
    }
 }
 

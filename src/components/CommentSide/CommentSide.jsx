@@ -1,5 +1,4 @@
 import {
-   createRef,
    useCallback,
    useEffect,
    useLayoutEffect,
@@ -10,6 +9,7 @@ import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useUI } from "../../contexts/UIContext/UIContext";
 
 import CommentItem from "./CommentItem";
+import CommentSideSkeleton from "./CommentItemSkeleton";
 
 import {
    getComments,
@@ -18,7 +18,6 @@ import {
 import { getToken } from "../../utils/token";
 
 import _ from "lodash";
-import { get, set } from "idb-keyval";
 
 import { ACTION_MODAL_TYPES, ACTION_VIDEOS_TYPE } from "../../constants";
 
@@ -48,7 +47,12 @@ function CommentSide({ className }) {
    const [hidePlaceholder, setHidePlaceholder] = useState(false);
    const [hideCount, setHideCount] = useState(true);
 
-   const DOM_comments = useRef([])
+   const [skeletonLoading, setSkeletonLoading] = useState({
+      initLoading: true,
+      moreLoading: false,
+   });
+
+   const DOM_comments = useRef([]);
    const DOM_loader = useRef(null);
    const DOM_list = useRef(null);
    const DOM_input = useRef(null);
@@ -78,16 +82,16 @@ function CommentSide({ className }) {
 
    useEffect(() => {
       const handleClickOutside = (e) => {
-         DOM_comments.current?.forEach(comment => {
-            comment?.handleClickOutside(e)
-         })
-      }
+         DOM_comments.current?.forEach((comment) => {
+            comment?.handleClickOutside(e);
+         });
+      };
 
       document.addEventListener("click", handleClickOutside);
       return () => {
          document.removeEventListener("click", handleClickOutside);
-      }
-   }, [visible, comments])
+      };
+   }, [visible, comments]);
 
    // Caching comments when the component unmounts
    useEffect(() => {
@@ -105,20 +109,29 @@ function CommentSide({ className }) {
       }
    }, [comments, videoState]);
 
+   // Initial fetch comments when the new video is visible
    useLayoutEffect(() => {
       const { videoId, commentsCache, isCommentVisible } = videoState;
 
       // Get comments when the videoId changes
-      if (currentVideoId.current != videoId) {
-         console.log("init");
+      if (videoId && currentVideoId.current != videoId && visible) {
+         // Scroll to top when render new video's comments
          DOM_list.current?.scrollTo({
             top: 0,
             behavior: "instant",
          });
 
-         if (videoId && !commentsCache[videoId]) {
+         // Get new video's comments
+         setSkeletonLoading((prev) => {
+            console.log("a");
+            return {
+               ...prev,
+               initLoading: true,
+            };
+         });
+         if (!commentsCache[videoId]) {
             (async () => {
-               const { commentData, maxPage, totalComments } =
+               const { success, commentData, maxPage, totalComments } =
                   await fetchComments(1);
 
                setCommentPage((prev) => ({
@@ -126,17 +139,31 @@ function CommentSide({ className }) {
                   limit: maxPage,
                   total: totalComments,
                }));
+
                if (commentData.length > 0) setComments(commentData);
+               if (success)
+                  setSkeletonLoading((prev) => {
+                     console.log("b");
+                     return {
+                        ...prev,
+                        initLoading: false,
+                     };
+                  });
             })();
          } else if (commentsCache[videoId]) {
             setComments(commentsCache[videoId]);
-         }
-      }
 
-      // Update and reset states
-      if (currentVideoId.current != videoId) {
-         currentVideoId.current = videoId;
-         setCommentPage(initCommentPage);
+            setCommentPage((prev) => ({
+               ...prev,
+               total: commentsCache[videoId].length,
+            }));
+         }
+
+         // Update currentVideoId and reset states
+         if (currentVideoId.current != videoId) {
+            currentVideoId.current = videoId;
+            // setCommentPage(initCommentPage);
+         }
       }
 
       // Handle Animation
@@ -149,12 +176,11 @@ function CommentSide({ className }) {
             setVisible(false);
          }, 200); // delay 300ms to allow the animation to finish
       }
-   }, [videoState]);
+   }, [videoState, visible]);
 
    const handleLoadMoreComments = useCallback(
       async ([entries]) => {
          const { isIntersecting } = entries;
-         console.log("entry");
 
          const nextPage = commentPage.page + 1;
          if (isIntersecting && nextPage <= commentPage.limit) {
@@ -163,8 +189,6 @@ function CommentSide({ className }) {
             );
 
             if (success) {
-               console.log("success", newComments);
-
                setCommentPage((prev) => ({ ...prev, page: nextPage }));
                setComments((prev) => [...prev, ...newComments]);
             }
@@ -316,16 +340,32 @@ function CommentSide({ className }) {
 
                <div className={cx("inner")}>
                   <ul ref={DOM_list} className="list">
-                     {comments.map((comment, index) => (
-                        <li className={cx("comment-item")} key={comment.id}>
-                           <CommentItem
-                              ref={ref => DOM_comments.current[index] = ref}
-                              onToggleLikeComment={handleToggleLikeComment}
-                              onDelete={handleDeleteComment}
-                              commentData={comment}
-                           />
+                     {!skeletonLoading.initLoading &&
+                        comments.map((comment, index) => (
+                           <li className={cx("comment-item")} key={comment.id}>
+                              <CommentItem
+                                 ref={(ref) =>
+                                    (DOM_comments.current[index] = ref)
+                                 }
+                                 onToggleLikeComment={handleToggleLikeComment}
+                                 onDelete={handleDeleteComment}
+                                 commentData={comment}
+                              />
+                           </li>
+                        ))}
+
+                     {skeletonLoading.initLoading &&
+                        [1, 2, 3, 4, 5, 6].map((item) => (
+                           <li key={item}>
+                              <CommentSideSkeleton />
+                           </li>
+                        ))}
+
+                     {skeletonLoading.moreLoading && (
+                        <li>
+                           <CommentSideSkeleton key={item} />
                         </li>
-                     ))}
+                     )}
 
                      <li ref={DOM_loader} className={cx("loader")}></li>
                   </ul>
@@ -386,4 +426,4 @@ function CommentSide({ className }) {
    );
 }
 
-export default CommentSide; 
+export default CommentSide;

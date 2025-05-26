@@ -26,7 +26,7 @@ import styles from "../../assets/styles/components/VideoItem.module.scss";
 const cx = classNames.bind(styles);
 
 function VideoItem({ className, video }) {
-   const { dispatch } = useVideo();
+   const { state: videoState, dispatch: videoDispatch } = useVideo();
 
    const DOM_videoItem = useRef(null);
    const DOM_moreMenu = useRef(null);
@@ -67,7 +67,7 @@ function VideoItem({ className, video }) {
    useEffect(() => {
       // update video id
       if (inViewport) {
-         dispatch({
+         videoDispatch({
             type: ACTION_VIDEOS_TYPE.UPDATE_VIDEOID,
             payload: video?.uuid,
          });
@@ -267,7 +267,7 @@ function VideoItem({ className, video }) {
             video={video}
             landscape={orientation}
             portrait={!orientation}
-            className={cx("video-actions")}
+            className={cx("video-actions", {"comment-visible": videoState.isCommentVisible})}
          />
       </li>
    );
