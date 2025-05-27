@@ -2,6 +2,7 @@ import {
    useCallback,
    useEffect,
    useLayoutEffect,
+   useReducer,
    useRef,
    useState,
 } from "react";
@@ -31,6 +32,40 @@ const cx = classNames.bind(styles);
 const MAX_LENGTH = 150;
 const initCommentPage = { page: 1, limit: 1, total: 0 };
 
+const initialSkeletonState = {
+   initLoading: true,
+   moreLoading: false,
+};
+
+const ACTION_SKELETON_TYPE = {
+   RESET_SKELETON: "reset_skeleton",
+   SET_INIT_LOADING: "set_init_loading",
+   SET_MORE_LOADING: "set_more_loading",
+};
+
+const skeletonReducer = (state, action) => {
+   switch (action.type) {
+      case ACTION_SKELETON_TYPE.SET_INIT_LOADING:
+         return {
+            ...state,
+            initLoading: action.payload,
+         };
+      case ACTION_SKELETON_TYPE.SET_MORE_LOADING:
+         return {
+            ...state,
+            moreLoading: action.payload,
+         };
+      case ACTION_SKELETON_TYPE.RESET_SKELETON:
+         return {
+            ...state,
+            moreLoading: false,
+            initLoading: false,
+         };
+      default:
+         return state;
+   }
+};
+
 function CommentSide({ className }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
    const { dispatch: uiDispatch } = useUI();
@@ -47,10 +82,10 @@ function CommentSide({ className }) {
    const [hidePlaceholder, setHidePlaceholder] = useState(false);
    const [hideCount, setHideCount] = useState(true);
 
-   const [skeletonLoading, setSkeletonLoading] = useState({
-      initLoading: true,
-      moreLoading: false,
-   });
+   const [skeletonLoading, dispatchSkeleton] = useReducer(
+      skeletonReducer,
+      initialSkeletonState
+   );
 
    const DOM_comments = useRef([]);
    const DOM_loader = useRef(null);
@@ -97,12 +132,18 @@ function CommentSide({ className }) {
    useEffect(() => {
       if (
          comments.length > 0 &&
-         !_.isEqual(videoState.commentsCache[videoState.videoId], comments)
+         !_.isEqual(
+            videoState.commentsCache[videoState.videoId]?.comments,
+            comments
+         )
       ) {
          videoDispatch({
             type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
             payload: {
                videoId: videoState.videoId,
+               page: commentPage.page,
+               limit: commentPage.limit,
+               total: commentPage.total,
                comments: comments,
             },
          });
@@ -121,42 +162,53 @@ function CommentSide({ className }) {
             behavior: "instant",
          });
 
-         // Get new video's comments
-         setSkeletonLoading((prev) => {
-            console.log("a");
-            return {
-               ...prev,
-               initLoading: true,
-            };
+         // visible skeleton loading when get new video's comments
+         dispatchSkeleton({
+            type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
+            payload: true,
          });
+
          if (!commentsCache[videoId]) {
             (async () => {
                const { success, commentData, maxPage, totalComments } =
                   await fetchComments(1);
 
-               setCommentPage((prev) => ({
-                  ...prev,
-                  limit: maxPage,
-                  total: totalComments,
-               }));
+               if (success) {
+                  // Set comments and pagination
+                  if (commentData.length > 0) setComments(commentData);
+                  setCommentPage((prev) => ({
+                     ...prev,
+                     page: 1,
+                     limit: maxPage,
+                     total: totalComments,
+                  }));
+               } else {
+                  // Reset comments and pagnination if fetch failed
+                  setComments([]);
+                  setCommentPage(initCommentPage);
+               }
 
-               if (commentData.length > 0) setComments(commentData);
-               if (success)
-                  setSkeletonLoading((prev) => {
-                     console.log("b");
-                     return {
-                        ...prev,
-                        initLoading: false,
-                     };
-                  });
+               // Hide skeleton loading
+               dispatchSkeleton({
+                  type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
+                  payload: false,
+               });
             })();
          } else if (commentsCache[videoId]) {
-            setComments(commentsCache[videoId]);
-
+            // Set comments and pagination
+            setComments(commentsCache[videoId].comments);
             setCommentPage((prev) => ({
                ...prev,
-               total: commentsCache[videoId].length,
+               page: commentsCache[videoId].page,
+               limit: commentsCache[videoId].limit,
+               total: commentsCache[videoId].total,
             }));
+
+            // Hide skeleton loading
+            dispatchSkeleton({
+               type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
+               payload: false,
+            });
          }
 
          // Update currentVideoId and reset states
@@ -184,6 +236,11 @@ function CommentSide({ className }) {
 
          const nextPage = commentPage.page + 1;
          if (isIntersecting && nextPage <= commentPage.limit) {
+            dispatchSkeleton({
+               type: ACTION_SKELETON_TYPE.SET_MORE_LOADING,
+               payload: true,
+            });
+
             const { success, commentData: newComments } = await fetchComments(
                nextPage
             );
@@ -192,6 +249,11 @@ function CommentSide({ className }) {
                setCommentPage((prev) => ({ ...prev, page: nextPage }));
                setComments((prev) => [...prev, ...newComments]);
             }
+
+            dispatchSkeleton({
+               type: ACTION_SKELETON_TYPE.SET_MORE_LOADING,
+               payload: false,
+            });
          }
       },
       [commentPage, fetchComments]
@@ -215,6 +277,7 @@ function CommentSide({ className }) {
          DOM_loader.current && observer?.unobserve(DOM_loader.current);
    }, [visible, handleLoadMoreComments]);
 
+   // Handle placeholder and counter visibility
    useEffect(() => {
       if (commentValue) {
          setHidePlaceholder(true);
@@ -235,7 +298,7 @@ function CommentSide({ className }) {
       if (DOM_input.current) {
          setOriginalHeight(DOM_input.current.clientHeight);
       }
-   }, [videoState.isCommentVisible]);
+   }, [visible]);
 
    const handleToggleLikeComment = useCallback(
       (commentId) => {
@@ -362,12 +425,15 @@ function CommentSide({ className }) {
                         ))}
 
                      {skeletonLoading.moreLoading && (
-                        <li>
-                           <CommentSideSkeleton key={item} />
+                        <li key={7}>
+                           <CommentSideSkeleton />
                         </li>
                      )}
 
-                     <li ref={DOM_loader} className={cx("loader")}></li>
+                     {!(
+                        skeletonLoading.initLoading ||
+                        skeletonLoading.moreLoading
+                     ) && <li ref={DOM_loader} className={cx("loader")}></li>}
                   </ul>
                </div>
 

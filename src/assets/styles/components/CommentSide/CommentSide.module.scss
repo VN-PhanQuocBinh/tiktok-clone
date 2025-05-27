@@ -16,7 +16,6 @@
       width: 0;
       opacity: 0;
       transition: width 0.2s linear, opacity 0.2s ease-out;
-
    }
 
    .wrapper {
@@ -27,6 +26,7 @@
       flex-basis: 384px;
       width: 384px;
       @include mixins.flex-column;
+      position: relative;
 
       .header {
          @include mixins.flex-row;
@@ -62,7 +62,7 @@
          width: 100%;
 
          ul {
-            height: calc(100vh - 60px - 28px - 2 * 12px - 24px);
+            height: calc(100vh - 60px - 28px - 2 * 12px - 24px); //60px: height footer
             width: 100%;
             overflow-y: auto;
             overflow-x: hidden;
@@ -86,6 +86,10 @@
       }
 
       .footer {
+         width: calc(100% - 2*12px);
+         position: absolute;
+         bottom: 12px;
+         left: 12px;
          padding-top: 12px;
          background-color: rgba(30, 30, 30, 1);
          @include mixins.flex-row;
@@ -103,7 +107,6 @@
             .input-wrapper {
                .input {
                   position: relative;
-                  // @include mixins.flex-column;
                   width: 212px !important;
                   background-color: transparent;
                   caret-color: variables.$primary-color;
@@ -181,7 +184,6 @@
       }
    }
 }
-
 
 @media screen and (max-width: 1280px) {
    .animation-wrapper {

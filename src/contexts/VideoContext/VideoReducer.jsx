@@ -24,17 +24,24 @@ const videoReducer = (state, action) => {
             isCommentVisible: true,
          };
       case ACTION_TYPES.CACHING_COMMENTS:
+         const payload = action.payload
+
          return {
             ...state,
             commentsCache: {
                ...state.commentsCache,
-               [action.payload.videoId]: action.payload.comments,
+               [action.payload.videoId]: {
+                  page: payload.page,
+                  limit: payload.limit,
+                  total: payload.total,
+                  comments: payload.comments
+               },
             },
          };
       case ACTION_TYPES.TOGGLE_LIKE_COMMENT:
          const newCommentsCache = state.commentsCache[
             action.payload.videoId
-         ].map((comment) => {
+         ].comments.map((comment) => {
             if (comment.id === action.payload.commentId) {
                return {
                   ...comment,
