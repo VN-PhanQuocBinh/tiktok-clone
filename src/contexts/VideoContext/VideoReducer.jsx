@@ -2,6 +2,7 @@ import { ACTION_VIDEOS_TYPE as ACTION_TYPES } from "../../constants";
 
 const initState = {
    videoId: null,
+   userId: null,
    commentsCache: {},
    isCommentVisible: false,
 };
@@ -11,7 +12,8 @@ const videoReducer = (state, action) => {
       case ACTION_TYPES.UPDATE_VIDEOID:
          return {
             ...state,
-            videoId: action.payload,
+            videoId: action.payload.uuid,
+            userId: action.payload.userId
          };
       case ACTION_TYPES.CLOSE_COMMENT:
          return {

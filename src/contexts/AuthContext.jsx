@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as authService from "../services/authService/authService";
 import { getToken, removeToken, saveToken } from "../utils/token";
+import { getAllFollowingList } from "../utils/getAllFollowing";
 
 import { useNavigate } from "react-router";
 
@@ -12,32 +13,37 @@ const AuthProvider = ({ children }) => {
    const [isRegistering, setIsRegistering] = useState(false);
    const [isLoggingIn, setLoggingIn] = useState(false);
    const [user, setUser] = useState({});
-   const navigate = useNavigate()
+   const [followingList, setFollowingList] = useState([]);
+   const navigate = useNavigate();
 
    useEffect(() => {
-      navigate("/")
-   }, [isLoggedIn])
+      if (isLoggedIn) {
+         (async () => {
+            const _list = await getAllFollowingList();
+            setFollowingList(_list);
+         })();
+      }
+
+      navigate("/");
+   }, [isLoggedIn]);
 
    useEffect(() => {
       const token = getToken();
 
-      const fetchAPI = async () => {
-         try {
+      if (token !== "undefined") {
+         (async () => {
             const response = await authService.getCurrentUser(token);
-            setUser(response.data);
-            // console.log(response);
-         } catch (error) {
-            console.log("GET CURRENT USER: ", error);
-         }
-      };
 
-      if (token) {
-         fetchAPI();
-         setIsLoggedOut(false)
-         setIsLoggedIn(true);
-      } else {
-         setIsLoggedIn(false);
-         setIsLoggedOut(true)
+            if (response.success) {
+               setUser(response.data);
+               setIsLoggedOut(false);
+               setIsLoggedIn(true);
+            } else {
+               console.log("GET CURRENT USER: ", response?.message);
+               setIsLoggedIn(false);
+               setIsLoggedOut(true);
+            }
+         })();
       }
    }, []);
 
@@ -77,11 +83,14 @@ const AuthProvider = ({ children }) => {
    const login = async (email, password) => {
       setLoggingIn(true);
 
-      try {
-         const response = await authService.login(email, password);
-         const token = await response?.meta?.token;
+      const response = await authService.login(email, password);
 
-         setUser(response?.data)
+      setLoggingIn(false);
+
+      if (response?.success) {
+         const token = await response?.data?.meta?.token;
+
+         setUser(response?.data?.data);
          setIsLoggedIn(true);
          saveToken(token);
 
@@ -90,12 +99,12 @@ const AuthProvider = ({ children }) => {
             success: true,
             message: "",
          };
-      } catch (error) {
-         console.log(error);
+      } else {
+         console.log(response?.message?.status);
 
          let message = "";
 
-         switch (error?.response?.status) {
+         switch (response?.message?.status) {
             case 401:
                message = "Account doesn't exist";
                break;
@@ -110,8 +119,6 @@ const AuthProvider = ({ children }) => {
             success: false,
             message,
          };
-      } finally {
-         setLoggingIn(false);
       }
    };
 

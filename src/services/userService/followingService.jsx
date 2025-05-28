@@ -14,7 +14,7 @@ export const getFollowingList = async (token, page = 1) => {
       
       return response;
    } catch (error) {
-      console.log("Error fetching users suggested: ", error);
+      console.log("Error fetching following list: ", error);
    }
 };
 

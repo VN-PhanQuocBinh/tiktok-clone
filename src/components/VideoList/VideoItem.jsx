@@ -65,11 +65,14 @@ function VideoItem({ className, video }) {
    }, []);
 
    useEffect(() => {
-      // update video id
+      // update video uuid
       if (inViewport) {
          videoDispatch({
             type: ACTION_VIDEOS_TYPE.UPDATE_VIDEOID,
-            payload: video?.uuid,
+            payload: {
+               uuid: video?.uuid,
+               userId: video?.user?.id
+            },
          });
       }
 

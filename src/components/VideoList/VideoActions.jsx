@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState, useLayoutEffect } from "react";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
+import { useAuth } from "../../contexts/AuthContext";
+
+import { follow, unfollow } from "../../services/userService/followingService";
+import { getToken } from "../../utils/token";
+import { checkFollowed } from "../../utils/checkFollowed";
+
 import { ACTION_VIDEOS_TYPE } from "../../constants";
 
 import {
@@ -24,13 +29,15 @@ function VideoActions({
    video,
    landscape,
    portrait,
+   isFollowed,
    ...props
 }) {
+   const { state: videoState, dispatch: videoDispatch } = useVideo()
+   const { user } = useAuth()
+
    const [isLiked, setIsLiked] = useState(false);
    const [isFavorite, setIsFavorite] = useState(false);
    const [followed, setFollowed] = useState(false);
-   const navigate = useNavigate()
-   const { state, dispatch } = useVideo()
 
    const isMatchQuery = useMediaQuery("(max-width: 768px)");
 
@@ -38,7 +45,12 @@ function VideoActions({
       // console.log(video);
       if (video) {
          setIsLiked(video.is_liked);
-         setFollowed(video?.user?.is_followed);
+
+         // ;(async () => {
+         //    const _isFollowed = await checkFollowed(video?.user?.id)
+         //    setFollowed(_isFollowed)
+         // })()
+         
       }
    }, [video]);
 
@@ -51,15 +63,35 @@ function VideoActions({
    };
 
    const handleFollow = () => {
-      setFollowed((prev) => !prev);
+      const { userId } = videoState
+      
+      if (user.id !== userId) {
+         ;(async () => {
+            const token = getToken()
+
+            if (followed) {
+               setFollowed(false)
+               const response = await follow(token, userId)
+               console.log(response);
+               
+
+               if (!response.success) setFollowed(true)
+            } else {
+               setFollowed(true)
+               const response = await unfollow(token, userId)
+               console.log(response);
+
+               if (!response.success) setFollowed(false)
+            }
+         })()
+      }
    };
 
    const handleComment = () => {
-      // navigate(`${video?.user?.nickname}/video/${video?.id}`)
-      if (state.isCommentVisible) {
-         dispatch({type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT})
+      if (videoState.isCommentVisible) {
+         videoDispatch({type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT})
       } else {
-         dispatch({type: ACTION_VIDEOS_TYPE.OPEN_COMMENT})
+         videoDispatch({type: ACTION_VIDEOS_TYPE.OPEN_COMMENT})
       }
    }
 

@@ -50,9 +50,10 @@ export const login = async (path, option = {}) => {
    // console.log(response);
    
 
-   if (response.status !== 200) {
-      throw Error("Network response was not ok! - LOG IN")
-   }
+   
+   // if (response.status !== 200) {
+   //    throw Error("Network response was not ok! - LOG IN")
+   // }
 
    return response
 }

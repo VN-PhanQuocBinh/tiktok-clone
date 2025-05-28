@@ -457,10 +457,10 @@ function CommentSide({ className }) {
                         {!hideCount && (
                            <span
                               className={cx("character-count", {
-                                 active: commentValue.length === 150,
+                                 active: commentValue.length === MAX_LENGTH,
                               })}
                            >
-                              {commentValue.length}/150
+                              {commentValue.length}/{MAX_LENGTH}
                            </span>
                         )}
                      </div>
