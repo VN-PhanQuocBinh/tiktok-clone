@@ -1,11 +1,10 @@
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState, useLayoutEffect, useMemo } from "react";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
 
 import { follow, unfollow } from "../../services/userService/followingService";
 import { getToken } from "../../utils/token";
-import { checkFollowed } from "../../utils/checkFollowed";
 
 import { ACTION_VIDEOS_TYPE } from "../../constants";
 
@@ -32,25 +31,23 @@ function VideoActions({
    isFollowed,
    ...props
 }) {
-   const { state: videoState, dispatch: videoDispatch } = useVideo()
-   const { user } = useAuth()
+   const { state: videoState, dispatch: videoDispatch } = useVideo();
+   const { user, updateFollowingList } = useAuth();
 
    const [isLiked, setIsLiked] = useState(false);
    const [isFavorite, setIsFavorite] = useState(false);
-   const [followed, setFollowed] = useState(false);
+   const [followed, setFollowed] = useState(isFollowed);
 
    const isMatchQuery = useMediaQuery("(max-width: 768px)");
+
+   useEffect(() => {
+      setFollowed(isFollowed);
+   }, [isFollowed]);
 
    useEffect(() => {
       // console.log(video);
       if (video) {
          setIsLiked(video.is_liked);
-
-         // ;(async () => {
-         //    const _isFollowed = await checkFollowed(video?.user?.id)
-         //    setFollowed(_isFollowed)
-         // })()
-         
       }
    }, [video]);
 
@@ -63,37 +60,36 @@ function VideoActions({
    };
 
    const handleFollow = () => {
-      const { userId } = videoState
-      
+      const { userId } = videoState;
+
       if (user.id !== userId) {
-         ;(async () => {
-            const token = getToken()
+         (async () => {
+            const token = getToken();
+            const prevFollowed = followed;
 
-            if (followed) {
-               setFollowed(false)
-               const response = await follow(token, userId)
-               console.log(response);
-               
+            setFollowed(!prevFollowed);
+            const response = await (prevFollowed
+               ? unfollow(token, userId)
+               : follow(token, userId));
 
-               if (!response.success) setFollowed(true)
+            console.log(response);
+
+            if (!response.success) {
+               setFollowed(prevFollowed);
             } else {
-               setFollowed(true)
-               const response = await unfollow(token, userId)
-               console.log(response);
-
-               if (!response.success) setFollowed(false)
+               updateFollowingList(video?.user, !prevFollowed);
             }
-         })()
+         })();
       }
    };
 
    const handleComment = () => {
       if (videoState.isCommentVisible) {
-         videoDispatch({type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT})
+         videoDispatch({ type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT });
       } else {
-         videoDispatch({type: ACTION_VIDEOS_TYPE.OPEN_COMMENT})
+         videoDispatch({ type: ACTION_VIDEOS_TYPE.OPEN_COMMENT });
       }
-   }
+   };
 
    return (
       <div
@@ -110,16 +106,18 @@ function VideoActions({
       >
          <button className={cx("avatar-btn")}>
             <Image className={cx("avt-img")} src={video.user.avatar} />
-            <span
-               onClick={handleFollow}
-               className={cx("follow-icon", { followed: followed })}
-            >
-               {followed ? (
-                  <Icon_Check className={cx("icon")} />
-               ) : (
-                  <Icon_Plus className={cx("icon")} />
-               )}
-            </span>
+            {video?.user?.id !== user?.id && (
+               <span
+                  onClick={handleFollow}
+                  className={cx("follow-icon", { followed: followed })}
+               >
+                  {followed ? (
+                     <Icon_Check className={cx("icon")} />
+                  ) : (
+                     <Icon_Plus className={cx("icon")} />
+                  )}
+               </span>
+            )}
          </button>
 
          <button
@@ -132,7 +130,10 @@ function VideoActions({
             <span className={cx("count")}>{video.likes_count}</span>
          </button>
 
-         <button onClick={handleComment} className={cx("action-btn", "comment-btn")}>
+         <button
+            onClick={handleComment}
+            className={cx("action-btn", "comment-btn")}
+         >
             <span className={cx("comment-icon")}>
                <Icon_Comment className={cx("icon")} />
             </span>

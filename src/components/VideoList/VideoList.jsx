@@ -20,7 +20,6 @@ function VideoList() {
       const fetchAPI = async () => {
          try {
             const response = await videoService.getVideo("for-you", 1);
-            // console.log(response);
             setVideos(response);
          } catch (error) {}
       };

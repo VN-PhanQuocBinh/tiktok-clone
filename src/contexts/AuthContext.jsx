@@ -20,6 +20,8 @@ const AuthProvider = ({ children }) => {
       if (isLoggedIn) {
          (async () => {
             const _list = await getAllFollowingList();
+            console.log(_list);
+
             setFollowingList(_list);
          })();
       }
@@ -39,7 +41,7 @@ const AuthProvider = ({ children }) => {
                setIsLoggedOut(false);
                setIsLoggedIn(true);
             } else {
-               console.log("GET CURRENT USER: ", response?.message);
+               // console.log("GET CURRENT USER: ", response?.message);
                setIsLoggedIn(false);
                setIsLoggedOut(true);
             }
@@ -100,8 +102,6 @@ const AuthProvider = ({ children }) => {
             message: "",
          };
       } else {
-         console.log(response?.message?.status);
-
          let message = "";
 
          switch (response?.message?.status) {
@@ -128,6 +128,18 @@ const AuthProvider = ({ children }) => {
       removeToken();
    };
 
+   const updateFollowingList = (user, isFollowed) => {
+      if (isFollowed) {
+         setFollowingList(prev => [...prev, user])
+      } else {
+         setFollowingList((prev) => {
+            const newList = [...prev];
+            newList.filter(_user => _user.id !== user.id);
+            return newList
+         });
+      }
+   };
+
    return (
       <AuthContext.Provider
          value={{
@@ -139,6 +151,8 @@ const AuthProvider = ({ children }) => {
             isLoggedOut,
             isRegistering,
             isLoggingIn,
+            followingList,
+            updateFollowingList
          }}
       >
          {/* CHILDREND */}

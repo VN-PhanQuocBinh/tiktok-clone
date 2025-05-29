@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
-import { ACTION_VIDEOS_TYPE } from "../../constants";
+import { useAuth } from "../../contexts/AuthContext";
+
 
 import VideoPlayer from "./VideoPlayer";
 import VolumeControl from "./VolumeControl";
@@ -10,6 +11,7 @@ import DropDown from "../DropDown";
 import DropDownItem from "../DropDownItem";
 
 import { DROPDOWN_ITEM_TYPE as TYPE } from "../../constants";
+import { ACTION_VIDEOS_TYPE } from "../../constants";
 
 import {
    Icon_VolumeSolid,
@@ -27,6 +29,10 @@ const cx = classNames.bind(styles);
 
 function VideoItem({ className, video }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
+   const { followingList } = useAuth()
+   const followedSet = useMemo(() => new Set(followingList?.map(user => {
+      return user.id
+   })), [followingList])
 
    const DOM_videoItem = useRef(null);
    const DOM_moreMenu = useRef(null);
@@ -37,6 +43,7 @@ function VideoItem({ className, video }) {
    const [isPlay, setIsPlay] = useState(false);
    const [displayStateBtn, setDisplayStateBtn] = useState(false);
    const [isMuted, setIsMuted] = useState(false);
+   const [isFollowed, setIsFollowed] = useState(false)
 
    const [orientation, setOrientation] = useState(true);
    // true: landscape, false: portrait
@@ -65,15 +72,18 @@ function VideoItem({ className, video }) {
    }, []);
 
    useEffect(() => {
-      // update video uuid
       if (inViewport) {
+         // update video uuid
          videoDispatch({
             type: ACTION_VIDEOS_TYPE.UPDATE_VIDEOID,
             payload: {
                uuid: video?.uuid,
-               userId: video?.user?.id
+               userId: video?.user?.id,
             },
          });
+
+         // update followed
+         setIsFollowed(followedSet.has(video?.user?.id))
       }
 
       // Move more menu (responsive)
@@ -90,13 +100,24 @@ function VideoItem({ className, video }) {
       return () => {
          window.removeEventListener("resize", handleResize);
       };
-   }, [inViewport]);
+   }, [inViewport, followedSet]);
+
+   // Example for reason that I used MutationObserver,
+   // useLayoutEffect(() => {
+   //    console.log("mounted", !!DOM_moreMenu.current); //mouted {previous DOM ~ null}
+   //    if (DOM_moreMenu.current) {
+         
+   //       const rect = DOM_moreMenu.current.getBoundingClientRect();
+   //       let newLeft = window.innerWidth - rect.right - 12; //padding-right: 12px
+   //       setLeftMoreMenu((preLeft) => Math.min(0, preLeft + newLeft));
+   //    }
+   // }, [showMoreMenu]);
 
    useEffect(() => {
       const observer = new MutationObserver(() => {
          if (DOM_moreMenu.current) {
             const rect = DOM_moreMenu.current.getBoundingClientRect();
-            let newLeft = window.innerWidth - rect.right - 12;
+            let newLeft = window.innerWidth - rect.right - 12; //padding-right: 12px
             setLeftMoreMenu((preLeft) => Math.min(0, preLeft + newLeft));
          }
       });
@@ -270,7 +291,10 @@ function VideoItem({ className, video }) {
             video={video}
             landscape={orientation}
             portrait={!orientation}
-            className={cx("video-actions", {"comment-visible": videoState.isCommentVisible})}
+            isFollowed={isFollowed}
+            className={cx("video-actions", {
+               "comment-visible": videoState.isCommentVisible,
+            })}
          />
       </li>
    );
