@@ -1,5 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
-import { checkFollowed } from "../../utils/checkFollowed";
+import { useState, useEffect, useMemo, useLayoutEffect } from "react";
 import { follow, unfollow } from "../../services/userService/followingService";
 import { getToken } from "../../utils/token";
 
@@ -9,7 +8,7 @@ import {
    Icon_ShareSolid,
    Icon_EllipsisVertical,
    Icon_BlueTick,
-   Icon_Following
+   Icon_Following,
 } from "../../assets/Icons";
 
 import styles from "../../assets/styles/components/Profile/ProfileHeader.module.scss";
@@ -18,7 +17,11 @@ import { useAuth } from "../../contexts/AuthContext";
 const cx = classNames.bind(styles);
 
 function ProfileHeader({ user, isOwnProfile }) {
-   const { user: authUser } = useAuth();
+   const { user: authUser, followingList, updateFollowingList } = useAuth();
+   const followedSet = useMemo(
+      () => new Set(followingList?.map((user) => user?.id)),
+      [followingList]
+   );
    const [displayUser, setDisplayUser] = useState({});
    const [isFollowed, setIsFollowed] = useState(false);
 
@@ -28,11 +31,12 @@ function ProfileHeader({ user, isOwnProfile }) {
       setDisplayUser(user);
    }, [user, isOwnProfile]);
 
-   useEffect(() => {
+   useLayoutEffect(() => {
       if (user.id) {
          const checkFollowStatus = async () => {
-            if (user.id !== authUser?.id) {
-               const _isFollowed = await checkFollowed(user.id);
+            // if (user.id !== authUser?.id) {
+            if (!isOwnProfile) {
+               const _isFollowed = followedSet.has(user?.id);
 
                setIsFollowed(_isFollowed);
             } else {
@@ -42,28 +46,29 @@ function ProfileHeader({ user, isOwnProfile }) {
 
          checkFollowStatus();
       }
-   }, [user, isOwnProfile, isFollowed]);
+   }, [user, isOwnProfile, followedSet]);
 
    const handleToggleFollow = () => {
       const handleFollow = async () => {
          if (!isOwnProfile) {
-            if (!isFollowed) {
-               setIsFollowed(true)
-               const response = await follow(getToken(), user?.id)
-               console.log(response);
+            const token = getToken();
+            const userId = user?.id;
+            const prevFollowed = isFollowed;
 
-               if (!response.success) setIsFollowed(false)
+            setIsFollowed(!prevFollowed);
+            const response = await (prevFollowed
+               ? unfollow(token, userId)
+               : follow(token, userId));
+            
+            if (response.success) {
+               updateFollowingList(user, !prevFollowed)
             } else {
-               setIsFollowed(false)
-               const response = await unfollow(getToken(), user?.id)
-               console.log(response);
-
-               if (!response.success) setIsFollowed(true)
+               setIsFollowed(prevFollowed)
             }
          }
-      }
-      
-      handleFollow()
+      };
+
+      handleFollow();
    };
 
    // console.log("re-render");

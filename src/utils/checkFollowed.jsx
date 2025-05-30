@@ -5,8 +5,6 @@ export const checkFollowed = async (userId) => {
    let page = 1;
    let pageSize = 1;
    let isFound = false;
-
-   
    
    while (page <= pageSize && !isFound) {
       // console.log(userId);

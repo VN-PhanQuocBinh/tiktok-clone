@@ -133,8 +133,8 @@ const AuthProvider = ({ children }) => {
          setFollowingList(prev => [...prev, user])
       } else {
          setFollowingList((prev) => {
-            const newList = [...prev];
-            newList.filter(_user => _user.id !== user.id);
+            let newList = [...prev];
+            newList = newList.filter(_user => _user.id !== user.id);
             return newList
          });
       }

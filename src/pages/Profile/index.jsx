@@ -120,7 +120,7 @@ export default function Profile() {
       <div className={cx("wrapper")}>
          <ProfileHeader
             user={displayUser}
-            isOwnProfile={isLoggedIn && isMyProfile}
+            isOwnProfile={isMyProfile}
          />
          <div className={cx("content")}>
             <div className={cx("content-header")}>
