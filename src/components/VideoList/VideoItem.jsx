@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
 
-
 import VideoPlayer from "./VideoPlayer";
 import VolumeControl from "./VolumeControl";
 import TimeLine from "./TimeLine";
@@ -29,10 +28,16 @@ const cx = classNames.bind(styles);
 
 function VideoItem({ className, video }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
-   const { followingList } = useAuth()
-   const followedSet = useMemo(() => new Set(followingList?.map(user => {
-      return user.id
-   })), [followingList])
+   const { followingList } = useAuth();
+   const followedSet = useMemo(
+      () =>
+         new Set(
+            followingList?.map((user) => {
+               return user.id;
+            })
+         ),
+      [followingList]
+   );
 
    const DOM_videoItem = useRef(null);
    const DOM_moreMenu = useRef(null);
@@ -42,8 +47,9 @@ function VideoItem({ className, video }) {
    const [leftMoreMenu, setLeftMoreMenu] = useState(0);
    const [isPlay, setIsPlay] = useState(false);
    const [displayStateBtn, setDisplayStateBtn] = useState(false);
+   const [isFollowed, setIsFollowed] = useState(false);
    const [isMuted, setIsMuted] = useState(false);
-   const [isFollowed, setIsFollowed] = useState(false)
+   const prevVolume = useRef(0.3)
 
    const [orientation, setOrientation] = useState(true);
    // true: landscape, false: portrait
@@ -83,7 +89,7 @@ function VideoItem({ className, video }) {
          });
 
          // update followed
-         setIsFollowed(followedSet.has(video?.user?.id))
+         setIsFollowed(followedSet.has(video?.user?.id));
       }
 
       // Move more menu (responsive)
@@ -106,7 +112,7 @@ function VideoItem({ className, video }) {
    // useLayoutEffect(() => {
    //    console.log("mounted", !!DOM_moreMenu.current); //mouted {previous DOM ~ null}
    //    if (DOM_moreMenu.current) {
-         
+
    //       const rect = DOM_moreMenu.current.getBoundingClientRect();
    //       let newLeft = window.innerWidth - rect.right - 12; //padding-right: 12px
    //       setLeftMoreMenu((preLeft) => Math.min(0, preLeft + newLeft));
@@ -167,7 +173,8 @@ function VideoItem({ className, video }) {
    }, []);
 
    const handleChangeVolume = useCallback((value) => {
-      DOM_video.current?.setVolume(value);
+      // DOM_video.current?.setVolume(value);
+      videoDispatch({type: ACTION_VIDEOS_TYPE.SET_VOLUME, payload: value})
       setIsMuted(value == 0);
    }, []);
 
@@ -178,6 +185,17 @@ function VideoItem({ className, video }) {
          setOrientation(false);
       }
    }, []);
+
+   const handleMuted = useCallback(() => {
+      setIsMuted((prev) => !prev);
+
+      let newVolumeValue = 0
+      if (isMuted) {
+         newVolumeValue = videoState.volumeValue.previous
+      } 
+      videoDispatch({type: ACTION_VIDEOS_TYPE.SET_VOLUME, payload: newVolumeValue})
+      
+   }, [isMuted, videoState]);
 
    return (
       <li
@@ -200,7 +218,11 @@ function VideoItem({ className, video }) {
 
             <div className={cx("overlay-control")}>
                <span className={cx("volume-icons")}>
-                  {isMuted ? <Icon_VolumeSolidXmark /> : <Icon_VolumeSolid />}
+                  {isMuted ? (
+                     <Icon_VolumeSolidXmark onClick={handleMuted} />
+                  ) : (
+                     <Icon_VolumeSolid onClick={handleMuted} />
+                  )}
 
                   <VolumeControl
                      className={cx("volume-control")}
@@ -278,8 +300,6 @@ function VideoItem({ className, video }) {
 
             <TimeLine
                onSeek={handleSeek}
-               onPlay={DOM_video.current?.play}
-               onPause={DOM_video.current?.pause}
                onDisplayStateBtn={onDisplayStateBtn}
                counting={isPlay}
                duration={duration}

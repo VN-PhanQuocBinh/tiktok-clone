@@ -1,5 +1,3 @@
-import classNames from "classnames/bind";
-import styles from "../../assets/styles/components/VideoPlayer.module.scss";
 import {
    useEffect,
    useRef,
@@ -7,7 +5,10 @@ import {
    forwardRef,
    useImperativeHandle,
 } from "react";
+import { useVideo } from "../../contexts/VideoContext/VideoContext";
 
+import classNames from "classnames/bind";
+import styles from "../../assets/styles/components/VideoPlayer.module.scss";
 const cx = classNames.bind(styles);
 
 function VideoPlayer(
@@ -23,7 +24,16 @@ function VideoPlayer(
    },
    ref
 ) {
+   const { state: videoState } = useVideo();
    const DOM_video = useRef(null);
+
+   useEffect(() => {
+      // console.log(DOM_video.current, videoState);
+
+      if (DOM_video.current) {
+         DOM_video.current.volume = videoState.volumeValue.current;
+      }
+   }, [videoState]);
 
    useImperativeHandle(
       ref,
@@ -31,7 +41,7 @@ function VideoPlayer(
          return {
             play: () => DOM_video.current?.play(),
             pause: () => DOM_video.current?.pause(),
-            setVolume: (value) => (DOM_video.current.volume = value),
+            // setVolume: (value) => (DOM_video.current.volume = value),
             seekTo: (time) => {
                // console.log("seek: ", time);
 
@@ -45,8 +55,6 @@ function VideoPlayer(
    );
 
    useEffect(() => {
-      DOM_video.current.volume = 0.1;
-
       const handleClick = () => {
          if (DOM_video.current?.paused) {
             // DOM_video.current?.play();
@@ -105,6 +113,28 @@ function VideoPlayer(
          video?.removeEventListener("loadedmetadata", handleLoadedMetadata);
       };
    }, [onLoadedMetaData]);
+
+   useEffect(() => {
+      const handlePlay = () => {
+         console.log("play");
+      };
+
+      const handlePause = () => {
+         debugger
+         console.log("pause");
+      };
+
+      DOM_video.current.addEventListener("play", handlePlay);
+      DOM_video.current.addEventListener("pause", handlePause);
+
+      return () => {
+         DOM_video.current.removeEventListener("play", handlePlay);
+         DOM_video.current.removeEventListener("pause", handlePause);
+      };
+   }, []);
+
+   console.log("video player re-render");
+   
 
    return (
       <video

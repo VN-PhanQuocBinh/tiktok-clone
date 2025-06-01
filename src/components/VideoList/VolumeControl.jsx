@@ -1,11 +1,16 @@
 
 import { useEffect, useRef, useState } from "react"
+import { useVideo } from "../../contexts/VideoContext/VideoContext"
+
 import styles from "../../assets/styles/components/VolumeControl.module.scss"
 import classNames from "classnames/bind"
 
 const cx = classNames.bind(styles)
 
+
 function VolumeControl({className, onChangeVolume, ...props}) {
+   const { state: videoState } = useVideo()
+
    const DOM_wrapper = useRef(null)
    const DOM_track = useRef(null)
    const DOM_thumb = useRef(null)
@@ -14,7 +19,13 @@ function VolumeControl({className, onChangeVolume, ...props}) {
    useEffect(() => {
       const trackWidth = DOM_track.current?.offsetWidth
       const thumbWith = DOM_thumb.current?.offsetWidth
-      setLeftThumb(0.1 * (trackWidth - thumbWith))
+      setLeftThumb(videoState.volumeValue.current * (trackWidth - thumbWith))
+   }, [videoState])
+
+   useEffect(() => {
+      const trackWidth = DOM_track.current?.offsetWidth
+      const thumbWith = DOM_thumb.current?.offsetWidth
+      // setLeftThumb(videoState.volumeValue.current * (trackWidth - thumbWith))
 
       const clearEvents = () => {
          // console.log("clear events");
@@ -59,6 +70,7 @@ function VolumeControl({className, onChangeVolume, ...props}) {
          })
       }
    }, [])
+
 
    return (
       <div {...props} ref={DOM_wrapper} className={cx("wrapper") + " " + className}>

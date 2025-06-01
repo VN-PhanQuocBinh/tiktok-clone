@@ -9,8 +9,6 @@ function TimeLine({
    duration = 0,
    counting = false,
    onSeek,
-   onPlay,
-   onPause,
    onDisplayStateBtn,
    ...props
 }) {
@@ -24,15 +22,12 @@ function TimeLine({
    const [notTransition, setNotTransition] = useState(false)
 
    useEffect(() => {
-      // const trackWidth = DOM_track.current?.offsetWidth;
-      // const thumbWith = DOM_thumb.current?.offsetWidth;
       const trackWidth = DOM_track.current?.offsetWidth;
       const thumbWith = DOM_thumb.current?.offsetWidth;
 
       setLeftThumb(1/duration * trackWidth)
 
       const clearEvents = () => {
-         // console.log("clear events");
 
          setGrabbing(false);
          setNotTransition(false)
@@ -43,7 +38,6 @@ function TimeLine({
 
       const handlePointerMove = (e) => {
          let trackWidth = DOM_track.current?.offsetWidth;
-         let thumbWith = DOM_thumb.current?.offsetWidth;
 
          const rect = DOM_track.current?.getBoundingClientRect();
 
@@ -52,17 +46,12 @@ function TimeLine({
             trackWidth
          );
 
-         // console.dir(trackWidth);
          setLeftThumb(left);
       };
 
       const handlePointerUp = (e) => {
-         // console.log("pointer up");
-
          let trackWidth = DOM_track.current?.offsetWidth;
-         let thumbWith = DOM_thumb.current?.offsetWidth;
 
-         // onPlay()
          onDisplayStateBtn(true, false)
          setLeftThumb(prev => {
             const percent = prev / trackWidth
@@ -78,12 +67,9 @@ function TimeLine({
       };
 
       const handlePointerDown = (e) => {
-         // console.log("pointer down");
-         
          setGrabbing(true);
          setNotTransition(true)
          onDisplayStateBtn(false, false)
-         // onPause()
 
          window.addEventListener("pointermove", handlePointerMove);
          window.addEventListener("pointerup", handlePointerUp);
@@ -136,10 +122,7 @@ function TimeLine({
       let percent = 0
       if (duration !== 0) {
          percent = currentTime/duration
-         // setLeftThumb(percent * (trackWidth - thumbWith))
          setLeftThumb(percent * trackWidth)
-         // onSeek(percent * duration)
-         // console.log(percent);
          
       }
 

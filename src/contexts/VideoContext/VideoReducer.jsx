@@ -1,10 +1,14 @@
-import { ACTION_VIDEOS_TYPE as ACTION_TYPES } from "../../constants";
+import { ACTION_VIDEOS_TYPE as ACTION_TYPES, ACTION_VIDEOS_TYPE } from "../../constants";
 
 const initState = {
    videoId: null,
    userId: null,
    commentsCache: {},
    isCommentVisible: false,
+   volumeValue: {
+      previous: 0.3,
+      current: 0.3
+   }
 };
 
 const videoReducer = (state, action) => {
@@ -58,6 +62,16 @@ const videoReducer = (state, action) => {
             ...state,
             commentsCache: newCommentsCache,
          };
+         case ACTION_VIDEOS_TYPE.SET_VOLUME: 
+            console.log("set volume", action.payload);
+            
+            return {
+               ...state,
+               volumeValue: {
+                  previous: state.volumeValue.current || 0,
+                  current: action.payload || 0
+               }
+            }
       default:
          return state;
    }

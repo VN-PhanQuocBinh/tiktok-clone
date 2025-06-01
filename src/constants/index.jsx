@@ -30,6 +30,7 @@ const ACTION_VIDEOS_TYPE = {
    OPEN_COMMENT: "open_comment",
    CACHING_COMMENTS: "caching_comments",
    TOGGLE_LIKE_COMMENT: "like_comment",
+   SET_VOLUME: "set_volume"
 };
 
 
