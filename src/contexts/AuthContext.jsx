@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
       if (isLoggedIn) {
          (async () => {
             const _list = await getAllFollowingList();
-            console.log(_list);
+            // console.log(_list);
 
             setFollowingList(_list);
          })();

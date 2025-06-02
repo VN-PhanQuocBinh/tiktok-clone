@@ -39,8 +39,8 @@ function VideoPlayer(
       ref,
       () => {
          return {
-            play: () => DOM_video.current?.play(),
-            pause: () => DOM_video.current?.pause(),
+            play: () => DOM_video.current.play(),
+            pause: () => DOM_video.current.pause(),
             // setVolume: (value) => (DOM_video.current.volume = value),
             seekTo: (time) => {
                // console.log("seek: ", time);
@@ -56,13 +56,7 @@ function VideoPlayer(
 
    useEffect(() => {
       const handleClick = () => {
-         if (DOM_video.current?.paused) {
-            // DOM_video.current?.play();
-            onDisplayStateBtn(DOM_video.current.paused, true);
-         } else {
-            // DOM_video.current?.pause();
-            onDisplayStateBtn(DOM_video.current.paused, true);
-         }
+         onDisplayStateBtn(DOM_video.current?.paused, true);
       };
 
       DOM_video.current?.addEventListener("click", handleClick);
@@ -76,15 +70,15 @@ function VideoPlayer(
       const observer = new IntersectionObserver(
          ([entry]) => {
             if (entry.isIntersecting) {
-               DOM_video.current?.play();
-               onDisplayStateBtn(!DOM_video.current?.paused, false);
+               // DOM_video.current?.play()
+               onDisplayStateBtn(true, false);
             } else {
-               DOM_video.current?.pause();
-               onDisplayStateBtn(!DOM_video.current?.paused, false);
+               // DOM_video.current?.pause();
+               onDisplayStateBtn(false, false);
             }
          },
          {
-            threshold: 1,
+            threshold: 0.6,
          }
       );
 
@@ -113,28 +107,6 @@ function VideoPlayer(
          video?.removeEventListener("loadedmetadata", handleLoadedMetadata);
       };
    }, [onLoadedMetaData]);
-
-   useEffect(() => {
-      const handlePlay = () => {
-         console.log("play");
-      };
-
-      const handlePause = () => {
-         debugger
-         console.log("pause");
-      };
-
-      DOM_video.current.addEventListener("play", handlePlay);
-      DOM_video.current.addEventListener("pause", handlePause);
-
-      return () => {
-         DOM_video.current.removeEventListener("play", handlePlay);
-         DOM_video.current.removeEventListener("pause", handlePause);
-      };
-   }, []);
-
-   console.log("video player re-render");
-   
 
    return (
       <video

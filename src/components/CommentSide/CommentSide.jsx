@@ -70,18 +70,15 @@ function CommentSide({ className }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
    const { dispatch: uiDispatch } = useUI();
 
-   const [visible, setVisible] = useState(videoState.isCommentVisible);
-
+   const [commentValue, setCommentValue] = useState("");
    const [comments, setComments] = useState([]);
    const [commentPage, setCommentPage] = useState(initCommentPage);
-
-   const [commentValue, setCommentValue] = useState("");
+   
+   const [visible, setVisible] = useState(videoState.isCommentVisible);
    const [originalHeight, setOriginalHeight] = useState(0);
-
    const [animation, setAnimation] = useState(false);
    const [hidePlaceholder, setHidePlaceholder] = useState(false);
    const [hideCount, setHideCount] = useState(true);
-
    const [skeletonLoading, dispatchSkeleton] = useReducer(
       skeletonReducer,
       initialSkeletonState
@@ -135,7 +132,9 @@ function CommentSide({ className }) {
          !_.isEqual(
             videoState.commentsCache[videoState.videoId]?.comments,
             comments
-         )
+         ) &&
+         videoState.videoId === currentVideoId.current
+
       ) {
          videoDispatch({
             type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
@@ -151,7 +150,7 @@ function CommentSide({ className }) {
    }, [comments, videoState]);
 
    // Initial fetch comments when the new video is visible
-   useLayoutEffect(() => {
+   useEffect(() => {
       const { videoId, commentsCache, isCommentVisible } = videoState;
 
       // Get comments when the videoId changes
@@ -339,7 +338,7 @@ function CommentSide({ className }) {
 
       (async () => {
          const response = await createComment(token, videoId, commentValue);
-         console.log(response);
+         // console.log(response);
 
          // reset input value
          DOM_input.current.textContent = "";

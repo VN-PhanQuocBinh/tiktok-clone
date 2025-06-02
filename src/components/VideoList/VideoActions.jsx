@@ -72,7 +72,7 @@ function VideoActions({
                ? unfollow(token, userId)
                : follow(token, userId));
 
-            console.log(response);
+            // console.log(response);
 
             if (!response.success) {
                setFollowed(prevFollowed);

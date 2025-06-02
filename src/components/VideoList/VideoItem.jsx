@@ -49,7 +49,6 @@ function VideoItem({ className, video }) {
    const [displayStateBtn, setDisplayStateBtn] = useState(false);
    const [isFollowed, setIsFollowed] = useState(false);
    const [isMuted, setIsMuted] = useState(false);
-   const prevVolume = useRef(0.3)
 
    const [orientation, setOrientation] = useState(true);
    // true: landscape, false: portrait
@@ -197,6 +196,7 @@ function VideoItem({ className, video }) {
       
    }, [isMuted, videoState]);
 
+   
    return (
       <li
          ref={DOM_videoItem}
@@ -291,7 +291,7 @@ function VideoItem({ className, video }) {
             <div className={cx("video-info")}>
                <h3 className={cx("user-id")}>
                   {video?.user?.nickname}
-                  {!video?.user?.tick && (
+                  {video?.user?.tick && (
                      <Icon_BlueTick className={cx("tick")} />
                   )}
                </h3>

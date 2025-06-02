@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useMediaQuery from "../../hooks/useMediaQuery";
 
 import VideoItem from "./VideoItem";
@@ -10,22 +10,73 @@ import styles from "../../assets/styles/components/VideoList.module.scss";
 
 const cx = classNames.bind(styles);
 
+const initVideoPage = { page: 1, limit: 1 };
+
 function VideoList() {
    const [videos, setVideos] = useState([]);
+   const [videoPage, setVideoPage] = useState(initVideoPage);
    const [disabled, setDisabled] = useState(true);
    const DOM_list = useRef(null);
+   const DOM_loader = useRef(null);
    const isMatchQuery = useMediaQuery("(max-width: 768px)");
 
+   const fetchVideos = useCallback(async (page = 1) => {
+      const response = await videoService.getVideo("for-you", page);
+      const { success, data, message, meta } = response;
+
+      return {
+         success,
+         data: data || [],
+         message: !success ? "Error fetching videos" : message,
+         meta: meta || {},
+      };
+   }, []);
+
    useEffect(() => {
-      const fetchAPI = async () => {
-         try {
-            const response = await videoService.getVideo("for-you", 1);
-            setVideos(response);
-         } catch (error) {}
+      (async () => {
+         const { data, meta } = await fetchVideos(videoPage.page);
+         setVideos(data);
+         setVideoPage((prev) => ({
+            ...prev,
+            limit: meta?.pagination?.total_pages,
+         }));
+      })();
+   }, []);
+
+   useEffect(() => {
+      const handleLoadMoreVideo = async ([entries]) => {
+         if (entries.isIntersecting) {
+            const newPage = videoPage.page + 1;
+
+            if (newPage <= videoPage.limit) {
+               // console.log("loading successfully!");
+
+               const { success, data } = await fetchVideos(newPage);
+
+               if (success) {
+                  setVideoPage((prev) => ({
+                     ...prev,
+                     page: newPage,
+                  }));
+                  setVideos((prev) => [...prev, ...data]);
+               }
+            }
+         }
       };
 
-      fetchAPI();
-   }, []);
+      let observer;
+      if (DOM_loader.current) {
+         observer = new IntersectionObserver(handleLoadMoreVideo, {
+            root: DOM_list.current,
+            rootMargin: "300px",
+            threshold: 0.1,
+         });
+
+         observer.observe(DOM_loader.current);
+      }
+
+      return () => DOM_loader.current && observer.unobserve(DOM_loader.current);
+   }, [videos, videoPage]);
 
    const scrollByItem = (direction) => {
       if (!DOM_list.current) return;
@@ -38,6 +89,8 @@ function VideoList() {
       });
    };
 
+
+   // Lazyload disabled state of scroll button
    useEffect(() => {
       let timerId;
 
@@ -66,6 +119,12 @@ function VideoList() {
             {videos?.map((video) => (
                <VideoItem key={video.id} video={video} />
             ))}
+
+            <li
+               key={"-1"}
+               ref={DOM_loader}
+               style={{ display: "block", height: "1px", width: "100%" }}
+            ></li>
          </ul>
 
          {!isMatchQuery && (

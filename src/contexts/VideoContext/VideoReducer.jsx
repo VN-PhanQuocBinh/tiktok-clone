@@ -31,6 +31,8 @@ const videoReducer = (state, action) => {
          };
       case ACTION_TYPES.CACHING_COMMENTS:
          const payload = action.payload
+         console.log(payload);
+         
 
          return {
             ...state,
@@ -63,8 +65,6 @@ const videoReducer = (state, action) => {
             commentsCache: newCommentsCache,
          };
          case ACTION_VIDEOS_TYPE.SET_VOLUME: 
-            console.log("set volume", action.payload);
-            
             return {
                ...state,
                volumeValue: {
