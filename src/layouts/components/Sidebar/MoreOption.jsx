@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useAuthModal } from "../../../contexts/AuthModalContext";
+import { useUI } from "../../../contexts/UIContext/UIContext";
 
 import DropDown from "../../../components/DropDown";
 import DropDownItem from "../../../components/DropDownItem";
 
-import { DROPDOWN_ITEM_TYPE as TYPE, AUTH_TYPE } from "../../../constants";
-
+import {
+   DROPDOWN_ITEM_TYPE as TYPE,
+   ACTION_MODAL_TYPES,
+} from "../../../constants";
 import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
 
 import { actionItems_loggedIn, actionItems_loggedOut } from "../../../fakeDB";
@@ -17,7 +19,7 @@ const cx = classNames.bind(styles);
 
 function MoreOption({ className, onClose }) {
    const { isLoggedIn } = useAuth();
-   const { openAuthModal } = useAuthModal()
+   const { dispatch: uiDispatch } = useUI()
 
    const [currentMenu, setCurrentMenu] = useState({
       title: "More",
@@ -32,19 +34,24 @@ function MoreOption({ className, onClose }) {
       });
    }, [isLoggedIn]);
 
-   const handleClick = useCallback((item) => {
-      console.log(item);
-      switch (item.label) {
-         case "Log out":
-            openAuthModal(AUTH_TYPE.LOGOUT_CONFIRM)
-            break;
-         default:
-            if (item.children) {
-               setHistory((pre) => [...pre, currentMenu]);
-               setCurrentMenu({ title: item.label, list: item.children });
-            }
-      }
-   }, [currentMenu])
+   const handleClick = useCallback(
+      (item) => {
+         console.log(item);
+         switch (item.label) {
+            case "Log out":
+               uiDispatch({
+                  type: ACTION_MODAL_TYPES.OPEN_CONFIRM_LOGOUT,
+               });
+               break;
+            default:
+               if (item.children) {
+                  setHistory((pre) => [...pre, currentMenu]);
+                  setCurrentMenu({ title: item.label, list: item.children });
+               }
+         }
+      },
+      [currentMenu]
+   );
 
    const handleBack = () => {
       console.log("history: ", history);

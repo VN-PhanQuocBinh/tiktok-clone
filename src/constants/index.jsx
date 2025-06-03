@@ -37,13 +37,18 @@ const ACTION_VIDEOS_TYPE = {
 const MODAL_TYPES = {
    CONFIRM_DELETE_COMMENT: "confirm_delete_comment",
    ALERT: "alert",
+   AUTH_MODALS: "auth_modals",
+   CONFIRM_LOGOUT: "confirm_logout"
 }
 
 const ACTION_MODAL_TYPES = {
    CLOSE_MODAL: "close_modal",
    OPEN_CONFIRM_DELETE_COMMENT: "open_confirm_delete_comment",
    OPEN_ALERT: "open_alert",
+   OPEN_AUTH_MODALS: "auth_modals",
+   OPEN_CONFIRM_LOGOUT: "confirm_logout"
 }
+
 
 export { 
    LAYOUT_TYPE,

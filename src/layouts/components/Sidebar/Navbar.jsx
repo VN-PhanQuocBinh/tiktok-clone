@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useAuthModal } from "../../../contexts/AuthModalContext";
+import { useUI } from "../../../contexts/UIContext/UIContext";
 
 import { navListData } from "../../../fakeDB";
-import { AUTH_TYPE } from "../../../constants";
+import { ACTION_MODAL_TYPES } from "../../../constants";
 
 import NavbarItem from "./NavbarItem";
 import Image from "../../../components/Image";
@@ -16,12 +15,14 @@ const cx = classNames.bind(styles);
 
 function Navbar({className, showLabel, onOpen}) {
    const { isLoggedIn, user } = useAuth();
-   const { openAuthModal } = useAuthModal()
+   const { dispatch: uiDispatch } = useUI()
 
    const handleClickProfile = (e) => {
       if (!isLoggedIn) {
          e.preventDefault()
-         openAuthModal(AUTH_TYPE.LOGIN_OPTIONS)
+         uiDispatch({
+            type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS
+         })
       }
    }
 

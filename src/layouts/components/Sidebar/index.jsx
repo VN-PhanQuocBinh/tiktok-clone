@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
 import { useMediaQuery } from "../../../hooks";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useAuthModal } from "../../../contexts/AuthModalContext";
+import { useUI } from "../../../contexts/UIContext/UIContext";
 
 import { Link } from "react-router";
 import SidebarSearch from "./SidebarSearch";
@@ -14,6 +14,7 @@ import SideMenu from "./SideMenu";
 import MoreOption from "./MoreOption";
 
 import { AUTH_TYPE } from "../../../constants";
+import { ACTION_MODAL_TYPES } from "../../../constants";
 
 import logo from "../../../assets/images/logo.svg";
 import logoLess from "../../../assets/images/logo-less.png";
@@ -30,10 +31,10 @@ const keyTabDisplay = {
 };
 
 export default function Sidebar({ className }) {
-   const location = useLocation()
+   const location = useLocation();
 
    const { isLoggedIn } = useAuth();
-   const { authModal, openAuthModal, closeAuthModal } = useAuthModal()
+   const { state: uiState, dispatch: uiDispatch } = useUI();
 
    const [showFull, setShowFull] = useState(true);
    const [showBlurArea, setShowBlurArea] = useState(false);
@@ -49,8 +50,8 @@ export default function Sidebar({ className }) {
    const DOM_blurArea = useRef(null);
 
    useEffect(() => {
-      handleCloseSideMenu()
-   }, [location])
+      handleCloseSideMenu();
+   }, [location]);
 
    // responsive
    useEffect(() => {
@@ -112,11 +113,11 @@ export default function Sidebar({ className }) {
    // auto focus input when open sidemenu
    useEffect(() => {
       // console.log(DOM_inputSearchArea.current.focus);
-      
+
       if (tabDisplay[keyTabDisplay.KEY_SEARCH]) {
          setTimeout(() => {
             DOM_inputSearchArea.current.focus();
-         }, 0)
+         }, 0);
       }
    }, [tabDisplay]);
 
@@ -155,8 +156,7 @@ export default function Sidebar({ className }) {
                return newState;
             });
 
-            if (!isMatchQuery) 
-               setShowFull(true);
+            if (!isMatchQuery) setShowFull(true);
          } else {
             setTabDisplay((pre) => {
                let newState = { ...pre };
@@ -173,6 +173,15 @@ export default function Sidebar({ className }) {
       },
       [tabDisplay]
    );
+
+   const handleLogin = useCallback(() => {
+      uiDispatch({
+         type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+         modalProps: {
+            type: AUTH_TYPE.LOGIN_OPTIONS
+         },
+      });
+   }, [uiState]);
 
    // console.log("sidebar re-render", isMatchQuery);
 
@@ -244,7 +253,7 @@ export default function Sidebar({ className }) {
                {isLoggedIn && showFull && <UserSuggested />}
                {!isLoggedIn && showFull && (
                   <button
-                     onClick={() => openAuthModal(AUTH_TYPE.LOGIN_OPTIONS)}
+                     onClick={handleLogin}
                      className={cx("login-btn")}
                   >
                      Log in

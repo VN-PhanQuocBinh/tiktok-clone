@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAuthModal } from "../../contexts/AuthModalContext";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useUI } from "../../contexts/UIContext/UIContext";
 
 import LoginItem from "./LoginItem";
 import SignupForm_email from "./SignupForm_email";
 import LoginForm_email from "./LoginForm_email";
-import LogoutModal from "./LogoutModal";
 
 import { loginMethods, signupMethods } from "../../fakeDB";
-import { AUTH_TYPE as FORM_TYPE } from "../../constants";
+import {
+   ACTION_MODAL_TYPES,
+   AUTH_TYPE,
+   AUTH_TYPE as FORM_TYPE,
+} from "../../constants";
 
 import { Icon_XMark } from "../../assets/Icons";
 
@@ -16,8 +19,8 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function AuthModal({ isOpen, type, onClose }) {
-   const { openAuthModal, closeAuthModal } = useAuthModal();
+function AuthModal({ isOpen = true, type, onClose }) {
+   const { dispatch: uiDispatch } = useUI();
 
    const [currentForm, setCurrentForm] = useState(
       type || FORM_TYPE.LOGIN_OPTIONS
@@ -25,8 +28,24 @@ function AuthModal({ isOpen, type, onClose }) {
    const [currentList, setCurrentList] = useState([]);
    const [isClosing, setIsClosing] = useState(false);
 
+   const DOM_wrapper = useRef(null)
+
    useEffect(() => {
-      setCurrentForm(type);
+      const handleBlur = (e) => {
+         if (e.target === DOM_wrapper.current) {
+            handleClose()
+         }
+      }
+
+      DOM_wrapper.current?.addEventListener("pointerdown", handleBlur)
+
+      return () => DOM_wrapper.current?.removeEventListener("pointerdown", handleBlur)
+   }, [])
+
+   useEffect(() => {
+      if (type) {
+         setCurrentForm(type);
+      }
    }, [type]);
 
    useEffect(() => {
@@ -39,10 +58,23 @@ function AuthModal({ isOpen, type, onClose }) {
       setIsClosing(true);
 
       setTimeout(() => {
-         onClose();
-         setIsClosing(false)
+         onClose?.();
+         uiDispatch({ type: ACTION_MODAL_TYPES.CLOSE_MODAL });
+         setIsClosing(false);
       }, 200);
    };
+
+   const changeIntoForm = useCallback(
+      (type) => {
+         uiDispatch({
+            type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+            modalProps: {
+               type
+            },
+         });
+      },
+      [uiDispatch]
+   );
 
    const handleClick = useCallback(
       (e, type) => {
@@ -50,12 +82,12 @@ function AuthModal({ isOpen, type, onClose }) {
             type == "phone_email" &&
             currentForm === FORM_TYPE.SIGNUP_OPTIONS
          ) {
-            openAuthModal(FORM_TYPE.SIGNUP);
+            changeIntoForm(FORM_TYPE.SIGNUP)
          } else if (
             type == "phone_email_name" &&
             currentForm === FORM_TYPE.LOGIN_OPTIONS
          ) {
-            openAuthModal(FORM_TYPE.LOGIN);
+            changeIntoForm(FORM_TYPE.LOGIN)
          }
       },
       [currentForm]
@@ -66,18 +98,18 @@ function AuthModal({ isOpen, type, onClose }) {
          currentForm === FORM_TYPE.LOGIN_OPTIONS ||
          currentForm === FORM_TYPE.LOGIN
       ) {
-         openAuthModal(FORM_TYPE.SIGNUP_OPTIONS);
+         changeIntoForm(AUTH_TYPE.SIGNUP_OPTIONS)
       } else if (
          currentForm === FORM_TYPE.SIGNUP_OPTIONS ||
          currentForm === FORM_TYPE.SIGNUP
       ) {
-         openAuthModal(FORM_TYPE.LOGIN_OPTIONS);
+         changeIntoForm(AUTH_TYPE.LOGIN_OPTIONS)
       }
    };
 
    return (
       isOpen && (
-         <div className={cx("wrapper")}>
+         <div ref={DOM_wrapper} className={cx("wrapper")}>
             {[
                FORM_TYPE.LOGIN_OPTIONS,
                FORM_TYPE.SIGNUP_OPTIONS,
@@ -127,12 +159,6 @@ function AuthModal({ isOpen, type, onClose }) {
                      </button>
                   </div>
                </div>
-            )}
-
-            {currentForm === FORM_TYPE.LOGOUT_CONFIRM && (
-               <LogoutModal
-                  onClose={() => closeAuthModal(FORM_TYPE.LOGOUT_CONFIRM)}
-               />
             )}
          </div>
       )

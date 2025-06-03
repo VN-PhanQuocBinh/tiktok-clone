@@ -5,7 +5,7 @@ import { useUI } from "../../contexts/UIContext/UIContext";
 import ModalRenderer from "./ModalRenderer";
 
 function ModalContainer() {
-   const { state, dispatch } = useUI();
+   const { state } = useUI();
 
    return createPortal(
       <ModalRenderer modalType={state.modalType} />,

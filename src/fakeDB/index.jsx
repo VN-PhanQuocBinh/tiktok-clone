@@ -291,7 +291,7 @@ const loginMethods = [
    {
       label: "Continue with Google",
       icon: Icon_Google,
-      type: "fb"
+      type: "gg"
    },
    {
       label: "Continue with LINE",
