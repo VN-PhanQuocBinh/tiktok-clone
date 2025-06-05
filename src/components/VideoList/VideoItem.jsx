@@ -28,7 +28,7 @@ const cx = classNames.bind(styles);
 
 function VideoItem({ className, video }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
-   const { followingList } = useAuth();
+   const { followingList, toggleFollowUser } = useAuth();
    const followedSet = useMemo(
       () =>
          new Set(
@@ -52,7 +52,7 @@ function VideoItem({ className, video }) {
    const [duration, setDuration] = useState(0);
    const [orientation, setOrientation] = useState(true);
 
-   const [isFollowed, setIsFollowed] = useState(false);
+   const isFollowed = useMemo(() => followedSet.has(video?.user?.id), [followedSet]);
    const [isMuted, setIsMuted] = useState(false);
    // true: landscape, false: portrait
 
@@ -89,7 +89,7 @@ function VideoItem({ className, video }) {
          });
 
          // update followed
-         setIsFollowed(followedSet.has(video?.user?.id));
+         // setIsFollowed(followedSet.has(video?.user?.id));
       }
 
       // Move more menu (responsive)
@@ -197,6 +197,9 @@ function VideoItem({ className, video }) {
       
    }, [isMuted, videoState]);
    
+   const handleFollowUser = () => {
+      toggleFollowUser(video?.user, !isFollowed)
+   }
 
    return (
       <li
@@ -313,6 +316,7 @@ function VideoItem({ className, video }) {
             landscape={orientation}
             portrait={!orientation}
             isFollowed={isFollowed}
+            onFollowUser={handleFollowUser}
             className={cx("video-actions", {
                "comment-visible": videoState.isCommentVisible,
             })}

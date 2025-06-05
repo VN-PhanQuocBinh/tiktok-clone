@@ -50,7 +50,6 @@ const videoReducer = (state, action) => {
             isCommentVisible: true,
          };
       case ACTION_TYPES.CACHING_VIDEOS: {
-         console.log("cache videos", action.payload);
          const newVideosCache = {};
          const list = action.payload;
          list.forEach((video) => {
@@ -63,35 +62,33 @@ const videoReducer = (state, action) => {
          };
       }
       case ACTION_TYPES.TOGGLE_LIKE_VIDEO:
-         const { videoId, value } = action.payload
+         const { videoId, value } = action.payload;
 
          const newVideosCache = {
             ...state.videosCache,
             [videoId]: {
                ...state.videosCache[videoId],
-               isLiked: value
-            }
-         }
-
-         return {
-            ...state,
-            videosCache: newVideosCache
-         };
-      case ACTION_TYPES.CACHING_COMMENTS:
-         const payload = action.payload;
-
-         return {
-            ...state,
-            commentsCache: {
-               ...state.commentsCache,
-               [action.payload.videoId]: {
-                  page: payload.page,
-                  limit: payload.limit,
-                  total: payload.total,
-                  comments: payload.comments,
-               },
+               isLiked: value,
             },
          };
+
+         return {
+            ...state,
+            videosCache: newVideosCache,
+         };
+      case ACTION_TYPES.CACHING_COMMENTS: {
+         const { videoId, commentsCache } = action.payload;
+         console.log(videoId, commentsCache);
+
+         const newVideosCache = {...state.videosCache}
+         newVideosCache[videoId] = {...newVideosCache[videoId], commentsCache} 
+
+         return {
+            ...state,
+            videosCache: {...newVideosCache},
+         };
+      }
+
       case ACTION_TYPES.TOGGLE_LIKE_COMMENT:
          const newCommentsCache = state.commentsCache[
             action.payload.videoId

@@ -1,8 +1,13 @@
-import { useState, useEffect, useMemo, useLayoutEffect } from "react";
-import { follow, unfollow } from "../../services/userService/followingService";
-import { getToken } from "../../utils/token";
+import {
+   useState,
+   useEffect,
+   useMemo,
+   useCallback,
+} from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 import Image from "../../components/Image";
+
 import {
    Icon_Setting,
    Icon_ShareSolid,
@@ -13,17 +18,26 @@ import {
 
 import styles from "../../assets/styles/components/Profile/ProfileHeader.module.scss";
 import classNames from "classnames/bind";
-import { useAuth } from "../../contexts/AuthContext";
+
+
 const cx = classNames.bind(styles);
 
 function ProfileHeader({ user, isOwnProfile }) {
-   const { user: authUser, followingList, updateFollowingList } = useAuth();
+   const {
+      followingList,
+      toggleFollowUser,
+   } = useAuth();
+
    const followedSet = useMemo(
       () => new Set(followingList?.map((user) => user?.id)),
       [followingList]
    );
+
    const [displayUser, setDisplayUser] = useState({});
-   const [isFollowed, setIsFollowed] = useState(false);
+   const isFollowed = useMemo(
+      () => !isOwnProfile && followedSet.has(user?.id),
+      [followedSet, user, isOwnProfile]
+   );
 
    useEffect(() => {
       console.log(user);
@@ -31,45 +45,9 @@ function ProfileHeader({ user, isOwnProfile }) {
       setDisplayUser(user);
    }, [user, isOwnProfile]);
 
-   useLayoutEffect(() => {
-      if (user.id) {
-         const checkFollowStatus = async () => {
-            // if (user.id !== authUser?.id) {
-            if (!isOwnProfile) {
-               const _isFollowed = followedSet.has(user?.id);
-
-               setIsFollowed(_isFollowed);
-            } else {
-               setIsFollowed(false);
-            }
-         };
-
-         checkFollowStatus();
-      }
-   }, [user, isOwnProfile, followedSet]);
-
-   const handleToggleFollow = () => {
-      const handleFollow = async () => {
-         if (!isOwnProfile) {
-            const token = getToken();
-            const userId = user?.id;
-            const prevFollowed = isFollowed;
-
-            setIsFollowed(!prevFollowed);
-            const response = await (prevFollowed
-               ? unfollow(token, userId)
-               : follow(token, userId));
-            
-            if (response.success) {
-               updateFollowingList(user, !prevFollowed)
-            } else {
-               setIsFollowed(prevFollowed)
-            }
-         }
-      };
-
-      handleFollow();
-   };
+   const handleToggleFollow = useCallback(() => {
+      toggleFollowUser(user, !isFollowed);
+   }, [toggleFollowUser, isFollowed, user]);
 
    // console.log("re-render");
 

@@ -1,5 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+   createContext,
+   useCallback,
+   useContext,
+   useEffect,
+   useState,
+} from "react";
 import * as authService from "../services/authService/authService";
+import { follow, unfollow } from "../services/userService/followingService";
 import { getToken, removeToken, saveToken } from "../utils/token";
 import { getAllFollowingList } from "../utils/getAllFollowing";
 
@@ -130,15 +137,32 @@ const AuthProvider = ({ children }) => {
 
    const updateFollowingList = (user, isFollowed) => {
       if (isFollowed) {
-         setFollowingList(prev => [...prev, user])
+         setFollowingList((prev) => [...prev, user]);
       } else {
          setFollowingList((prev) => {
             let newList = [...prev];
-            newList = newList.filter(_user => _user.id !== user.id);
-            return newList
+            newList = newList.filter((_user) => _user.id !== user.id);
+            return newList;
          });
       }
    };
+
+   const toggleFollowUser = useCallback(async (user, followed) => {
+      const token = getToken();
+      const userId = user?.id
+
+      // setFollowed(!prevFollowed);
+      updateFollowingList(user, followed)
+      const response = await(
+         followed ? follow(token, userId) : unfollow(token, userId)
+      );
+
+      // console.log(response);
+
+      if (!response.success) {
+         updateFollowingList(user, !followed);
+      } 
+   }, []);
 
    return (
       <AuthContext.Provider
@@ -152,7 +176,7 @@ const AuthProvider = ({ children }) => {
             isRegistering,
             isLoggingIn,
             followingList,
-            updateFollowingList
+            toggleFollowUser,
          }}
       >
          {/* CHILDREND */}

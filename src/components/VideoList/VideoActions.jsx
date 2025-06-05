@@ -3,9 +3,6 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
 
-import { follow, unfollow } from "../../services/userService/followingService";
-import { getToken } from "../../utils/token";
-
 import { ACTION_VIDEOS_TYPE } from "../../constants";
 
 import {
@@ -29,6 +26,7 @@ function VideoActions({
    landscape,
    portrait,
    isFollowed,
+   onFollowUser,
    ...props
 }) {
    const {
@@ -36,32 +34,16 @@ function VideoActions({
       dispatch: videoDispatch,
       actions: { toggleLikeVideo },
    } = useVideo();
-   const { user, updateFollowingList } = useAuth();
+   const { user } = useAuth();
 
-   const [isLiked, setIsLiked] = useState(false);
+   const isLiked = useMemo(() => videoState.videosCache[video.uuid]?.isLiked, [videoState])
    const [isFavorite, setIsFavorite] = useState(false);
-   const [followed, setFollowed] = useState(isFollowed);
+   const followed = useMemo(() => isFollowed, [isFollowed])
 
    const isMatchQuery = useMediaQuery("(max-width: 768px)");
 
-   useEffect(() => {
-      setFollowed(isFollowed);
-   }, [isFollowed]);
-
-   useEffect(() => {
-      // console.log(video);
-      if (video) {
-         setIsLiked(video.is_liked);
-      }
-   }, [video]);
-
-   useEffect(() => {
-      setIsLiked(videoState.videosCache[video.uuid]?.isLiked)
-   }, [videoState])
-
    const handleLike = () => {
       console.log("like");
-      // setIsLiked((prev) => !prev);
       toggleLikeVideo(video?.uuid)
    };
 
@@ -69,30 +51,6 @@ function VideoActions({
       setIsFavorite((prev) => !prev);
       
    }, [])
-
-   const handleFollow = () => {
-      const { userId } = videoState;
-
-      if (user.id !== userId) {
-         (async () => {
-            const token = getToken();
-            const prevFollowed = followed;
-
-            setFollowed(!prevFollowed);
-            const response = await (prevFollowed
-               ? unfollow(token, userId)
-               : follow(token, userId));
-
-            // console.log(response);
-
-            if (!response.success) {
-               setFollowed(prevFollowed);
-            } else {
-               updateFollowingList(video?.user, !prevFollowed);
-            }
-         })();
-      }
-   };
 
    const handleComment = () => {
       if (videoState.isCommentVisible) {
@@ -119,7 +77,7 @@ function VideoActions({
             <Image className={cx("avt-img")} src={video.user.avatar} />
             {video?.user?.id !== user?.id && (
                <span
-                  onClick={handleFollow}
+                  onClick={onFollowUser}
                   className={cx("follow-icon", { followed: followed })}
                >
                   {followed ? (
