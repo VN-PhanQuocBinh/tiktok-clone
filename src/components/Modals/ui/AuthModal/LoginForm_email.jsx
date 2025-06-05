@@ -4,13 +4,13 @@ import {
    Icon_Eye,
    Icon_EyeXmark,
    Icon_CircleNotch,
-} from "../../assets/Icons";
+} from "../../../../assets/Icons";
 
-import { useAuth } from "../../contexts/AuthContext";
-import { useUI } from "../../contexts/UIContext/UIContext";
-import { ACTION_MODAL_TYPES } from "../../constants";
+import { useAuth } from "../../../../contexts/AuthContext";
+import { useUI } from "../../../../contexts/UIContext/UIContext";
+import { ACTION_MODAL_TYPES } from "../../../../constants";
 
-import styles from "../../assets/styles/components/LoginForm_email.module.scss";
+import styles from "../../../../assets/styles/components/LoginForm_email.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

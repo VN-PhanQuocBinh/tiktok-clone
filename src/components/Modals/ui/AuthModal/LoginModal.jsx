@@ -5,7 +5,7 @@ import { loginMethods, signupMethods } from "../../fakeDB";
 
 import { Icon_XMark } from "../../assets/Icons";
 
-import styles from "../../assets/styles/components/LoginModal.module.scss";
+import styles from "../../../../assets/styles/components/LoginModal.module.scss";
 import classNames from "classnames/bind";
 import { useCallback, useEffect, useState } from "react";
 

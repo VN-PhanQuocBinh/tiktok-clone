@@ -73,7 +73,7 @@ function CommentSide({ className }) {
    const [commentValue, setCommentValue] = useState("");
    const [comments, setComments] = useState([]);
    const [commentPage, setCommentPage] = useState(initCommentPage);
-   
+
    const [visible, setVisible] = useState(videoState.isCommentVisible);
    const [originalHeight, setOriginalHeight] = useState(0);
    const [animation, setAnimation] = useState(false);
@@ -134,7 +134,6 @@ function CommentSide({ className }) {
             comments
          ) &&
          videoState.videoId === currentVideoId.current
-
       ) {
          videoDispatch({
             type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
@@ -149,7 +148,7 @@ function CommentSide({ className }) {
       }
    }, [comments, videoState]);
 
-   // Initial fetch comments when the new video is visible
+   // Initial fetch comments when a new video is visible
    useEffect(() => {
       const { videoId, commentsCache, isCommentVisible } = videoState;
 
@@ -347,6 +346,10 @@ function CommentSide({ className }) {
          if (response.success) {
             // update comments list
             setComments((prev) => [response.data, ...prev]);
+            setCommentPage((prev) => ({
+               ...prev,
+               total: prev.total + 1,
+            }));
 
             // notify comment created successfully
             const handleClose = () => {
@@ -373,6 +376,10 @@ function CommentSide({ className }) {
 
    const handleDeleteComment = (commentId) => {
       setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+      setCommentPage((prev) => ({
+         ...prev,
+         total: prev.total - 1,
+      }));
    };
 
    const handleClose = () => {

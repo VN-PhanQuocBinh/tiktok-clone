@@ -107,7 +107,7 @@ function CommentItem({
             response = await unlikeComment(token, commentId);
          }
 
-         console.log(response);
+         // console.log(response);
 
          if (response.success) {
             onToggleLikeComment(commentData.id);
@@ -139,7 +139,7 @@ function CommentItem({
 
          onDelete && onDelete(commentData.id);
 
-         console.log(response);
+         // console.log(response);
       };
 
       uiDispatch({

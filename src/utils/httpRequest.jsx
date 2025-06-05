@@ -177,5 +177,25 @@ export const deleteComment = async (path, config = {}) => {
    return response.data
 }
 
+export const likeVideo = async (path, option = {}) => {
+   const response = await request.post(path, {}, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - LIKE VIDEO")
+   }
+
+   return response.data
+}
+
+export const unlikeVideo = async (path, option = {}) => {
+   const response = await request.post(path, {}, option)
+
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - LIKE VIDEO")
+   }
+
+   return response.data
+}
+
 export default request
 

@@ -35,9 +35,6 @@ const uiReducer = (state, action) => {
             modalProps: { ...action?.modalProps },
          };
       case ACTION_MODAL_TYPES.OPEN_CONFIRM_LOGOUT:
-         console.log("open confirm logout");
-         
-
          return {
             ...state,
             isOpen: true,

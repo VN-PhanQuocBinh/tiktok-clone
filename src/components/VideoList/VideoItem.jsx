@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, memo } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -44,18 +44,19 @@ function VideoItem({ className, video }) {
    const DOM_video = useRef(null);
 
    const [inViewport, setInViewport] = useState(false);
+
    const [leftMoreMenu, setLeftMoreMenu] = useState(0);
    const [isPlay, setIsPlay] = useState(false);
    const [displayStateBtn, setDisplayStateBtn] = useState(false);
+   const [showMoreMenu, setShowMoreMenu] = useState(false);
+   const [duration, setDuration] = useState(0);
+   const [orientation, setOrientation] = useState(true);
+
    const [isFollowed, setIsFollowed] = useState(false);
    const [isMuted, setIsMuted] = useState(false);
-
-   const [orientation, setOrientation] = useState(true);
    // true: landscape, false: portrait
 
-   const [duration, setDuration] = useState(0);
 
-   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
    useEffect(() => {
       const observer = new IntersectionObserver(
@@ -195,8 +196,8 @@ function VideoItem({ className, video }) {
       videoDispatch({type: ACTION_VIDEOS_TYPE.SET_VOLUME, payload: newVolumeValue})
       
    }, [isMuted, videoState]);
-
    
+
    return (
       <li
          ref={DOM_videoItem}
@@ -320,4 +321,4 @@ function VideoItem({ className, video }) {
    );
 }
 
-export default VideoItem;
+export default memo(VideoItem);

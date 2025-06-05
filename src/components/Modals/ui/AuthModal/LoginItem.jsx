@@ -1,7 +1,7 @@
 
 
 import { Fragment } from "react"
-import styles from "../../assets/styles/components/LoginItem.module.scss"
+import styles from "../../../../assets/styles/components/LoginItem.module.scss"
 import classNames from "classnames/bind"
 
 const cx = classNames.bind(styles)

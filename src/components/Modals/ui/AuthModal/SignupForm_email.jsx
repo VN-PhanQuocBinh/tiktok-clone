@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 import {
    validateForm,
@@ -9,7 +9,7 @@ import {
    validateDay,
    validateMonth,
    validateYear,
-} from "../../utils/validators";
+} from "../../../../utils/validators";
 
 import {
    Icon_ArrowDown,
@@ -17,9 +17,9 @@ import {
    Icon_EyeXmark,
    Icon_Warning,
    Icon_CircleNotch,
-} from "../../assets/Icons";
+} from "../../../../assets/Icons";
 
-import styles from "../../assets/styles/components/SignupForm_email.module.scss";
+import styles from "../../../../assets/styles/components/SignupForm_email.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

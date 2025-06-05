@@ -25,12 +25,15 @@ const AUTH_TYPE = {
 };
 
 const ACTION_VIDEOS_TYPE = {
+   INIT_VIDEOS_CACHE: "init_videos_cache",
    UPDATE_VIDEOID: "update_videoid",
    CLOSE_COMMENT: "close_comment",
    OPEN_COMMENT: "open_comment",
    CACHING_COMMENTS: "caching_comments",
    TOGGLE_LIKE_COMMENT: "like_comment",
-   SET_VOLUME: "set_volume"
+   SET_VOLUME: "set_volume",
+   CACHING_VIDEOS: "caching_videos",
+   TOGGLE_LIKE_VIDEO: "toggle_like_video"
 };
 
 

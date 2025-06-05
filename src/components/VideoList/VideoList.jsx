@@ -1,5 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, memo } from "react";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { useVideo } from "../../contexts/VideoContext/VideoContext.jsx";
+
+import { ACTION_VIDEOS_TYPE } from "../../constants/index.jsx";
 
 import VideoItem from "./VideoItem";
 import { Icon_AngleLeft } from "../../assets/Icons/index.jsx";
@@ -13,12 +16,15 @@ const cx = classNames.bind(styles);
 const initVideoPage = { page: 1, limit: 1 };
 
 function VideoList() {
+   const { state: videoState, dispatch: videoDispatch } = useVideo()
    const [videos, setVideos] = useState([]);
    const [videoPage, setVideoPage] = useState(initVideoPage);
+
    const [disabled, setDisabled] = useState(true);
+   const isMatchQuery = useMediaQuery("(max-width: 768px)");
+
    const DOM_list = useRef(null);
    const DOM_loader = useRef(null);
-   const isMatchQuery = useMediaQuery("(max-width: 768px)");
 
    const fetchVideos = useCallback(async (page = 1) => {
       const response = await videoService.getVideo("for-you", page);
@@ -35,6 +41,9 @@ function VideoList() {
    useEffect(() => {
       (async () => {
          const { data, meta } = await fetchVideos(videoPage.page);
+
+         videoDispatch({type: ACTION_VIDEOS_TYPE.CACHING_VIDEOS, payload: data || []})
+
          setVideos(data);
          setVideoPage((prev) => ({
             ...prev,
@@ -49,7 +58,7 @@ function VideoList() {
             const newPage = videoPage.page + 1;
 
             if (newPage <= videoPage.limit) {
-               // console.log("loading successfully!");
+               console.log("loading successfully!");
 
                const { success, data } = await fetchVideos(newPage);
 
@@ -59,6 +68,7 @@ function VideoList() {
                      page: newPage,
                   }));
                   setVideos((prev) => [...prev, ...data]);
+                  videoDispatch({type: ACTION_VIDEOS_TYPE.CACHING_VIDEOS, payload: data || []})
                }
             }
          }
@@ -112,6 +122,7 @@ function VideoList() {
          DOM_list.current?.removeEventListener("scroll", hanldeScroll);
       };
    }, []);
+   
 
    return (
       <div className={cx("wrapper")}>
@@ -149,4 +160,4 @@ function VideoList() {
    );
 }
 
-export default VideoList;
+export default memo(VideoList);

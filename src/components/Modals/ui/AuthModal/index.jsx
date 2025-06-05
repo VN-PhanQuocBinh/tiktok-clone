@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useUI } from "../../contexts/UIContext/UIContext";
+import { useUI } from "../../../../contexts/UIContext/UIContext";
 
 import LoginItem from "./LoginItem";
 import SignupForm_email from "./SignupForm_email";
 import LoginForm_email from "./LoginForm_email";
 
-import { loginMethods, signupMethods } from "../../fakeDB";
+import { loginMethods, signupMethods } from "../../../../fakeDB";
 import {
    ACTION_MODAL_TYPES,
    AUTH_TYPE,
    AUTH_TYPE as FORM_TYPE,
-} from "../../constants";
+} from "../../../../constants";
 
-import { Icon_XMark } from "../../assets/Icons";
+import { Icon_XMark } from "../../../../assets/Icons";
 
-import styles from "../../assets/styles/components/AuthModal.module.scss";
+import styles from "../../../../assets/styles/components/AuthModal.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

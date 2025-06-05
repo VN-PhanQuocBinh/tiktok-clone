@@ -3,8 +3,8 @@ import { MODAL_TYPES } from "../../constants"
 import DeleteConfirmComment from "./ui/DeleteConfirmComment"
 import Alert from "./ui/Alert"
 
-import AuthModal from "../AuthModal"
-import LogoutModal from "../AuthModal/LogoutModal"
+import AuthModal from "./ui/AuthModal"
+import LogoutModal from "./ui/AuthModal/LogoutModal"
 
 const MODAL_COMPONENTS = {
    [MODAL_TYPES.CONFIRM_DELETE_COMMENT]: DeleteConfirmComment,

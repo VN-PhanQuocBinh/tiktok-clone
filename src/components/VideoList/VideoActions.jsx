@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect, useMemo } from "react";
+import { useEffect, useState, useLayoutEffect, useMemo, useCallback } from "react";
 import useMediaQuery from "../../hooks/useMediaQuery";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -31,7 +31,11 @@ function VideoActions({
    isFollowed,
    ...props
 }) {
-   const { state: videoState, dispatch: videoDispatch } = useVideo();
+   const {
+      state: videoState,
+      dispatch: videoDispatch,
+      actions: { toggleLikeVideo },
+   } = useVideo();
    const { user, updateFollowingList } = useAuth();
 
    const [isLiked, setIsLiked] = useState(false);
@@ -51,13 +55,20 @@ function VideoActions({
       }
    }, [video]);
 
+   useEffect(() => {
+      setIsLiked(videoState.videosCache[video.uuid]?.isLiked)
+   }, [videoState])
+
    const handleLike = () => {
-      setIsLiked((prev) => !prev);
+      console.log("like");
+      // setIsLiked((prev) => !prev);
+      toggleLikeVideo(video?.uuid)
    };
 
-   const handleFavorite = () => {
+   const handleFavorite = useCallback(() => {
       setIsFavorite((prev) => !prev);
-   };
+      
+   }, [])
 
    const handleFollow = () => {
       const { userId } = videoState;
