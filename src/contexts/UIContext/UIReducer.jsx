@@ -42,7 +42,7 @@ const uiReducer = (state, action) => {
             modalProps: { ...action?.modalProps },
          };
       default:
-         return state;
+         return state
    }
 };
 

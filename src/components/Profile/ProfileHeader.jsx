@@ -5,6 +5,7 @@ import {
    useCallback,
 } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { useFollow } from "../../hooks";
 
 import Image from "../../components/Image";
 
@@ -24,9 +25,10 @@ const cx = classNames.bind(styles);
 
 function ProfileHeader({ user, isOwnProfile }) {
    const {
-      followingList,
-      toggleFollowUser,
+      followingList
    } = useAuth();
+
+   const toggleFollowUser = useFollow()
 
    const followedSet = useMemo(
       () => new Set(followingList?.map((user) => user?.id)),

@@ -1,4 +1,8 @@
 import { createContext, useCallback, useContext, useReducer } from "react";
+import { useUI } from "../UIContext/UIContext";
+
+import { ACTION_MODAL_TYPES, AUTH_TYPE } from "../../constants";
+
 import { initState, videoReducer } from "./VideoReducer";
 
 import {
@@ -12,31 +16,39 @@ const VideoContext = createContext(null);
 
 function VideoProvider({ children }) {
    const [state, dispatch] = useReducer(videoReducer, initState);
+   const { dispatch: uiDispatch } = useUI();
 
    const handleToggleLikeVideo = useCallback(
       async (videoId) => {
-         const currentState = state.videosCache[videoId].isLiked;
-
-         dispatch({
-            type: ACTION_VIDEOS_TYPE.TOGGLE_LIKE_VIDEO,
-            payload: {
-               videoId,
-               value: !currentState,
-            },
-         });
-
          const token = getToken();
-         const { success } = await (currentState
-            ? unlikeVideo(token, videoId)
-            : likeVideo(token, videoId));
 
-         if (!success) {
+         if (token?.length > 0) {
+            const currentState = state.videosCache[videoId].isLiked;
             dispatch({
                type: ACTION_VIDEOS_TYPE.TOGGLE_LIKE_VIDEO,
                payload: {
                   videoId,
-                  value: currentState,
+                  value: !currentState,
                },
+            });
+
+            const { success } = await (currentState
+               ? unlikeVideo(token, videoId)
+               : likeVideo(token, videoId));
+
+            if (!success) {
+               dispatch({
+                  type: ACTION_VIDEOS_TYPE.TOGGLE_LIKE_VIDEO,
+                  payload: {
+                     videoId,
+                     value: currentState,
+                  },
+               });
+            }
+         } else {
+            uiDispatch({
+               type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+               modalProps: { type: AUTH_TYPE.LOGIN_OPTIONS },
             });
          }
       },

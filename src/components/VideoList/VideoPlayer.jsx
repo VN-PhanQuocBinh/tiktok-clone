@@ -28,8 +28,6 @@ function VideoPlayer(
    const DOM_video = useRef(null);
 
    useEffect(() => {
-      // console.log(DOM_video.current, videoState);
-
       if (DOM_video.current) {
          DOM_video.current.volume = videoState.volumeValue.current;
       }
@@ -41,10 +39,7 @@ function VideoPlayer(
          return {
             play: () => DOM_video.current.play(),
             pause: () => DOM_video.current.pause(),
-            // setVolume: (value) => (DOM_video.current.volume = value),
             seekTo: (time) => {
-               // console.log("seek: ", time);
-
                if (DOM_video.current) {
                   DOM_video.current.currentTime = time;
                }
@@ -55,25 +50,11 @@ function VideoPlayer(
    );
 
    useEffect(() => {
-      const handleClick = () => {
-         onDisplayStateBtn(DOM_video.current?.paused, true);
-      };
-
-      DOM_video.current?.addEventListener("click", handleClick);
-
-      return () => {
-         DOM_video.current?.removeEventListener("click", handleClick);
-      };
-   }, []);
-
-   useEffect(() => {
       const observer = new IntersectionObserver(
          ([entry]) => {
             if (entry.isIntersecting) {
-               // DOM_video.current?.play()
                onDisplayStateBtn(true, false);
             } else {
-               // DOM_video.current?.pause();
                onDisplayStateBtn(false, false);
             }
          },
@@ -95,8 +76,6 @@ function VideoPlayer(
       const video = DOM_video.current;
 
       const handleLoadedMetadata = () => {
-         // console.dir(video);
-
          onDurationChange?.(video?.duration);
          onLoadedMetaData(video?.clientWidth, video?.clientHeight);
       };

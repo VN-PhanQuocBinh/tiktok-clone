@@ -28,7 +28,7 @@ const cx = classNames.bind(styles);
 
 function VideoItem({ className, video }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
-   const { followingList, toggleFollowUser } = useAuth();
+   const { followingList } = useAuth();
    const followedSet = useMemo(
       () =>
          new Set(
@@ -40,7 +40,7 @@ function VideoItem({ className, video }) {
    );
 
    const DOM_videoItem = useRef(null);
-   const DOM_videoWrapper = useRef(null);
+   const DOM_clickListener = useRef(null);
    const DOM_moreMenu = useRef(null);
    const DOM_video = useRef(null);
 
@@ -55,7 +55,7 @@ function VideoItem({ className, video }) {
 
    const isFollowed = useMemo(
       () => followedSet.has(video?.user?.id),
-      [followedSet]
+      [followedSet, video]
    );
    const [isMuted, setIsMuted] = useState(false);
    // true: landscape, false: portrait
@@ -89,9 +89,6 @@ function VideoItem({ className, video }) {
                userId: video?.user?.id,
             },
          });
-
-         // update followed
-         // setIsFollowed(followedSet.has(video?.user?.id));
       }
 
       // Move more menu (responsive)
@@ -160,8 +157,6 @@ function VideoItem({ className, video }) {
       DOM_video.current?.seekTo(time);
    }, []);
 
-   // console.log("videoItem re-render");
-
    const handlePlay = useCallback((e) => {
       console.log("play");
 
@@ -175,8 +170,6 @@ function VideoItem({ className, video }) {
    }, []);
 
    const handleChangeVolume = useCallback((value) => {
-      // DOM_video.current?.setVolume(value);
-
       videoDispatch({ type: ACTION_VIDEOS_TYPE.SET_VOLUME, payload: value });
       setIsMuted(value == 0);
    }, []);
@@ -189,33 +182,34 @@ function VideoItem({ className, video }) {
       }
    }, []);
 
-   const handleMuted = useCallback((e) => {
-      e.stopPropagation()
-      setIsMuted((prev) => !prev);
+   const handleMuted = useCallback(
+      (e) => {
+         e.stopPropagation();
+         setIsMuted((prev) => !prev);
 
-      let newVolumeValue = 0;
-      if (isMuted) {
-         newVolumeValue = videoState.volumeValue.previous;
-      }
-      videoDispatch({
-         type: ACTION_VIDEOS_TYPE.SET_VOLUME,
-         payload: newVolumeValue,
-      });
-   }, [isMuted, videoState]);
+         let newVolumeValue = 0;
+         if (isMuted) {
+            newVolumeValue = videoState.volumeValue.previous;
+         }
+         videoDispatch({
+            type: ACTION_VIDEOS_TYPE.SET_VOLUME,
+            payload: newVolumeValue,
+         });
+      },
+      [isMuted, videoState]
+   );
 
    const handleToggleMore = useCallback((e) => {
       e.stopPropagation();
       setShowMoreMenu((prev) => !prev);
    }, []);
 
-   const handleFollowUser = () => {
-      toggleFollowUser(video?.user, !isFollowed);
-   };
-
-   // const handleClickToControl = useCallback((e) => {
-   //    console.log("click");
-   //    onDisplayStateBtn(!isPlay, true);
-   // }, [isPlay])
+   const handleClickToControl = useCallback(
+      (e) => {
+         onDisplayStateBtn(!isPlay, true);
+      },
+      [isPlay]
+   );
 
    return (
       <li
@@ -224,98 +218,104 @@ function VideoItem({ className, video }) {
             [className]: className,
          })}
       >
-         <div ref={DOM_videoWrapper} className={cx("videoPlayer-wrapper")}>
-            <VideoPlayer
-               className={cx("video-element")}
-               src={video.file_url}
-               onDisplayStateBtn={onDisplayStateBtn}
-               onDurationChange={onDurationChange}
-               onPlay={handlePlay}
-               onPause={handlePause}
-               onLoadedMetaData={handleLoadedMetadata}
-               ref={DOM_video}
-            ></VideoPlayer>
+         <div className={cx("videoPlayer-wrapper")}>
+            <div
+               ref={DOM_clickListener}
+               onClick={handleClickToControl}
+               className={cx("click-listener")}
+            >
+               <VideoPlayer
+                  className={cx("video-element")}
+                  src={video.file_url}
+                  onDisplayStateBtn={onDisplayStateBtn}
+                  onDurationChange={onDurationChange}
+                  onPlay={handlePlay}
+                  onPause={handlePause}
+                  onLoadedMetaData={handleLoadedMetadata}
+                  ref={DOM_video}
+               ></VideoPlayer>
 
-            <div className={cx("overlay-control")}>
-               <span className={cx("volume-icons")}>
-                  {isMuted ? (
-                     <Icon_VolumeSolidXmark onClick={handleMuted} />
-                  ) : (
-                     <Icon_VolumeSolid onClick={handleMuted} />
-                  )}
+               <div className={cx("overlay-control")}>
+                  <span className={cx("volume-icons")}>
+                     {isMuted ? (
+                        <Icon_VolumeSolidXmark onClick={handleMuted} />
+                     ) : (
+                        <Icon_VolumeSolid onClick={handleMuted} />
+                     )}
 
-                  <VolumeControl
-                     className={cx("volume-control")}
-                     onChangeVolume={handleChangeVolume}
-                  />
-               </span>
+                     <VolumeControl
+                        className={cx("volume-control")}
+                        onChangeVolume={handleChangeVolume}
+                     />
+                  </span>
 
-               <span
-                  onClick={handleToggleMore}
-                  className={cx("more-icon-wrapper")}
-               >
-                  <Icon_EllipsisVertical className={cx("more-icon")} />
-
-                  <DropDown
-                     style={{
-                        left: leftMoreMenu,
-                     }}
-                     ref={DOM_moreMenu}
-                     className={cx("more-menu")}
-                     isVisible={showMoreMenu}
+                  <span
+                     onClick={handleToggleMore}
+                     className={cx("more-icon-wrapper")}
                   >
-                     <DropDownItem
-                        type={TYPE.ACTIONS}
-                        item={{
-                           label: "No interested",
-                           icon: Icon_Play,
-                        }}
-                        className={cx("more-item")}
-                     />
+                     <Icon_EllipsisVertical className={cx("more-icon")} />
 
-                     <DropDownItem
-                        type={TYPE.ACTIONS}
-                        item={{
-                           label: "No interested",
-                           icon: Icon_Play,
+                     <DropDown
+                        style={{
+                           left: leftMoreMenu,
                         }}
-                        className={cx("more-item")}
-                     />
+                        ref={DOM_moreMenu}
+                        className={cx("more-menu")}
+                        isVisible={showMoreMenu}
+                     >
+                        <DropDownItem
+                           type={TYPE.ACTIONS}
+                           item={{
+                              label: "No interested",
+                              icon: Icon_Play,
+                           }}
+                           className={cx("more-item")}
+                        />
 
-                     <DropDownItem
-                        type={TYPE.ACTIONS}
-                        item={{
-                           label: "No interested",
-                           icon: Icon_Play,
-                        }}
-                        className={cx("more-item")}
-                     />
-                  </DropDown>
-               </span>
-            </div>
+                        <DropDownItem
+                           type={TYPE.ACTIONS}
+                           item={{
+                              label: "No interested",
+                              icon: Icon_Play,
+                           }}
+                           className={cx("more-item")}
+                        />
 
-            <div className={cx("play-pause-btn")}>
-               {displayStateBtn && isPlay && (
-                  <span>
-                     <Icon_Play className={cx("icon", "play")} />
+                        <DropDownItem
+                           type={TYPE.ACTIONS}
+                           item={{
+                              label: "No interested",
+                              icon: Icon_Play,
+                           }}
+                           className={cx("more-item")}
+                        />
+                     </DropDown>
                   </span>
-               )}
+               </div>
 
-               {displayStateBtn && !isPlay && (
-                  <span>
-                     <Icon_Pause className={cx("icon")} />
-                  </span>
-               )}
-            </div>
-
-            <div className={cx("video-info")}>
-               <h3 className={cx("user-id")}>
-                  {video?.user?.nickname}
-                  {video?.user?.tick && (
-                     <Icon_BlueTick className={cx("tick")} />
+               <div className={cx("play-pause-btn")}>
+                  {displayStateBtn && isPlay && (
+                     <span>
+                        <Icon_Play className={cx("icon", "play")} />
+                     </span>
                   )}
-               </h3>
-               <p className={cx("description")}>{video?.description}</p>
+
+                  {displayStateBtn && !isPlay && (
+                     <span>
+                        <Icon_Pause className={cx("icon")} />
+                     </span>
+                  )}
+               </div>
+
+               <div className={cx("video-info")}>
+                  <h3 className={cx("user-id")}>
+                     {video?.user?.nickname}
+                     {video?.user?.tick && (
+                        <Icon_BlueTick className={cx("tick")} />
+                     )}
+                  </h3>
+                  <p className={cx("description")}>{video?.description}</p>
+               </div>
             </div>
 
             <TimeLine
@@ -332,7 +332,6 @@ function VideoItem({ className, video }) {
             landscape={orientation}
             portrait={!orientation}
             isFollowed={isFollowed}
-            onFollowUser={handleFollowUser}
             className={cx("video-actions", {
                "comment-visible": videoState.isCommentVisible,
             })}

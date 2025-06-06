@@ -5,6 +5,7 @@ import {
    useEffect,
    useState,
 } from "react";
+
 import * as authService from "../services/authService/authService";
 import { follow, unfollow } from "../services/userService/followingService";
 import { getToken, removeToken, saveToken } from "../utils/token";
@@ -31,6 +32,8 @@ const AuthProvider = ({ children }) => {
 
             setFollowingList(_list);
          })();
+      } else {
+         setFollowingList([])
       }
 
       navigate("/");
@@ -39,7 +42,7 @@ const AuthProvider = ({ children }) => {
    useEffect(() => {
       const token = getToken();
 
-      if (token !== "undefined") {
+      if (token) {
          (async () => {
             const response = await authService.getCurrentUser(token);
 
@@ -48,7 +51,6 @@ const AuthProvider = ({ children }) => {
                setIsLoggedOut(false);
                setIsLoggedIn(true);
             } else {
-               // console.log("GET CURRENT USER: ", response?.message);
                setIsLoggedIn(false);
                setIsLoggedOut(true);
             }
@@ -147,23 +149,6 @@ const AuthProvider = ({ children }) => {
       }
    };
 
-   const toggleFollowUser = useCallback(async (user, followed) => {
-      const token = getToken();
-      const userId = user?.id
-
-      // setFollowed(!prevFollowed);
-      updateFollowingList(user, followed)
-      const response = await(
-         followed ? follow(token, userId) : unfollow(token, userId)
-      );
-
-      // console.log(response);
-
-      if (!response.success) {
-         updateFollowingList(user, !followed);
-      } 
-   }, []);
-
    return (
       <AuthContext.Provider
          value={{
@@ -176,7 +161,7 @@ const AuthProvider = ({ children }) => {
             isRegistering,
             isLoggingIn,
             followingList,
-            toggleFollowUser,
+            updateFollowingList
          }}
       >
          {/* CHILDREND */}

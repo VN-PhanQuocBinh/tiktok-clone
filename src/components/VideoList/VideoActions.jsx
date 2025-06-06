@@ -1,9 +1,14 @@
-import { useEffect, useState, useLayoutEffect, useMemo, useCallback } from "react";
-import useMediaQuery from "../../hooks/useMediaQuery";
+import { useState, useMemo, useCallback } from "react";
+import { useMediaQuery, useFollow } from "../../hooks";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
+import { useUI } from "../../contexts/UIContext/UIContext";
 
-import { ACTION_VIDEOS_TYPE } from "../../constants";
+import {
+   ACTION_VIDEOS_TYPE,
+   ACTION_MODAL_TYPES,
+   AUTH_TYPE,
+} from "../../constants";
 
 import {
    Icon_HeartRegular,
@@ -26,7 +31,6 @@ function VideoActions({
    landscape,
    portrait,
    isFollowed,
-   onFollowUser,
    ...props
 }) {
    const {
@@ -34,31 +38,48 @@ function VideoActions({
       dispatch: videoDispatch,
       actions: { toggleLikeVideo },
    } = useVideo();
-   const { user } = useAuth();
+   const { user, isLoggedIn } = useAuth();
+   const { dispatch: uiDispatch } = useUI();
+   const toggleFollow = useFollow();
 
-   const isLiked = useMemo(() => videoState.videosCache[video.uuid]?.isLiked, [videoState])
+   const isLiked = useMemo(
+      () => videoState.videosCache[video.uuid]?.isLiked,
+      [videoState]
+   );
    const [isFavorite, setIsFavorite] = useState(false);
-   const followed = useMemo(() => isFollowed, [isFollowed])
+   const followed = useMemo(() => isFollowed, [isFollowed]);
 
    const isMatchQuery = useMediaQuery("(max-width: 768px)");
 
    const handleLike = () => {
       console.log("like");
-      toggleLikeVideo(video?.uuid)
+      toggleLikeVideo(video?.uuid);
    };
 
    const handleFavorite = useCallback(() => {
       setIsFavorite((prev) => !prev);
-      
-   }, [])
+   }, []);
 
-   const handleComment = () => {
-      if (videoState.isCommentVisible) {
-         videoDispatch({ type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT });
+   const handleComment = useCallback(() => {
+      console.log(isLoggedIn);
+
+      if (isLoggedIn) {
+         if (videoState.isCommentVisible) {
+            videoDispatch({ type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT });
+         } else {
+            videoDispatch({ type: ACTION_VIDEOS_TYPE.OPEN_COMMENT });
+         }
       } else {
-         videoDispatch({ type: ACTION_VIDEOS_TYPE.OPEN_COMMENT });
+         uiDispatch({
+            type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+            modalProps: { type: AUTH_TYPE.LOGIN_OPTIONS },
+         });
       }
-   };
+   }, [isLoggedIn, videoState]);
+
+   const handleFollowUser = useCallback(() => {
+      toggleFollow(video?.user, !followed);
+   }, [toggleFollow]);
 
    return (
       <div
@@ -77,7 +98,7 @@ function VideoActions({
             <Image className={cx("avt-img")} src={video.user.avatar} />
             {video?.user?.id !== user?.id && (
                <span
-                  onClick={onFollowUser}
+                  onClick={handleFollowUser}
                   className={cx("follow-icon", { followed: followed })}
                >
                   {followed ? (

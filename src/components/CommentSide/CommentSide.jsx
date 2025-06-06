@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useUI } from "../../contexts/UIContext/UIContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 import CommentItem from "./CommentItem";
 import CommentSideSkeleton from "./CommentItemSkeleton";
@@ -67,6 +68,7 @@ const skeletonReducer = (state, action) => {
 function CommentSide({ className }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
    const { dispatch: uiDispatch } = useUI();
+   const { isLoggedIn } = useAuth()
 
    const currentVideoId = useMemo(() => videoState.videoId, [videoState]);
    const [commentValue, setCommentValue] = useState("");
@@ -103,7 +105,7 @@ function CommentSide({ className }) {
 
    // Handle Animation open/close
    useEffect(() => {
-      if (videoState.isCommentVisible) {
+      if (videoState.isCommentVisible && isLoggedIn) {
          setVisible(true);
          setAnimation(true);
       } else {
@@ -112,7 +114,7 @@ function CommentSide({ className }) {
             setVisible(false);
          }, 200); // delay 300ms to allow the animation to finish
       }
-   }, [videoState]);
+   }, [videoState, isLoggedIn]);
 
    const getCommentsByPage = useCallback(
       async (page = 1) => {

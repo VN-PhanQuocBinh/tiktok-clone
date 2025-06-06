@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { createContext, useContext } from "react";
 
 import ModalContainer from "../../components/Modals/ModalContainer";
