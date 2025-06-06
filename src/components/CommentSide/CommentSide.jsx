@@ -2,6 +2,7 @@ import {
    useCallback,
    useEffect,
    useLayoutEffect,
+   useMemo,
    useReducer,
    useRef,
    useState,
@@ -67,6 +68,7 @@ function CommentSide({ className }) {
    const { state: videoState, dispatch: videoDispatch } = useVideo();
    const { dispatch: uiDispatch } = useUI();
 
+   const currentVideoId = useMemo(() => videoState.videoId, [videoState]);
    const [commentValue, setCommentValue] = useState("");
    const [comments, setComments] = useState([]);
    const [commentPage, setCommentPage] = useState(initCommentPage);
@@ -86,17 +88,35 @@ function CommentSide({ className }) {
    const DOM_list = useRef(null);
    const DOM_input = useRef(null);
 
-   const currentVideoId = useRef(-1);
+   const currentVideoIdRef = useRef(-1);
    const commentListRef = useRef(comments);
    const commentPageRef = useRef(commentPage);
 
-   const fetchComments = useCallback(
+   // Update ref for caching
+   useEffect(() => {
+      commentListRef.current = comments;
+   }, [comments]);
+
+   useEffect(() => {
+      commentPageRef.current = commentPage;
+   }, [commentPage]);
+
+   // Handle Animation open/close
+   useEffect(() => {
+      if (videoState.isCommentVisible) {
+         setVisible(true);
+         setAnimation(true);
+      } else {
+         setAnimation(false);
+         setTimeout(() => {
+            setVisible(false);
+         }, 200); // delay 300ms to allow the animation to finish
+      }
+   }, [videoState]);
+
+   const getCommentsByPage = useCallback(
       async (page = 1) => {
-         const response = await getComments(
-            getToken(),
-            videoState?.videoId,
-            page
-         );
+         const response = await getComments(getToken(), currentVideoId, page);
 
          const { success, data } = response;
          const { data: commentData, meta } = data || {};
@@ -108,9 +128,38 @@ function CommentSide({ className }) {
             totalComments: meta?.pagination?.total || 0,
          };
       },
-      [commentPage, videoState]
+      [currentVideoId]
    );
 
+   const handleLoadMoreComments = useCallback(
+      async ([entries]) => {
+         const { isIntersecting } = entries;
+
+         const nextPage = commentPage.page + 1;
+         if (isIntersecting && nextPage <= commentPage.limit) {
+            dispatchSkeleton({
+               type: ACTION_SKELETON_TYPE.SET_MORE_LOADING,
+               payload: true,
+            });
+
+            const { success, commentData: newComments } =
+               await getCommentsByPage(nextPage);
+
+            if (success) {
+               setCommentPage((prev) => ({ ...prev, page: nextPage }));
+               setComments((prev) => [...prev, ...newComments]);
+            }
+
+            dispatchSkeleton({
+               type: ACTION_SKELETON_TYPE.SET_MORE_LOADING,
+               payload: false,
+            });
+         }
+      },
+      [commentPage, getCommentsByPage]
+   );
+
+   // Hanlde blur every comment
    useEffect(() => {
       const handleClickOutside = (e) => {
          DOM_comments.current?.forEach((comment) => {
@@ -124,190 +173,23 @@ function CommentSide({ className }) {
       };
    }, [visible, comments]);
 
-   // Caching comments when the component unmounts
-   // useEffect(() => {
-   //    if (
-   //       comments.length > 0 &&
-   //       !_.isEqual(
-   //          videoState.commentsCache[videoState.videoId]?.comments,
-   //          comments
-   //       ) &&
-   //       videoState.videoId === currentVideoId.current
-   //    ) {
-   //       videoDispatch({
-   //          type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
-   //          payload: {
-   //             videoId: videoState.videoId,
-   //             page: commentPage.page,
-   //             limit: commentPage.limit,
-   //             total: commentPage.total,
-   //             comments: comments,
-   //          },
-   //       });
-   //    }
-   // }, [comments, videoState]);
-
-   // Caching comments when the component is unmounted
-   useEffect(() => {
-      return () => {
-         if (visible) {
-            console.log(commentListRef.current);
-
-            const comments = commentListRef.current;
-            const { page, limit, total } = commentPageRef.current;
-
-            videoDispatch({
-               type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
-               payload: {
-                  videoId: videoState.videoId,
-                  commentsCache: {
-                     page,
-                     limit,
-                     total,
-                     comments,
-                  },
-               },
-            });
-         }
-      };
-   }, [visible]);
-
-   // Update ref for caching
-   useEffect(() => {
-      commentListRef.current = comments;
-   }, [comments]);
-
-   useEffect(() => {
-      commentPageRef.current = commentPage;
-   }, [commentPage]);
-
-   // Initial fetch comments when a new video is visible
-   // useEffect(() => {
-   //    const { videoId, commentsCache, isCommentVisible } = videoState;
-
-   //    // Get comments when the videoId changes
-   //    if (videoId && currentVideoId.current != videoId && visible) {
-   //       // Scroll to top when render new video's comments
-   //       DOM_list.current?.scrollTo({
-   //          top: 0,
-   //          behavior: "instant",
-   //       });
-
-   //       // visible skeleton loading when get new video's comments
-   //       dispatchSkeleton({
-   //          type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
-   //          payload: true,
-   //       });
-
-   //       if (!commentsCache[videoId]) {
-   //          (async () => {
-   //             const { success, commentData, maxPage, totalComments } =
-   //                await fetchComments(1);
-
-   //             if (success) {
-   //                // Set comments and pagination
-   //                if (commentData.length > 0) setComments(commentData);
-   //                setCommentPage((prev) => ({
-   //                   ...prev,
-   //                   page: 1,
-   //                   limit: maxPage,
-   //                   total: totalComments,
-   //                }));
-   //             } else {
-   //                // Reset comments and pagnination if fetch failed
-   //                setComments([]);
-   //                setCommentPage(initCommentPage);
-   //             }
-
-   //             // Hide skeleton loading
-   //             dispatchSkeleton({
-   //                type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
-   //                payload: false,
-   //             });
-   //          })();
-   //       } else if (commentsCache[videoId]) {
-   //          // Set comments and pagination
-   //          setComments(commentsCache[videoId].comments);
-   //          setCommentPage((prev) => ({
-   //             ...prev,
-   //             page: commentsCache[videoId].page,
-   //             limit: commentsCache[videoId].limit,
-   //             total: commentsCache[videoId].total,
-   //          }));
-
-   //          // Hide skeleton loading
-   //          dispatchSkeleton({
-   //             type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
-   //             payload: false,
-   //          });
-   //       }
-
-   //       // Update currentVideoId and reset states
-   //       if (currentVideoId.current != videoId) {
-   //          currentVideoId.current = videoId;
-   //       }
-   //    }
-
-   //    // Handle Animation
-   //    if (isCommentVisible) {
-   //       setVisible(true);
-   //       setAnimation(true);
-   //    } else {
-   //       setAnimation(false);
-   //       setTimeout(() => {
-   //          setVisible(false);
-   //       }, 200); // delay 300ms to allow the animation to finish
-   //    }
-   // }, [videoState, visible]);
-
-   // const handleLoadMoreComments = useCallback(
-   //    async ([entries]) => {
-   //       const { isIntersecting } = entries;
-
-   //       const nextPage = commentPage.page + 1;
-   //       if (isIntersecting && nextPage <= commentPage.limit) {
-   //          dispatchSkeleton({
-   //             type: ACTION_SKELETON_TYPE.SET_MORE_LOADING,
-   //             payload: true,
-   //          });
-
-   //          const { success, commentData: newComments } = await fetchComments(
-   //             nextPage
-   //          );
-
-   //          if (success) {
-   //             setCommentPage((prev) => ({ ...prev, page: nextPage }));
-   //             setComments((prev) => [...prev, ...newComments]);
-   //          }
-
-   //          dispatchSkeleton({
-   //             type: ACTION_SKELETON_TYPE.SET_MORE_LOADING,
-   //             payload: false,
-   //          });
-   //       }
-   //    },
-   //    [commentPage, fetchComments]
-   // );
-
    // Intersection Observer to load more comments when the loader is visible
+   useEffect(() => {
+      let observer;
 
-   // Observer load more comment
-   // useEffect(() => {
-   //    let observer;
+      if (visible && DOM_loader.current) {
+         observer = new IntersectionObserver(handleLoadMoreComments, {
+            root: DOM_list.current,
+            rootMargin: "300px",
+            threshold: 0.1,
+         });
 
-   //    if (visible && DOM_loader.current) {
-   //       observer = new IntersectionObserver(handleLoadMoreComments, {
-   //          root: DOM_list.current,
-   //          rootMargin: "300px",
-   //          threshold: 0.1,
-   //       });
+         observer.observe(DOM_loader.current);
+      }
 
-   //       observer.observe(DOM_loader.current);
-   //    }
-
-   //    return () =>
-   //       DOM_loader.current && observer?.unobserve(DOM_loader.current);
-   // }, [visible, handleLoadMoreComments]);
+      return () =>
+         DOM_loader.current && observer?.unobserve(DOM_loader.current);
+   }, [visible, handleLoadMoreComments]);
 
    // Handle placeholder and counter visibility
    useEffect(() => {
@@ -326,11 +208,107 @@ function CommentSide({ className }) {
       }
    }, [commentValue]);
 
+   // store input box's original height
    useEffect(() => {
       if (DOM_input.current) {
          setOriginalHeight(DOM_input.current.clientHeight);
       }
    }, [visible]);
+
+   // Caching comments when the component is unmounted
+   useEffect(() => {
+      return () => {
+         if (visible) {
+            const comments = commentListRef.current;
+            const { page, limit, total } = commentPageRef.current;
+
+            videoDispatch({
+               type: ACTION_VIDEOS_TYPE.CACHING_COMMENTS,
+               payload: {
+                  videoId: videoState.videoId,
+                  commentsCache: {
+                     page,
+                     limit,
+                     total,
+                     comments,
+                  },
+               },
+            });
+         }
+      };
+   }, [visible, currentVideoId]);
+
+   // Initial fetch comments when a new video is visible
+   useEffect(() => {
+      if (visible && currentVideoId !== currentVideoIdRef.current) {
+         const {
+            comments: commentsCacheData,
+            page,
+            limit,
+            total,
+         } = videoState?.videosCache[currentVideoId]?.commentsCache;
+
+         // FOR ANIMATION
+         DOM_list.current?.scrollTo({
+            top: 0,
+            behavior: "instant",
+         });
+
+         // visible skeleton loading when get new video's comments
+         dispatchSkeleton({
+            type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
+            payload: true,
+         });
+
+         // FOR INIT DATA
+         if (commentsCacheData.length == 0) {
+            (async () => {
+               const { success, commentData, maxPage, totalComments } =
+                  await getCommentsByPage(1);
+
+               if (success) {
+                  // Set comments and pagination
+                  setComments(commentData);
+                  setCommentPage((prev) => ({
+                     ...prev,
+                     page: 1,
+                     limit: maxPage,
+                     total: totalComments,
+                  }));
+               } else {
+                  // Reset comments and pagnination if fetch failed
+                  setComments([]);
+                  setCommentPage(initCommentPage);
+               }
+
+               // Hide skeleton loading
+               dispatchSkeleton({
+                  type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
+                  payload: false,
+               });
+            })();
+         } else {
+            // Set comments and pagination
+            setComments(commentsCacheData);
+            setCommentPage((prev) => ({
+               ...prev,
+               page,
+               limit,
+               total,
+            }));
+            // Hide skeleton loading
+            dispatchSkeleton({
+               type: ACTION_SKELETON_TYPE.SET_INIT_LOADING,
+               payload: false,
+            });
+         }
+
+         // Update currentVideoIdRef and reset states
+         if (currentVideoIdRef.current != currentVideoId) {
+            currentVideoIdRef.current = currentVideoId;
+         }
+      }
+   }, [videoState, visible]);
 
    const handleToggleLikeComment = useCallback(
       (commentId) => {
@@ -370,23 +348,22 @@ function CommentSide({ className }) {
       const videoId = videoState?.videoId;
 
       (async () => {
-         const response = await createComment(token, videoId, commentValue);
-         // console.log(response);
+         const {success, data} = await createComment(token, videoId, commentValue);
 
          // reset input value
          DOM_input.current.textContent = "";
          setCommentValue("");
 
-         if (response.success) {
+         if (success) {
             // update comments list
-            setComments((prev) => [response.data, ...prev]);
+            setComments((prev) => [data, ...prev]);
             setCommentPage((prev) => ({
                ...prev,
                total: prev.total + 1,
             }));
 
-            // notify comment created successfully
-            const handleClose = () => {
+            // declare handle close notify function
+            const handleCloseAlert = () => {
                setTimeout(() => {
                   uiDispatch({
                      type: ACTION_MODAL_TYPES.CLOSE_MODAL,
@@ -394,6 +371,7 @@ function CommentSide({ className }) {
                }, 300); // delay 300ms to allow the animation to finish
             };
 
+            // notify create comment successfully
             uiDispatch({
                type: ACTION_MODAL_TYPES.OPEN_ALERT,
                modalProps: {
@@ -401,7 +379,7 @@ function CommentSide({ className }) {
                   openClassName: "slide-down",
                   closeClassName: "slide-up",
                   duration: 3000,
-                  onClose: handleClose,
+                  onClose: handleCloseAlert,
                },
             });
          }

@@ -106,11 +106,8 @@ function VideoList() {
 
       const hanldeScroll = () => {
          clearTimeout(timerId);
-         // console.log("time out...");
 
          timerId = setTimeout(() => {
-            // console.log("completed");
-
             if (DOM_list.current.scrollTop <= 0) setDisabled(true);
             else setDisabled(false);
          }, 250);

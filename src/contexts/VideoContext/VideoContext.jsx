@@ -13,7 +13,7 @@ const VideoContext = createContext(null);
 function VideoProvider({ children }) {
    const [state, dispatch] = useReducer(videoReducer, initState);
 
-   const handleToggleVideo = useCallback(
+   const handleToggleLikeVideo = useCallback(
       async (videoId) => {
          const currentState = state.videosCache[videoId].isLiked;
 
@@ -48,7 +48,7 @@ function VideoProvider({ children }) {
          value={{
             state,
             dispatch,
-            actions: { toggleLikeVideo: handleToggleVideo },
+            actions: { toggleLikeVideo: handleToggleLikeVideo },
          }}
       >
          {children}

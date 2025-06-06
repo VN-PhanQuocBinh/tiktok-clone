@@ -27,12 +27,6 @@ const initState = {
 
 const videoReducer = (state, action) => {
    switch (action.type) {
-      // case ACTION_TYPES.INIT_VIDEOS_CACHE:
-      //    const initVideoCache = {}
-
-      //    return {
-      //       ...state,
-      //    }
       case ACTION_TYPES.UPDATE_VIDEOID:
          return {
             ...state,
@@ -78,8 +72,6 @@ const videoReducer = (state, action) => {
          };
       case ACTION_TYPES.CACHING_COMMENTS: {
          const { videoId, commentsCache } = action.payload;
-         console.log(videoId, commentsCache);
-
          const newVideosCache = {...state.videosCache}
          newVideosCache[videoId] = {...newVideosCache[videoId], commentsCache} 
 
@@ -88,26 +80,6 @@ const videoReducer = (state, action) => {
             videosCache: {...newVideosCache},
          };
       }
-
-      case ACTION_TYPES.TOGGLE_LIKE_COMMENT:
-         const newCommentsCache = state.commentsCache[
-            action.payload.videoId
-         ].comments.map((comment) => {
-            if (comment.id === action.payload.commentId) {
-               return {
-                  ...comment,
-                  is_liked: !comment.is_liked,
-                  likes_count:
-                     comment.likes_count + (comment.likes_count ? 1 : -1),
-               };
-            }
-            return comment;
-         });
-
-         return {
-            ...state,
-            commentsCache: newCommentsCache,
-         };
       case ACTION_VIDEOS_TYPE.SET_VOLUME:
          return {
             ...state,

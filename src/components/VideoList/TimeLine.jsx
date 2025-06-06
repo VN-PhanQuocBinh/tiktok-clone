@@ -50,6 +50,7 @@ function TimeLine({
       };
 
       const handlePointerUp = (e) => {
+         e.stopPropagation()
          let trackWidth = DOM_track.current?.offsetWidth;
 
          onDisplayStateBtn(true, false)
@@ -67,6 +68,8 @@ function TimeLine({
       };
 
       const handlePointerDown = (e) => {
+         e.stopPropagation()
+
          setGrabbing(true);
          setNotTransition(true)
          onDisplayStateBtn(false, false)

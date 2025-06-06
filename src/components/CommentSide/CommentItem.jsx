@@ -111,14 +111,6 @@ function CommentItem({
 
          if (response.success) {
             onToggleLikeComment(commentData.id);
-
-            videoDispatch({
-               type: ACTION_VIDEOS_TYPE.TOGGLE_LIKE_COMMENT,
-               payload: {
-                  videoId: videoState.videoId,
-                  commentId: commentData.id,
-               },
-            });
          } else {
             setIsLiked(oldIsLiked);
             setLikeCount(oldLikeCount);

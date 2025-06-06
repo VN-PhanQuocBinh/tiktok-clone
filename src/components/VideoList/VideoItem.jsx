@@ -40,6 +40,7 @@ function VideoItem({ className, video }) {
    );
 
    const DOM_videoItem = useRef(null);
+   const DOM_videoWrapper = useRef(null);
    const DOM_moreMenu = useRef(null);
    const DOM_video = useRef(null);
 
@@ -52,11 +53,12 @@ function VideoItem({ className, video }) {
    const [duration, setDuration] = useState(0);
    const [orientation, setOrientation] = useState(true);
 
-   const isFollowed = useMemo(() => followedSet.has(video?.user?.id), [followedSet]);
+   const isFollowed = useMemo(
+      () => followedSet.has(video?.user?.id),
+      [followedSet]
+   );
    const [isMuted, setIsMuted] = useState(false);
    // true: landscape, false: portrait
-
-
 
    useEffect(() => {
       const observer = new IntersectionObserver(
@@ -174,7 +176,8 @@ function VideoItem({ className, video }) {
 
    const handleChangeVolume = useCallback((value) => {
       // DOM_video.current?.setVolume(value);
-      videoDispatch({type: ACTION_VIDEOS_TYPE.SET_VOLUME, payload: value})
+
+      videoDispatch({ type: ACTION_VIDEOS_TYPE.SET_VOLUME, payload: value });
       setIsMuted(value == 0);
    }, []);
 
@@ -186,20 +189,33 @@ function VideoItem({ className, video }) {
       }
    }, []);
 
-   const handleMuted = useCallback(() => {
+   const handleMuted = useCallback((e) => {
+      e.stopPropagation()
       setIsMuted((prev) => !prev);
 
-      let newVolumeValue = 0
+      let newVolumeValue = 0;
       if (isMuted) {
-         newVolumeValue = videoState.volumeValue.previous
-      } 
-      videoDispatch({type: ACTION_VIDEOS_TYPE.SET_VOLUME, payload: newVolumeValue})
-      
+         newVolumeValue = videoState.volumeValue.previous;
+      }
+      videoDispatch({
+         type: ACTION_VIDEOS_TYPE.SET_VOLUME,
+         payload: newVolumeValue,
+      });
    }, [isMuted, videoState]);
-   
+
+   const handleToggleMore = useCallback((e) => {
+      e.stopPropagation();
+      setShowMoreMenu((prev) => !prev);
+   }, []);
+
    const handleFollowUser = () => {
-      toggleFollowUser(video?.user, !isFollowed)
-   }
+      toggleFollowUser(video?.user, !isFollowed);
+   };
+
+   // const handleClickToControl = useCallback((e) => {
+   //    console.log("click");
+   //    onDisplayStateBtn(!isPlay, true);
+   // }, [isPlay])
 
    return (
       <li
@@ -208,7 +224,7 @@ function VideoItem({ className, video }) {
             [className]: className,
          })}
       >
-         <div className={cx("videoPlayer-wrapper")}>
+         <div ref={DOM_videoWrapper} className={cx("videoPlayer-wrapper")}>
             <VideoPlayer
                className={cx("video-element")}
                src={video.file_url}
@@ -235,7 +251,7 @@ function VideoItem({ className, video }) {
                </span>
 
                <span
-                  onClick={() => setShowMoreMenu(!showMoreMenu)}
+                  onClick={handleToggleMore}
                   className={cx("more-icon-wrapper")}
                >
                   <Icon_EllipsisVertical className={cx("more-icon")} />
