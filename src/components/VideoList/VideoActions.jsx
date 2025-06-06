@@ -4,6 +4,8 @@ import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUI } from "../../contexts/UIContext/UIContext";
 
+import { useNavigate } from "react-router";
+
 import {
    ACTION_VIDEOS_TYPE,
    ACTION_MODAL_TYPES,
@@ -41,6 +43,8 @@ function VideoActions({
    const { user, isLoggedIn } = useAuth();
    const { dispatch: uiDispatch } = useUI();
    const toggleFollow = useFollow();
+
+   const navigate = useNavigate()
 
    const isLiked = useMemo(
       () => videoState.videosCache[video.uuid]?.isLiked,
@@ -81,6 +85,10 @@ function VideoActions({
       toggleFollow(video?.user, !followed);
    }, [toggleFollow]);
 
+   const handleClickToNavigate = useCallback(() => {
+      navigate(`profile/${video?.user?.nickname}`)
+   }, [])
+
    return (
       <div
          className={
@@ -95,7 +103,7 @@ function VideoActions({
          {...props}
       >
          <button className={cx("avatar-btn")}>
-            <Image className={cx("avt-img")} src={video.user.avatar} />
+            <Image onClick={handleClickToNavigate} className={cx("avt-img")} src={video.user.avatar} />
             {video?.user?.id !== user?.id && (
                <span
                   onClick={handleFollowUser}
