@@ -74,6 +74,7 @@ export {
    Icon_Liked,
    Icon_PlaySolid,
    Icon_Following,
+   Icon_PencilSolid
 } from "./components/Profile";
 
 export {

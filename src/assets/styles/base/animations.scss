@@ -1,9 +1,51 @@
-.slide-down {
-   animation: slideDown 0.3s ease-in-out forwards;
-}
+$animations: (
+   (
+      class: slide-down,
+      keyframe: slideDown,
+      duration: 0.3s,
+      timing: ease-in-out,
+      interation: forwards,
+   ),
+   (
+      class: slide-up,
+      keyframe: slideUp,
+      duration: 0.3s,
+      timing: ease-out,
+      interation: forwards,
+   ),
+   (
+      class: zoom-in,
+      keyframe: zoomIn,
+      duration: 0.3s,
+      timing: ease,
+      interation: forwards,
+   ),
+   (
+      class: zoom-out,
+      keyframe: zoomOut,
+      duration: 0.3s,
+      timing: ease-out,
+      interation: forwards,
+   ),
+   (
+      class: fade-out,
+      keyframe: fadeOut,
+      duration: 0.2s,
+      timing: ease-out,
+      interation: forwards,
+   ),
+);
 
-.slide-up {
-   animation: slideUp 0.3s ease-out forwards;
+@each $animation in $animations {
+   $class: map-get($map: $animation, $key: class);
+   $keyframe: map-get($map: $animation, $key: keyframe);
+   $duration: map-get($map: $animation, $key: duration);
+   $timing: map-get($map: $animation, $key: timing);
+   $interation: map-get($map: $animation, $key: interation);
+
+   .#{$class} {
+      animation: #{$keyframe} #{$duration} #{$timing} #{$interation};
+   }
 }
 
 
@@ -27,6 +69,40 @@
 
    to {
       transform: translateY(-100%);
+      opacity: 0;
+   }
+}
+
+@keyframes zoomIn {
+   from {
+      scale: 0.7;
+      opacity: 0.7;
+   }
+
+   to {
+      scale: 1;
+      opacity: 1;
+   }
+}
+
+@keyframes zoomOut {
+   from {
+      scale: 1;
+      opacity: 1;
+   }
+
+   to {
+      scale: 0.5;
+      opacity: 0;
+   }
+}
+
+@keyframes fadeOut {
+   from {
+      opacity: 1;
+   }
+
+   to {
       opacity: 0;
    }
 }

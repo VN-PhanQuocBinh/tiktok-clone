@@ -5,12 +5,14 @@ import Alert from "./ui/Alert"
 
 import AuthModal from "./ui/AuthModal"
 import LogoutModal from "./ui/AuthModal/LogoutModal"
+import EditProfile from "./ui/EditProfile"
 
 const MODAL_COMPONENTS = {
    [MODAL_TYPES.CONFIRM_DELETE_COMMENT]: DeleteConfirmComment,
    [MODAL_TYPES.ALERT]: Alert,
    [MODAL_TYPES.AUTH_MODALS]: AuthModal,
-   [MODAL_TYPES.CONFIRM_LOGOUT]: LogoutModal
+   [MODAL_TYPES.CONFIRM_LOGOUT]: LogoutModal,
+   [MODAL_TYPES.EDIT_PROFILE]: EditProfile
 }
 
 export default MODAL_COMPONENTS

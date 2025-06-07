@@ -41,6 +41,14 @@ const uiReducer = (state, action) => {
             modalType: MODAL_TYPES.CONFIRM_LOGOUT,
             modalProps: { ...action?.modalProps },
          };
+      case ACTION_MODAL_TYPES.OPEN_EDIT_PROFILE: {
+         return {
+            ...state,
+            isOpen: true,
+            modalType: MODAL_TYPES.EDIT_PROFILE,
+            modalProps: { ...action?.modalProps },
+         }
+      }
       default:
          return state
    }

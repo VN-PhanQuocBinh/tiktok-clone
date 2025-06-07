@@ -1,11 +1,9 @@
-import {
-   useState,
-   useEffect,
-   useMemo,
-   useCallback,
-} from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useFollow } from "../../hooks";
+import { useUI } from "../../contexts/UIContext/UIContext";
+
+import { ACTION_MODAL_TYPES } from "../../constants";
 
 import Image from "../../components/Image";
 
@@ -20,15 +18,12 @@ import {
 import styles from "../../assets/styles/components/Profile/ProfileHeader.module.scss";
 import classNames from "classnames/bind";
 
-
 const cx = classNames.bind(styles);
 
 function ProfileHeader({ user, isOwnProfile }) {
-   const {
-      followingList
-   } = useAuth();
-
-   const toggleFollowUser = useFollow()
+   const { followingList } = useAuth();
+   const { dispatch: uiDispatch } = useUI();
+   const toggleFollowUser = useFollow();
 
    const followedSet = useMemo(
       () => new Set(followingList?.map((user) => user?.id)),
@@ -50,6 +45,16 @@ function ProfileHeader({ user, isOwnProfile }) {
    const handleToggleFollow = useCallback(() => {
       toggleFollowUser(user, !isFollowed);
    }, [toggleFollowUser, isFollowed, user]);
+
+   const handleEditProfile = useCallback(() => {
+      console.log("edit profile");
+      uiDispatch({
+         type: ACTION_MODAL_TYPES.OPEN_EDIT_PROFILE,
+         modalProps: {
+            onClose: () => uiDispatch({ type: ACTION_MODAL_TYPES.CLOSE_MODAL }),
+         },
+      });
+   }, []);
 
    // console.log("re-render");
 
@@ -77,7 +82,9 @@ function ProfileHeader({ user, isOwnProfile }) {
 
             <div className={cx("actions")}>
                <button
-                  onClick={handleToggleFollow}
+                  onClick={
+                     isOwnProfile ? handleEditProfile : handleToggleFollow
+                  }
                   className={cx("edit", { following: isFollowed })}
                >
                   {isOwnProfile ? (

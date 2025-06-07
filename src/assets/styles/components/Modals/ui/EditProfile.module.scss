@@ -1,0 +1,209 @@
+@use "../../../base/variables";
+@use "../../../base/mixins";
+
+$border-body-style-medium: 0.5px solid rgba(255, 255, 255, 0.2);
+$border-body-style-large: 1px solid rgba(255, 255, 255, 0.5);
+
+.wrapper {
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: 200;
+
+   .input-style {
+      border-radius: 2px;
+      resize: none;
+      border: none;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.12);
+      min-height: 38px;
+      width: 100%;
+      padding: 7px 12px;
+      caret-color: variables.$primary-color;
+      color: variables.$text-color;
+   }
+
+   .black-bg {
+      width: 100vw;
+      height: 100vh;
+      background: rgba($color: #000000, $alpha: 0.4);
+      @include mixins.flex-center;
+
+      .modal {
+         position: relative;
+         border-radius: 12px;
+         height: calc(100vh - 64px);
+         width: 700px;
+         background-color: rgba($color: #181818, $alpha: 1);
+         @include mixins.flex-column;
+
+         .header {
+            @include mixins.flex-row;
+            justify-content: space-between;
+            padding: 24px 24px 12px;
+            border-bottom: $border-body-style-medium;
+
+            h2,
+            .icon {
+               color: variables.$text-color;
+            }
+
+            button {
+               .icon {
+                  width: 24px;
+                  height: 24px;
+               }
+            }
+         }
+
+         .inner {
+            padding: 8px 24px 0px;
+            height: calc(100vh - 64px - 72px - 84px);
+            overflow-y: auto;
+
+            &::-webkit-scrollbar {
+               appearance: none;
+               width: 8px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+               background: rgba(255, 255, 255, 0.08);
+               border-radius: 999px;
+            }
+
+            .info-field {
+               @include mixins.flex-row;
+               gap: 24px;
+               justify-content: space-between;
+               padding: 16px 0;
+
+               &.username .description {
+                  margin-top: 16px !important;
+               }
+
+               &.profile-photo {
+                  .content {
+                     @include mixins.flex-center;
+
+                     .input-field {
+                        position: relative;
+                        height: 96px;
+
+                        .avt {
+                           width: 96px;
+                           height: 96px;
+                        }
+
+                        span {
+                           @include mixins.flex-center;
+                           position: absolute; 
+                           overflow: hidden;
+                           bottom: 0;
+                           right: 0;
+                           border-radius: 999px;
+                           
+                           input {
+                              position: absolute;
+                              padding-bottom: 64px;
+                              padding: 0;
+                              opacity: 0;
+                              cursor: pointer;
+                           }
+
+                           .icon {
+                              width: 32px;
+                              background: rgb(46, 46, 46);
+                              height: 32px;
+                              padding: 6px;
+                              border: $border-body-style-large;
+                              border-radius: 999px;
+                              color: variables.$text-color;
+                           }
+                        }
+                     }
+                  }
+               }
+
+               & + .info-field {
+                  border-top: $border-body-style-large;
+               }
+
+               .title {
+                  display: block;
+                  width: 120px;
+                  color: variables.$text-color;
+                  font-weight: 500;
+               }
+
+               .content {
+                  margin-right: 144px;
+                  flex: 1;
+
+                  .input-field {
+                     height: max-content;
+                     input:not([type=file]),
+                     textarea {
+                        @extend .input-style;
+                     }
+                  }
+
+                  .description {
+                     @include mixins.flex-column;
+                     gap: 8px;
+                     margin-top: 8px;
+                     color: variables.$text-color;
+                     font-size: 1.2rem;
+                  }
+               }
+            }
+         }
+
+         .footer {
+            @include mixins.flex-row;
+            justify-content: flex-end;
+            padding: 24px;
+            gap: 12px;
+            border-top: $border-body-style-medium;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba($color: #181818, $alpha: 1);
+
+            button {
+               @include mixins.flex-center;
+               min-height: 36px;
+               min-width: 96px;
+               color: variables.$text-color;
+               font-size: 1.4rem;
+               background: rgba(255, 255, 255, 0.08);
+               border-radius: 4px;
+               font-weight: 500;
+
+               &.cancel-btn {
+                  &:hover {
+                     border: $border-body-style-large;
+                  }
+               }
+
+               &.save-btn {
+                  &.active {
+                     background-color: variables.$primary-color;
+
+                     &:hover {
+                        background: rgba(
+                           $color: variables.$primary-color,
+                           $alpha: 0.8
+                        );
+                     }
+                  }
+
+                  &:disabled {
+                     opacity: 0.7;
+                  }
+               }
+            }
+         }
+      }
+   }
+}

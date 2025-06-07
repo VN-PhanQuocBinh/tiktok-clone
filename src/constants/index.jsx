@@ -40,7 +40,8 @@ const MODAL_TYPES = {
    CONFIRM_DELETE_COMMENT: "confirm_delete_comment",
    ALERT: "alert",
    AUTH_MODALS: "auth_modals",
-   CONFIRM_LOGOUT: "confirm_logout"
+   CONFIRM_LOGOUT: "confirm_logout",
+   EDIT_PROFILE: "edit_profile"
 }
 
 const ACTION_MODAL_TYPES = {
@@ -48,7 +49,8 @@ const ACTION_MODAL_TYPES = {
    OPEN_CONFIRM_DELETE_COMMENT: "open_confirm_delete_comment",
    OPEN_ALERT: "open_alert",
    OPEN_AUTH_MODALS: "auth_modals",
-   OPEN_CONFIRM_LOGOUT: "confirm_logout"
+   OPEN_CONFIRM_LOGOUT: "confirm_logout",
+   OPEN_EDIT_PROFILE: "open_edit_profile"
 }
 
 
