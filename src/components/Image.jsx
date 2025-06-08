@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import { fallback } from "../assets/images";
 
 function Image({
    src,
    fallback: errorImg = fallback,
    ...props
-}) {
+}, ref) {
    const [fallback, setFallback] = useState("");
    
 
@@ -22,6 +22,7 @@ function Image({
 
    return (
       <img
+         ref={ref}
          onError={HandleError}
          src={(src && src !== "https://files.fullstack.edu.vn/f8-tiktok/") ? src : fallback} 
          {...props} 
@@ -30,5 +31,5 @@ function Image({
 }
 
 
-export default Image
+export default forwardRef(Image)
 

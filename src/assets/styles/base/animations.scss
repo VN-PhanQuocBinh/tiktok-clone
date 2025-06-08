@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $animations: (
    (
       class: slide-down,
@@ -37,11 +39,11 @@ $animations: (
 );
 
 @each $animation in $animations {
-   $class: map-get($map: $animation, $key: class);
-   $keyframe: map-get($map: $animation, $key: keyframe);
-   $duration: map-get($map: $animation, $key: duration);
-   $timing: map-get($map: $animation, $key: timing);
-   $interation: map-get($map: $animation, $key: interation);
+   $class: map.get($map: $animation, $key: class);
+   $keyframe: map.get($map: $animation, $key: keyframe);
+   $duration: map.get($map: $animation, $key: duration);
+   $timing: map.get($map: $animation, $key: timing);
+   $interation: map.get($map: $animation, $key: interation);
 
    .#{$class} {
       animation: #{$keyframe} #{$duration} #{$timing} #{$interation};
@@ -83,7 +85,7 @@ $animations: (
       scale: 1;
       opacity: 1;
    }
-}
+} 
 
 @keyframes zoomOut {
    from {

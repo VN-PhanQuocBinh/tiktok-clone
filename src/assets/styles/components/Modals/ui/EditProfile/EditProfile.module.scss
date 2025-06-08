@@ -1,5 +1,5 @@
-@use "../../../base/variables";
-@use "../../../base/mixins";
+@use "../../../../base/variables";
+@use "../../../../base/mixins";
 
 $border-body-style-medium: 0.5px solid rgba(255, 255, 255, 0.2);
 $border-body-style-large: 1px solid rgba(255, 255, 255, 0.5);
@@ -156,6 +156,10 @@ $border-body-style-large: 1px solid rgba(255, 255, 255, 0.5);
                   }
                }
             }
+         }
+
+         .edit-photo {
+            height: calc(100vh - 64px - 72px - 84px);
          }
 
          .footer {
