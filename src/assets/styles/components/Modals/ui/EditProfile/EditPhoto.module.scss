@@ -8,8 +8,8 @@
    .avt-frame {
       width: 100%;
       height: 100%;
-      overflow: visible;
-      mask-image: radial-gradient(circle, black 42%, rgba(0, 0, 0, 0.5) 42%);
+      mask-image: radial-gradient(circle, black 42.5%, rgba(0, 0, 0, 0.5) 42.5%); 
+      //42.5% diagonal of parent element
       position: relative;
       user-select: none;
 
@@ -21,6 +21,7 @@
          @include mixins.flex-center;
 
          .img {
+            cursor: move;
             min-height: 360px;
             min-width: 360px;
             max-height: 100%;
