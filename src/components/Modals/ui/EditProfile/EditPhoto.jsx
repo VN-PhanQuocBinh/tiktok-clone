@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "../../../Image";
+import InputRange from "../../../InputRange";
 
 import styles from "../../../../assets/styles/components/Modals/ui/EditProfile/EditPhoto.module.scss";
 import classNames from "classnames/bind";
@@ -16,92 +17,116 @@ function EditPhoto({ className, src }) {
       x: 0,
       y: 0,
    });
-   const [client, setClient] = useState({ x: 0, y: 0 });
+   const [offset, setOffset] = useState({ x: 0, y: 0 });
    const [dragging, setDragging] = useState(false);
    const DOM_img = useRef(null);
    const DOM_avtFrame = useRef(null);
-   const maxPosition = useRef({ x: 0, y: 0 });
+   const positionLimit = useRef({ maxX: 0, maxY: 0, minX: 0, minY: 0 });
 
    useEffect(() => {
-      const observer = new MutationObserver(() => {
-         console.dir(DOM_img.current);
-         console.dir(DOM_avtFrame.current);
+      const handlePointerUp = (e) => {
+         if (dragging) {
+            console.log("up");
 
-         const { left: imgLeft, top: imgTop } =
-            DOM_img.current?.getBoundingClientRect();
+            setPosition((prev) => {
+               const { maxX, maxY, minX, minY } = positionLimit.current;
+               let newX = prev.currentX;
+               let newY = prev.currentY;
 
-         const {
-            left: avtFrameLeft,
-            top: avtFrameTop,
-            right: avtFrameRight,
-            bottom: avtFrameBottom,
-         } = DOM_avtFrame.current?.getBoundingClientRect();
+               if (newX < minX) newX = minX;
+               else if (newX > maxX) newX = maxX;
 
-         const circleRect = {
-            left: (avtFrameRight + avtFrameLeft) / 2 - CIRCLE_DIAMETER / 2,
-            top: (avtFrameBottom + avtFrameTop) / 2 - CIRCLE_DIAMETER / 2,
-         };
+               if (newY < minY) newY = minY;
+               else if (newY > maxY) newY = maxY;
 
-         console.log(circleRect, imgLeft, imgTop);
+               return {
+                  ...prev,
+                  currentX: newX,
+                  currentY: newY,
+                  x: newX,
+                  y: newY,
+               };
+            });
+            setDragging(false);
+         }
+      };
 
-         const dLeft = circleRect.left - imgLeft;
-         const dTop = circleRect.top - imgTop;
+      document.addEventListener("pointerup", handlePointerUp);
 
-         console.log(dLeft, dTop);
-      });
+      return () => document.removeEventListener("pointerup", handlePointerUp);
+   }, [dragging]);
 
-      if (DOM_img.current) {
-         observer.observe(DOM_img.current, {
-            childList: true,
-            subtree: true
-         })
-      }
+   const handleLoadImg = useCallback(() => {
+      const { left: imgLeft, top: imgTop } =
+         DOM_img.current?.getBoundingClientRect();
 
-      return () => observer.disconnect()
+      const {
+         left: avtFrameLeft,
+         top: avtFrameTop,
+         right: avtFrameRight,
+         bottom: avtFrameBottom,
+      } = DOM_avtFrame.current?.getBoundingClientRect();
+
+      const circleRect = {
+         left: (avtFrameRight + avtFrameLeft) / 2 - CIRCLE_DIAMETER / 2,
+         top: (avtFrameBottom + avtFrameTop) / 2 - CIRCLE_DIAMETER / 2,
+         right: (avtFrameBottom + avtFrameRight) / 2 - CIRCLE_DIAMETER / 2,
+         bottom: (avtFrameBottom + avtFrameBottom) / 2 - CIRCLE_DIAMETER / 2,
+      };
+
+      const dLeft = circleRect.left - imgLeft; // max of x, the negative is min of x
+      const dTop = circleRect.top - imgTop; // max of y, the negative is min of y
+
+      positionLimit.current = {
+         maxX: Math.abs(dLeft),
+         maxY: Math.abs(dTop),
+         minX: -Math.abs(dLeft),
+         minY: -Math.abs(dTop),
+      };
    }, []);
 
-   const handlePointerMove = (e) => {
-      if (!dragging) return;
-      const dX = e.clientX - client.x;
-      const dY = e.clientY - client.y;
-      // console.log(dX, dY);
+   const handlePointerMove = useCallback(
+      (e) => {
+         if (!dragging) return;
+         const dX = e.clientX - offset.x;
+         const dY = e.clientY - offset.y;
 
-      setPosition((prev) => ({
-         ...prev,
-         currentX: prev.x + dX,
-         currentY: prev.y + dY,
-      }));
-   };
+         setPosition((prev) => ({
+            ...prev,
+            currentX: prev.x + dX,
+            currentY: prev.y + dY,
+         }));
+      },
+      [dragging, offset]
+   );
 
    const handlePointerDown = (e) => {
-      setClient({ x: e.clientX, y: e.clientY });
+      setOffset({ x: e.clientX, y: e.clientY });
       setDragging(true);
-      // console.log(`x: ${e.x}, y: ${e.y}`);
-   };
-
-   const handlePointerUp = (e) => {
-      console.log("up");
-      setPosition((prev) => ({ ...prev, x: prev.currentX, y: prev.currentY }));
-      setDragging(false);
    };
 
    return (
       <div className={cx("wrapper") + " " + className}>
          <div ref={DOM_avtFrame} className={cx("avt-frame")}>
-            <div className={cx("img-wrapper")}>
-               <Image
-                  ref={DOM_img}
-                  style={{
-                     translate: `${position.currentX}px ${position.currentY}px`,
-                  }}
-                  className={cx("img")}
-                  src={src}
-                  draggable="false"
-                  onPointerDown={handlePointerDown}
-                  onPointerUp={handlePointerUp}
-                  onPointerMove={handlePointerMove}
-               />
-            </div>
+            {/* <div className={cx("img-wrapper")}> */}
+            <Image
+               ref={DOM_img}
+               style={{
+                  translate: `${position.currentX}px ${position.currentY}px`,
+               }}
+               className={cx("img", { transition: !dragging })}
+               src={src}
+               draggable="false"
+               onPointerDown={handlePointerDown}
+               onPointerMove={handlePointerMove}
+               onLoad={handleLoadImg}
+            />
+            {/* </div> */}
+         </div>
+
+         <div className={cx("zoom-control")}>
+            <span>Zoom</span>
+            <InputRange className={cx("range")} />
          </div>
       </div>
    );

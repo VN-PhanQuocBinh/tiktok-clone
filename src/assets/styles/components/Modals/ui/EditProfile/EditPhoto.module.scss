@@ -3,31 +3,55 @@
 
 .wrapper {
    width: 100%;
-   @include mixins.flex-center;
+   @include mixins.flex-column;
 
    .avt-frame {
       width: 100%;
       height: 100%;
-      mask-image: radial-gradient(circle, black 42.5%, rgba(0, 0, 0, 0.5) 42.5%); 
+      mask-image: radial-gradient(
+         circle,
+         black 42.5%,
+         rgba(0, 0, 0, 0.5) 42.5%
+      );
       //42.5% diagonal of parent element
       position: relative;
       user-select: none;
+      @include mixins.flex-center;
 
+      // .img-wrapper {
+      //    position: absolute;
+      //    height: 100%;
+      //    width: 100%;
+      //    @include mixins.flex-center;
 
-      .img-wrapper {
-         position: absolute;
-         height: 100%;
-         width: 100%;
-         @include mixins.flex-center;
+      .img {
+         cursor: move;
+         min-height: 360px;
+         min-width: 360px;
+         max-height: 100%;
+         max-width: 100%;
+         object-fit: cover;
 
-         .img {
-            cursor: move;
-            min-height: 360px;
-            min-width: 360px;
-            max-height: 100%;
-            max-width: 100%;
-            object-fit: cover;
+         &.transition {
+            transition: translate 0.3s ease-out;
          }
+      }
+      // }
+   }
+
+   .zoom-control {
+      @include mixins.flex-row;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      height: 42px;
+
+      span {
+         color: variables.$text-color;
+      }
+
+      .range {
+         width: 320px;
       }
    }
 }

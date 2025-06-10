@@ -136,7 +136,8 @@
       }
 
       .sections {
-         height: 560px;
+         // height: 560px;
+         height: 100%;
          overflow-y: scroll;
 
          &::-webkit-scrollbar {
