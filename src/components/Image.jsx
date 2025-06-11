@@ -7,7 +7,6 @@ function Image({
    ...props
 }, ref) {
    const [fallback, setFallback] = useState("");
-   
 
    useEffect(() => {
       if (!src) {
@@ -18,9 +17,6 @@ function Image({
    const HandleError = () => {
       setFallback(errorImg);
    };
-   
-   console.log(props);
-   
 
    return (
       <img

@@ -23,12 +23,21 @@ function EditPhoto({ className, src }) {
    const DOM_img = useRef(null);
    const DOM_avtFrame = useRef(null);
    const positionLimit = useRef({ maxX: 0, maxY: 0, minX: 0, minY: 0 });
+   const isImgLoaded = useRef(false);
+   const [circleMaskRatio, setCircleMaskRatio] = useState(0); // 0 <= x <= 1
+
+   useEffect(() => {
+      const { width, height } = DOM_avtFrame.current?.getBoundingClientRect()
+      const ratio = CIRCLE_DIAMETER/Math.sqrt(width*width + height*height)
+      setCircleMaskRatio(ratio)
+   }, [])
 
    useEffect(() => {
       const handlePointerUp = (e) => {
          if (dragging) {
             console.log("up");
 
+            setDragging(false);
             setPosition((prev) => {
                const { maxX, maxY, minX, minY } = positionLimit.current;
                let newX = prev.currentX;
@@ -48,7 +57,6 @@ function EditPhoto({ className, src }) {
                   y: newY,
                };
             });
-            setDragging(false);
          }
       };
 
@@ -57,9 +65,13 @@ function EditPhoto({ className, src }) {
       return () => document.removeEventListener("pointerup", handlePointerUp);
    }, [dragging]);
 
-   const handleLoadImg = useCallback(() => {
-      const { left: imgLeft, top: imgTop } =
-         DOM_img.current?.getBoundingClientRect();
+   const handleUpdatePositionLimit = useCallback((difference) => {
+      const {
+         left: imgLeft,
+         top: imgTop,
+         height: imgHeight,
+         width: imgWidth,
+      } = DOM_img.current?.getBoundingClientRect();
 
       const {
          left: avtFrameLeft,
@@ -75,8 +87,11 @@ function EditPhoto({ className, src }) {
          bottom: (avtFrameBottom + avtFrameBottom) / 2 - CIRCLE_DIAMETER / 2,
       };
 
-      const dLeft = circleRect.left - imgLeft; // max of x, the negative is min of x
-      const dTop = circleRect.top - imgTop; // max of y, the negative is min of y
+      // const dLeft = circleRect.left - imgLeft; // max of x, the negative is min of x
+      // const dTop = circleRect.top - imgTop; // max of y, the negative is min of y
+      const dLeft = (CIRCLE_DIAMETER - imgWidth) / 2; // max of x, the negative is min of x
+      const dTop = (CIRCLE_DIAMETER - imgHeight) / 2; // max of y, the negative is min of y
+      console.log(dLeft, dTop);
 
       positionLimit.current = {
          maxX: Math.abs(dLeft),
@@ -86,11 +101,19 @@ function EditPhoto({ className, src }) {
       };
    }, []);
 
+   const handleLoadImg = useCallback(() => {
+      isImgLoaded.current = true;
+      handleUpdatePositionLimit();
+   }, [handleUpdatePositionLimit]);
+
    const handlePointerMove = useCallback(
       (e) => {
          if (!dragging) return;
          const dX = e.clientX - offset.x;
          const dY = e.clientY - offset.y;
+
+         // console.dir(DOM_img.current.getBoundingClientRect());
+         // console.dir(DOM_img.current);
 
          setPosition((prev) => ({
             ...prev,
@@ -108,21 +131,32 @@ function EditPhoto({ className, src }) {
 
    const handleZoom = useCallback((value) => {
       console.log(value);
-      setZoom(1 + value / 100);
+
+      const ratio = value / 100;
+      setZoom(1 + ratio);
+      // console.log(DOM_img.current.getBoundingClientRect());
+
+      handleUpdatePositionLimit();
    }, []);
 
    const imageStyle = useMemo(
       () => ({
-         transform: `translate(${position.currentX}px, ${position.currentY}px) scale(${zoom})`
-         // translate: `${position.currentX}px ${position.currentY}px`,
-         // scale: zoom,
+         transform: `translate(${position.currentX}px, ${position.currentY}px) scale(${zoom})`,
       }),
       [position, zoom]
    );
 
    return (
       <div className={cx("wrapper") + " " + className}>
-         <div ref={DOM_avtFrame} className={cx("avt-frame")}>
+         <div
+            ref={DOM_avtFrame}
+            style={{
+               maskImage: `radial-gradient(circle, black ${
+                  circleMaskRatio * 100
+               }%, rgba(0, 0, 0, 0.5) ${circleMaskRatio * 100}%`,
+            }}
+            className={cx("avt-frame")}
+         >
             {/* <div className={cx("img-wrapper")}> */}
             <Image
                ref={DOM_img}
