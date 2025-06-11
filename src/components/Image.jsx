@@ -19,6 +19,8 @@ function Image({
       setFallback(errorImg);
    };
    
+   console.log(props);
+   
 
    return (
       <img

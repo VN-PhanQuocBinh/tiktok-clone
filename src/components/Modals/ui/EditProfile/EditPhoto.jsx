@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "../../../Image";
 import InputRange from "../../../InputRange";
 
@@ -17,6 +17,7 @@ function EditPhoto({ className, src }) {
       x: 0,
       y: 0,
    });
+   const [zoom, setZoom] = useState(1);
    const [offset, setOffset] = useState({ x: 0, y: 0 });
    const [dragging, setDragging] = useState(false);
    const DOM_img = useRef(null);
@@ -105,15 +106,27 @@ function EditPhoto({ className, src }) {
       setDragging(true);
    };
 
+   const handleZoom = useCallback((value) => {
+      console.log(value);
+      setZoom(1 + value / 100);
+   }, []);
+
+   const imageStyle = useMemo(
+      () => ({
+         transform: `translate(${position.currentX}px, ${position.currentY}px) scale(${zoom})`
+         // translate: `${position.currentX}px ${position.currentY}px`,
+         // scale: zoom,
+      }),
+      [position, zoom]
+   );
+
    return (
       <div className={cx("wrapper") + " " + className}>
          <div ref={DOM_avtFrame} className={cx("avt-frame")}>
             {/* <div className={cx("img-wrapper")}> */}
             <Image
                ref={DOM_img}
-               style={{
-                  translate: `${position.currentX}px ${position.currentY}px`,
-               }}
+               style={imageStyle}
                className={cx("img", { transition: !dragging })}
                src={src}
                draggable="false"
@@ -126,7 +139,7 @@ function EditPhoto({ className, src }) {
 
          <div className={cx("zoom-control")}>
             <span>Zoom</span>
-            <InputRange className={cx("range")} />
+            <InputRange onChange={handleZoom} className={cx("range")} />
          </div>
       </div>
    );

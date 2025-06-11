@@ -28,12 +28,18 @@ function InputRange({
       setLeftThumb(-(thumbRect.current.width)/2)
 
       const handlePointerMove = (e) => {
+         const trachWidth = trackRect.current?.width
+         const thumbWidth = thumbRect.current?.width
          const min = -(thumbRect.current.width)/2
-         const max = trackRect.current?.width - (thumbRect.current.width)/2
-         let newLeft = (e.clientX - trackRect.current.left) - thumbRect.current.width/2
+         const max = trachWidth - (thumbWidth)/2
+
+         let value = (e.clientX - trackRect.current.left)
+         value = Math.min(Math.max(value, 0), trachWidth)
+
+         let newLeft = value - thumbWidth/2
          newLeft = Math.min(Math.max(newLeft, min), max)
-         console.log(newLeft);
          
+         onChange?.(Math.floor(value/trachWidth * 100))
          setLeftThumb(newLeft)
       };
 
