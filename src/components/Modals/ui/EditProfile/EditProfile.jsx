@@ -38,6 +38,14 @@ function EditProfile({ onClose = () => {} }) {
       }
    }, []);
 
+   const handleSave = useCallback(() => {
+      console.log("save");
+   }, []);
+
+   const handleApply = useCallback(() => {
+      console.log("apply");
+   }, []);
+
    return (
       <div className={cx("wrapper")}>
          <div className={cx("black-bg")}>
@@ -143,9 +151,15 @@ function EditProfile({ onClose = () => {} }) {
                )}
 
                <div className={cx("footer")}>
-                  <button onClick={handleClose} className={cx("cancel-btn")}>Cancel</button>
-                  <button className={cx("save-btn")} disabled>
-                     Save
+                  <button onClick={handleClose} className={cx("cancel-btn")}>
+                     Cancel
+                  </button>
+                  
+                  <button
+                     onClick={avatarPreview ? handleApply : handleSave}
+                     className={cx("save-btn", "active")}
+                  >
+                     {avatarPreview ? "Apply" : "Save"}
                   </button>
                </div>
             </div>
