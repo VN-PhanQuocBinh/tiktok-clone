@@ -3,6 +3,8 @@ import Following from "../pages/Following";
 import Chat from "../pages/Chat";
 import Profile from "../pages/Profile";
 
+import Test from "../pages/Test";
+
 import { LAYOUT_TYPE } from "../constants";
 
 import config from "../config";
@@ -28,6 +30,11 @@ const publicRoutes = [
     element: Profile,
     layout: LAYOUT_TYPE.SIDEBAR_ONLY
   },
+  // {
+  //   path: config.routes.test,
+  //   element: Test,
+  //   layout: LAYOUT_TYPE.NO_LAYOUT
+  // }
 ];
 
 const privateRoutes = [];

@@ -3,7 +3,8 @@ const routes = {
    following: "/following",
    chat: "/chat",
    profile: "/profile/:nickname",
-   videoPage: "/:nickname/video/:videoId"
+   videoPage: "/:nickname/video/:videoId",
+   test: "/"
 }
 
 export default routes

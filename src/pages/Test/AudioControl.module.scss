@@ -1,0 +1,135 @@
+@use "variables";
+
+.border {
+   @extend .liquidGlass-border-style;
+   // border-radius: 999px;
+   // background: rgba(255, 255, 255, 0.01);
+   // backdrop-filter: blur(2px);
+   height: 40px;
+
+   .blur {
+      @extend .liquidGlass-blur-style;
+      // border-radius: 999px;
+      // background: rgba(255, 255, 255, 0.01);
+      // box-shadow: 0px 0px 8px 2px rgba(255, 255, 255, 0.1) inset;
+      // backdrop-filter: blur(4px);
+      height: 100%;
+      width: 100%;
+
+      .wrapper {
+         height: 100%;
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: space-between;
+         gap: 2px;
+         padding: 0 8px;
+         width: 100%;
+
+         .img-wrapper {
+            flex: 1;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            padding: 0 4px;
+
+            img {
+               border-radius: 2px;
+               width: 24px;
+               height: 24px;
+               object-fit: cover;
+            }
+         }
+
+         .info {
+            color: white;
+            flex-shrink: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: hidden;
+
+            max-width: 60%;
+
+            span {
+               display: block;
+            }
+
+            .music-name-slider {
+               display: flex;
+               flex-direction: row;
+               gap: 50px;
+               animation: scroll-left 20s ease-out infinite;
+
+               span {
+                  // width: max-content;
+                  min-width: 100%;
+                  font-weight: 500;
+                  font-size: 10px;
+                  text-wrap: nowrap;
+                  overflow: hidden;
+               }
+
+               .name-1 {
+                  // animation: init-scroll-left 5s 2s ease-out forwards,
+                  //    scroll-left 10s ease-out infinite;
+               }
+
+               .name-2 {
+               }
+            }
+
+            .author-name {
+               font-size: 8px;
+            }
+         }
+
+         .controls {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            padding-right: 8px;
+
+            .icon {
+               width: 20px;
+               height: 20px;
+               color: white;
+
+               &.pause {
+                  width: 28px;
+                  height: 28px;
+               }
+
+               &.next {
+               }
+            }
+         }
+      }
+   }
+}
+
+@keyframes init-scroll-left {
+   from {
+      translate: 0;
+   }
+
+   to {
+      translate: -100%;
+   }
+}
+
+@keyframes scroll-left {
+   0% {
+      translate: 0;
+   }
+
+   50% {
+      translate: calc(-100% - 50px);
+   }
+
+   100% {
+      translate: calc(-100% - 50px);
+   }
+}

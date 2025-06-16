@@ -27,16 +27,12 @@ function InputRange({ className, onChange, ...props }) {
          const {
             width: trackWidth,
             x: trackX,
-            y: trackY,
          } = trackRect.current;
          const thumbWidth = thumbRect.current?.width;
          const min = -thumbRect.current.width / 2;
          const max = trackWidth - thumbWidth / 2;
 
-         // let value = (e.clientX - trackRect.current.left)
-         let value = Math.sqrt(
-            Math.pow(e.clientX - trackX, 2) + Math.pow(e.clientY - trackY, 2)
-         );
+         let value = e.clientX - trackX
          value = Math.min(Math.max(value, 0), trackWidth);
 
          let newLeft = value - thumbWidth / 2;
@@ -67,7 +63,7 @@ function InputRange({ className, onChange, ...props }) {
             handlePointerDown
          );
       };
-   }, []);
+   }, []); 
 
    return (
       <div

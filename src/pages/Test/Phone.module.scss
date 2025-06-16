@@ -1,0 +1,268 @@
+@use "variables";
+
+$transition-style: all 0.3s ease-out;
+
+.container {
+   margin: auto;
+   // margin-top: 20px;
+   width: 300px;
+   height: 650px;
+   border-radius: 30px;
+   background: #0a071e;
+   box-shadow: 2px 2px 30px 6px rgba(0, 0, 0, 0.5);
+   position: relative;
+   overflow: hidden;
+   border: 6px solid #555;
+   box-sizing: content-box;
+
+   .gradient-circle {
+      position: absolute;
+      top: 40%;
+      left: -30%;
+      width: 300px;
+      height: 300px;
+      flex-shrink: 0;
+      border-radius: 269.005px;
+      background: #781ecf;
+      filter: blur(109.28736114501953px);
+      // z-index: -1;
+   }
+
+   .inner {
+      height: 100%;
+      width: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+
+      &::-webkit-scrollbar {
+         appearance: none;
+      }
+
+      .header {
+         margin-top: 40px;
+         display: flex;
+         flex-direction: column;
+
+         h3 {
+            color: white;
+            font-size: 24px;
+         }
+
+         span {
+            color: #a5a5a5;
+            font-size: 12px;
+         }
+      }
+
+      .category-section {
+         .tab {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+
+            li {
+               color: #a5a5a5;
+               text-wrap: nowrap;
+               font-size: 12px;
+            }
+
+            li:first-child {
+               color: white;
+
+               &::after {
+                  display: block;
+                  content: "";
+                  width: 100%;
+                  height: 2px;
+                  background: linear-gradient(
+                     90deg,
+                     #c22bb7 3.67%,
+                     #922ff5 87.92%
+                  );
+               }
+            }
+         }
+
+         .categories {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+
+            li {
+               display: flex;
+               flex-direction: column;
+
+               img {
+                  width: 160px;
+                  height: 160px;
+                  border-radius: 8px;
+               }
+
+               .name,
+               .description {
+                  padding: 0 4px;
+               }
+
+               .name {
+                  font-size: 12px;
+                  margin-top: 8px;
+                  color: white;
+               }
+
+               .description {
+                  font-size: 10px;
+                  color: #a5a5a5;
+               }
+            }
+         }
+      }
+
+      .favorite {
+         .title {
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+         }
+
+         ul {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            li {
+               display: flex;
+               flex-direction: row;
+               justify-content: space-between;
+               gap: 12px;
+
+               img {
+                  width: 42px;
+                  height: 42px;
+                  border-radius: 4px;
+                  object-fit: cover;
+               }
+
+               .content {
+                  flex: 1;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  max-width: 60%;
+
+                  span {
+                     display: block;
+                     width: 100%;
+                  }
+
+                  span:first-child {
+                     font-size: 12px;
+                     color: white;
+                     overflow: hidden;
+                     text-overflow: ellipsis;
+                     text-wrap: nowrap;
+                  }
+
+                  span:last-child {
+                     font-size: 8px;
+                     color: #a5a5a5;
+                  }
+               }
+
+               > span {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 32px;
+                  font-size: 8px;
+                  color: white;
+               }
+            }
+         }
+      }
+   }
+
+   .overlay-control {
+      width: calc(100% - 2 * 12px);
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+
+      &.collapsed {
+         .audio-control {
+            bottom: 0;
+            left: calc(40px + 4px);
+            width: calc(100% - 2 * 4px - 2 * 40px);
+            transition: bottom 0.3s ease-out, left 0.1s ease-out,
+               width 0.1s ease-out !important;
+         }
+
+         .navbar {
+            flex: 0;
+         }
+
+         .search-btn {
+            width: 40px;
+            height: 40px;
+         }
+      }
+
+      .audio-control {
+         flex: 1;
+         position: absolute;
+         bottom: calc(100% + 4px);
+         left: 0;
+         width: 100%;
+         // transition: $transition-style;
+         transition: bottom 0.15s ease-out, left 0.2s ease-in-out 0.05s,
+            width 0.2s ease-in-out 0.05s;
+
+         transform-origin: 50% 50%;
+      }
+
+      .navbar {
+         min-width: 40px;
+         flex: 1;
+         flex-shrink: 1;
+      }
+
+      .search-btn {
+         width: 48px;
+         height: 48px;
+         // transition: $transition-style;
+         transition: all 0.15s ease-in-out;
+
+         .border {
+            @extend .liquidGlass-border-style;
+            width: 100%;
+            height: 100%;
+
+            .blur {
+               @extend .liquidGlass-blur-style;
+               width: 100%;
+               height: 100%;
+               display: grid;
+               place-items: center;
+
+               .icon {
+                  width: 20px;
+                  height: 20px;
+               }
+            }
+         }
+      }
+   }
+}

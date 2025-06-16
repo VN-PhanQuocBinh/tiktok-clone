@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 const CIRCLE_DIAMETER = 360;
 // 2 * radius
 
-function EditPhoto({ className, src, handleSave }) {
+function EditPhoto({ className, src, updateImageCrop }) {
    const [position, setPosition] = useState({
       currentX: 0,
       currentY: 0,
@@ -35,6 +35,14 @@ function EditPhoto({ className, src, handleSave }) {
          CIRCLE_DIAMETER / Math.sqrt(width * width + height * height);
       setCircleMaskRatio(ratio);
    }, []);
+
+   useEffect(() => {
+      if (!dragging) {
+         console.log("update");
+         
+         updateImageCrop({x: position.x, y: position.y, zoom})
+      }
+   }, [position, zoom, dragging])
 
    const applyBoundedPosition = useCallback(() => {
       setPosition((prev) => {
@@ -64,7 +72,7 @@ function EditPhoto({ className, src, handleSave }) {
          if (dragging) {
             setDragging(false);
             setTransition(true);
-            applyBoundedPosition()
+            applyBoundedPosition();
          }
       };
 
@@ -73,11 +81,9 @@ function EditPhoto({ className, src, handleSave }) {
       return () => document.removeEventListener("pointerup", handlePointerUp);
    }, [dragging, applyBoundedPosition]);
 
-   const handleUpdatePositionLimit = useCallback(function() {
-      const {
-         height: imgHeight,
-         width: imgWidth,
-      } = DOM_img.current?.getBoundingClientRect();
+   const handleUpdatePositionLimit = useCallback(function () {
+      const { height: imgHeight, width: imgWidth } =
+         DOM_img.current?.getBoundingClientRect();
 
       const dLeft = (CIRCLE_DIAMETER - imgWidth) / 2; // max of x, the negative is min of x
       const dTop = (CIRCLE_DIAMETER - imgHeight) / 2; // max of y, the negative is min of y
@@ -92,10 +98,10 @@ function EditPhoto({ className, src, handleSave }) {
 
    // handle when change zoom
    useEffect(() => {
-      setTransition(false)
-      handleUpdatePositionLimit()
-      applyBoundedPosition()
-   }, [zoom, handleUpdatePositionLimit])
+      setTransition(false);
+      handleUpdatePositionLimit();
+      applyBoundedPosition();
+   }, [zoom, handleUpdatePositionLimit]);
 
    const handleLoadImg = useCallback(() => {
       isImgLoaded.current = true;
@@ -108,7 +114,7 @@ function EditPhoto({ className, src, handleSave }) {
          const dX = e.clientX - offset.x;
          const dY = e.clientY - offset.y;
 
-         setTransition(false)
+         setTransition(false);
          setPosition((prev) => ({
             ...prev,
             currentX: prev.x + dX,
@@ -130,17 +136,17 @@ function EditPhoto({ className, src, handleSave }) {
 
    const handleScroll = useCallback((e) => {
       // setTransition(false)
-      setZoom(prev => {
-         const zoomSpeed = 0.1
-         const type = -e.deltaY/Math.abs(e.deltaY)
+      setZoom((prev) => {
+         const zoomSpeed = 0.1;
+         const type = -e.deltaY / Math.abs(e.deltaY);
          // up -> type = -1, down -> type = 1
 
-         const tmpValue = prev + type*zoomSpeed
-         const newValue = Math.min(Math.max(1, tmpValue), 2)
-         
-         return newValue
-      })
-   }, [])
+         const tmpValue = prev + type * zoomSpeed;
+         const newValue = Math.min(Math.max(1, tmpValue), 2);
+
+         return newValue;
+      });
+   }, []);
 
    const imageStyle = useMemo(
       () => ({

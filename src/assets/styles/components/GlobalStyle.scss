@@ -20,6 +20,7 @@ body {
    line-height: variables.$line-height;
    text-rendering: optimizeSpeed;
    background-color: variables.$page-bg-color;
+   // background-color: white;
    overflow: hidden;
    height: 100vh;
 }

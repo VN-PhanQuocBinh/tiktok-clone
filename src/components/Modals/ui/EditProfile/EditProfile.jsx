@@ -1,8 +1,10 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import EditPhoto from "./EditPhoto";
 import Image from "../../../Image";
 import { Icon_PencilSolid, Icon_XMark } from "../../../../assets/Icons";
+
+import { cropImage } from "../../../../utils/cropImage";
 
 import styles from "../../../../assets/styles/components/Modals/ui/EditProfile/EditProfile.module.scss";
 import classNames from "classnames/bind";
@@ -22,29 +24,48 @@ function EditProfile({ onClose = () => {} }) {
    const [animation, setAnimation] = useState(true);
    // true: opening, false: closing
 
+   const imageCrop = useRef(null)
+
    const handleClose = useCallback(() => {
       setAnimation(false);
       const timer = setTimeout(() => {
          onClose();
-      }, 200); //delay 100ms allow the animation to finish
+      }, 200); //delay 200ms allow the animation to finish
+
+      return () => clearTimeout(timer)
    }, [onClose]);
 
    const handleUploadFile = useCallback((e) => {
       console.dir(e.target.files[0]);
       const file = e.target.files[0];
       if (file) {
-         setAvatarPreview(URL.createObjectURL(file));
+         const url = URL.createObjectURL(file)
+         setAvatarPreview(url);
          setShowEditPhoto(true);
       }
+
+      return () => URL.revokeObjectURL(url)
    }, []);
 
    const handleSave = useCallback(() => {
       console.log("save");
    }, []);
 
-   const handleApply = useCallback(() => {
+   const handleApply = useCallback(async () => {
       console.log("apply");
+      
+      // const blob = await cropImage({
+         
+      // })
    }, []);
+
+   const updateImageCrop = useCallback((crop) => {
+      // console.log(crop);
+      
+      imageCrop.current = {...crop}
+      console.log(imageCrop.current);
+      
+   }, [])
 
    return (
       <div className={cx("wrapper")}>
@@ -147,7 +168,7 @@ function EditProfile({ onClose = () => {} }) {
                      </div>
                   </form>
                ) : (
-                  <EditPhoto className={cx("edit-photo")} src={avatarPreview} />
+                  <EditPhoto updateImageCrop={updateImageCrop} className={cx("edit-photo")} src={avatarPreview} />
                )}
 
                <div className={cx("footer")}>

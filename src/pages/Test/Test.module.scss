@@ -1,0 +1,220 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap");
+
+.container {
+   font-family: "Jost", sans-serif;
+   width: 100vw;
+   height: 100vh;
+   background-color: #20262e;
+   position: relative;
+
+   .circle {
+      position: absolute;
+      border-radius: 999px;
+      // background-image: radial-gradient(#7f00ff, transparent);
+      box-shadow: 0 0 300px 200px rgba(100, 29, 133, 0.4);
+      width: 0px;
+      height: 0px;
+      filter: blur(100px);
+      // background-color: rgba(100, 29, 133, 0.4);
+      // backdrop-filter: blur(100px);
+   }
+
+   .circle-1 {
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      animation: zoomIn 1s ease-out forwards;
+   }
+
+   .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-bottom: 32px;
+      transition: all 1s ease-out;
+
+      &.hide {
+         top: 20px;
+         translate: -50% 0;
+
+         h1 {
+            font-size: 56px;
+            text-align: center;
+         }
+
+         .sub-title {
+            opacity: 0;
+         }
+      }
+
+      &.frame_1 {
+         .sub-title .div1 {
+            opacity: 1;
+
+         }
+      }
+
+      &.frame_2 {
+         .sub-title .div1 {
+            translate: 0;
+            transition: all 0.5s ease-out;
+         }
+
+         .sub-title .div2 {
+            opacity: 1;
+            translate: 0 0;
+            transition: all 0.3s 0.2s ease-out;
+         }
+
+         .sub-title .div3 {
+            opacity: 1;
+            translate: 0 0;
+            transition-delay: 0.3s;
+         }
+      }
+
+      &.frame_3 {
+         h1 {
+            animation: fadeIn 1s 0.4s ease-out forwards;
+            translate: 0 0;
+         }
+
+         .sub-title {
+            translate: 0 0;
+         }
+
+         .sub-title .div1,
+         .sub-title .div2,
+         .sub-title .div3 {
+            font-size: 28px;
+            transition: all 0.75s ease-out, font-size 0.4s linear;
+         }
+      }
+
+      h1 {
+         background-image: linear-gradient(to right, #7f00ff, #e100ff);
+         background-size: 100%;
+         background-clip: text;
+         color: transparent;
+         font-size: 96px;
+         font-weight: 500;
+         text-wrap: nowrap;
+         opacity: 0;
+         transition: all 1s ease-out;
+         translate: 0 -20px;
+      }
+
+      .sub-title {
+         display: flex;
+         flex-direction: row;
+         justify-content: center;
+         gap: 16px;
+         color: white;
+         // font-size: 28px;
+         width: 100%;
+         transition: all 0.4s ease-in-out;
+         translate: 0px -54px;
+
+         > div {
+            transition: all 0.3s ease-out;
+            font-size: 40px;
+         }
+
+         .div1 {
+            translate: 176px;
+
+            opacity: 0;
+            // animation: animation-1 0.5s 1.15s ease-out forwards;
+         }
+
+         .div2 {
+            opacity: 0;
+            // animation: animation-2 0.5s 1.25s ease-out forwards;
+         }
+
+         .div3 {
+            translate: 0 20px;
+            opacity: 0;
+            // animation: animation-3 0.5s 1.4s ease-out forwards;
+         }
+      }
+   }
+
+   .phone {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -45%;
+      transition: all 1s ease-out;
+      scale: 1;
+
+      &.hide {
+         translate: -50% 700px;
+      }
+
+      &.zoom {
+         scale: 2;
+         translate: -50% -800px;
+      }
+   }
+}
+
+@keyframes fadeIn {
+   from {
+      opacity: 0;
+   }
+
+   to {
+      opacity: 1;
+   }
+}
+
+@keyframes zoomIn {
+   from {
+      box-shadow: 0 0 300px 200px rgb(100, 29, 133, 0.1);
+   }
+
+   to {
+      box-shadow: 0 0 300px 200px rgba(100, 29, 133, 0.4);
+   }
+}
+
+@keyframes animation-1 {
+   from {
+      translate: 0 20px;
+      opacity: 0;
+   }
+
+   to {
+      translate: 0 0;
+      opacity: 1;
+   }
+}
+
+@keyframes animation-2 {
+   from {
+      opacity: 0;
+      translate: 0 20px;
+   }
+
+   to {
+      opacity: 1;
+      translate: 0 0;
+   }
+}
+
+@keyframes animation-3 {
+   from {
+      opacity: 0;
+      translate: 0 20px;
+   }
+
+   to {
+      opacity: 1;
+      translate: 0 0;
+   }
+}
