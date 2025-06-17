@@ -4,6 +4,8 @@ import InputRange from "../../../InputRange";
 
 import styles from "../../../../assets/styles/components/Modals/ui/EditProfile/EditPhoto.module.scss";
 import classNames from "classnames/bind";
+import { head } from "lodash";
+import { height } from "@fortawesome/free-regular-svg-icons/faAddressBook";
 
 const cx = classNames.bind(styles);
 
@@ -38,11 +40,35 @@ function EditPhoto({ className, src, updateImageCrop }) {
 
    useEffect(() => {
       if (!dragging) {
-         console.log("update");
+         const {
+            left: frameLeft,
+            top: frameTop,
+            width: frameWidth,
+            height: frameHeight,
+         } = DOM_avtFrame.current?.getBoundingClientRect();
+         const {
+            left: imgLeft,
+            top: imgTop,
+            width: imgWidth,
+            height: imgHeight,
+         } = DOM_img.current.getBoundingClientRect();
+         const circleLeft = frameLeft + (frameWidth - CIRCLE_DIAMETER) / 2;
+         const circleTop = frameTop + (frameHeight - CIRCLE_DIAMETER) / 2;
+         console.log(frameLeft, frameTop);
+
+         const cropX = circleLeft - imgLeft;
+         const cropY = circleTop - imgTop;
          
-         updateImageCrop({x: position.x, y: position.y, zoom})
+         updateImageCrop({
+            x: cropX,
+            y: cropY,
+            width: CIRCLE_DIAMETER,
+            height: CIRCLE_DIAMETER,
+            canvasWidth: imgWidth,
+            canvasHeight: imgHeight
+         });
       }
-   }, [position, zoom, dragging])
+   }, [position, zoom, dragging]);
 
    const applyBoundedPosition = useCallback(() => {
       setPosition((prev) => {

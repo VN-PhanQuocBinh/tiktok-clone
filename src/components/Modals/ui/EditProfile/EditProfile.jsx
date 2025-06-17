@@ -12,7 +12,6 @@ import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
 function EditProfile({ onClose = () => {} }) {
-   const [avatarFile, setAvatarFile] = useState(null);
    const [avatarPreview, setAvatarPreview] = useState(null);
    const [formData, setFromData] = useState({
       username: "",
@@ -54,9 +53,16 @@ function EditProfile({ onClose = () => {} }) {
    const handleApply = useCallback(async () => {
       console.log("apply");
       
-      // const blob = await cropImage({
-         
-      // })
+      const blob = await cropImage({
+         imgSrc: avatarPreview,
+         crop: imageCrop.current,
+      })
+
+      // const previewUrl = URL.createObjectURL(blob)
+
+      // console.log(previewUrl);
+      // URL.revokeObjectURL(previewUrl)
+      
    }, []);
 
    const updateImageCrop = useCallback((crop) => {
@@ -66,6 +72,9 @@ function EditProfile({ onClose = () => {} }) {
       console.log(imageCrop.current);
       
    }, [])
+
+   console.log("re-render");
+   
 
    return (
       <div className={cx("wrapper")}>

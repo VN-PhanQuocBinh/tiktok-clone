@@ -63,7 +63,8 @@ function InputRange({ className, onChange, ...props }) {
             handlePointerDown
          );
       };
-   }, []); 
+   }, []);
+   
 
    return (
       <div
