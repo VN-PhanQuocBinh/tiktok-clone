@@ -4,26 +4,37 @@ function cropImage({ imgSrc, crop, mimeType = "image/png" }) {
       const img = new Image();
       img.src = imgSrc;
 
-      img.onerror = reject
+      img.onerror = reject;
       img.onload = () => {
-         console.log(img, crop);
+         const {
+            cropX,
+            cropY,
+            cropWidth,
+            cropHeight,
+            destinationWidth,
+            destinationHeight,
+         } = crop;
+
          const canvas = document.createElement("canvas");
-         canvas.width = crop.canvasWidth;
-         canvas.height = crop.canvasHeight;
+         canvas.width = destinationWidth;
+         canvas.height = destinationHeight;
          const ctx = canvas.getContext("2d");
-         console.log(ctx);
 
-         const { x, y, width, height } = crop;
+         ctx.drawImage(
+            img,
+            cropX, cropY,
+            cropWidth, cropHeight,
+            0,0,
+            destinationWidth,destinationWidth
+         );
 
-         ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
-
-         canvas.toBlob(blob => {
+         canvas.toBlob((blob) => {
             if (blob) {
-               resolve(blob)
+               resolve(blob);
             } else {
-               reject(blob)
+               reject(blob);
             }
-         })
+         }, mimeType);
       };
    });
 }

@@ -13,6 +13,7 @@ const cx = classNames.bind(styles);
 
 function EditProfile({ onClose = () => {} }) {
    const [avatarPreview, setAvatarPreview] = useState(null);
+   const [croppedImg, setCroppedImg] = useState(null);
    const [formData, setFromData] = useState({
       username: "",
       name: "",
@@ -23,7 +24,7 @@ function EditProfile({ onClose = () => {} }) {
    const [animation, setAnimation] = useState(true);
    // true: opening, false: closing
 
-   const imageCrop = useRef(null)
+   const imageCrop = useRef(null);
 
    const handleClose = useCallback(() => {
       setAnimation(false);
@@ -31,19 +32,21 @@ function EditProfile({ onClose = () => {} }) {
          onClose();
       }, 200); //delay 200ms allow the animation to finish
 
-      return () => clearTimeout(timer)
+      return () => clearTimeout(timer);
    }, [onClose]);
 
    const handleUploadFile = useCallback((e) => {
       console.dir(e.target.files[0]);
       const file = e.target.files[0];
+      
       if (file) {
-         const url = URL.createObjectURL(file)
+         const url = URL.createObjectURL(file);
+
          setAvatarPreview(url);
          setShowEditPhoto(true);
       }
 
-      return () => URL.revokeObjectURL(url)
+      return () => URL.revokeObjectURL(url);
    }, []);
 
    const handleSave = useCallback(() => {
@@ -52,33 +55,32 @@ function EditProfile({ onClose = () => {} }) {
 
    const handleApply = useCallback(async () => {
       console.log("apply");
-      
-      const blob = await cropImage({
-         imgSrc: avatarPreview,
-         crop: imageCrop.current,
-      })
+      try {
+         const blob = await cropImage({
+            imgSrc: avatarPreview,
+            crop: imageCrop.current,
+         });
 
-      // const previewUrl = URL.createObjectURL(blob)
-
-      // console.log(previewUrl);
-      // URL.revokeObjectURL(previewUrl)
-      
-   }, []);
+         const croppedImg = URL.createObjectURL(blob);
+         setCroppedImg(croppedImg);
+      } catch (error) {
+         console.log(error);
+      }
+   }, [avatarPreview]);
 
    const updateImageCrop = useCallback((crop) => {
-      // console.log(crop);
-      
-      imageCrop.current = {...crop}
+      imageCrop.current = { ...crop };
       console.log(imageCrop.current);
-      
-   }, [])
+   }, []);
 
    console.log("re-render");
-   
 
    return (
       <div className={cx("wrapper")}>
-         <div className={cx("black-bg")}>
+         <div className={cx("black-bg") + " " + "test-img"}>
+            {/* <img src={croppedImg} alt="" /> */}
+            {/* Test image element */}
+
             <div
                className={
                   cx("modal") + ` ${animation ? "zoom-in" : "fade-out"}`
@@ -177,14 +179,18 @@ function EditProfile({ onClose = () => {} }) {
                      </div>
                   </form>
                ) : (
-                  <EditPhoto updateImageCrop={updateImageCrop} className={cx("edit-photo")} src={avatarPreview} />
+                  <EditPhoto
+                     updateImageCrop={updateImageCrop}
+                     className={cx("edit-photo")}
+                     src={avatarPreview}
+                  />
                )}
 
                <div className={cx("footer")}>
                   <button onClick={handleClose} className={cx("cancel-btn")}>
                      Cancel
                   </button>
-                  
+
                   <button
                      onClick={avatarPreview ? handleApply : handleSave}
                      className={cx("save-btn", "active")}

@@ -29,6 +29,16 @@ $border-body-style-large: 1px solid rgba(255, 255, 255, 0.5);
       background: rgba($color: #000000, $alpha: 0.4);
       @include mixins.flex-center;
 
+      > img {
+         // width: 700px;
+         // height: 700px;
+         position: fixed;
+         top: 0;
+         left: 0;
+         // object-fit: contain;
+         z-index: 100;
+      }
+
       .modal {
          position: relative;
          border-radius: 12px;

@@ -27,6 +27,7 @@ function EditPhoto({ className, src, updateImageCrop }) {
    const [circleMaskRatio, setCircleMaskRatio] = useState(0); // 0 <= x <= 1
    const [transition, setTransition] = useState(true);
    const isImgLoaded = useRef(false);
+   const naturalSizeImg = useRef(null)
 
    const DOM_avtFrame = useRef(null);
    const DOM_img = useRef(null);
@@ -38,37 +39,60 @@ function EditPhoto({ className, src, updateImageCrop }) {
       setCircleMaskRatio(ratio);
    }, []);
 
-   useEffect(() => {
-      if (!dragging) {
-         const {
-            left: frameLeft,
-            top: frameTop,
-            width: frameWidth,
-            height: frameHeight,
-         } = DOM_avtFrame.current?.getBoundingClientRect();
-         const {
-            left: imgLeft,
-            top: imgTop,
-            width: imgWidth,
-            height: imgHeight,
-         } = DOM_img.current.getBoundingClientRect();
-         const circleLeft = frameLeft + (frameWidth - CIRCLE_DIAMETER) / 2;
-         const circleTop = frameTop + (frameHeight - CIRCLE_DIAMETER) / 2;
-         console.log(frameLeft, frameTop);
+   const handleCropData = useCallback(() => {
+      const { naturalWidth } = naturalSizeImg.current
 
-         const cropX = circleLeft - imgLeft;
-         const cropY = circleTop - imgTop;
-         
-         updateImageCrop({
-            x: cropX,
-            y: cropY,
-            width: CIRCLE_DIAMETER,
-            height: CIRCLE_DIAMETER,
-            canvasWidth: imgWidth,
-            canvasHeight: imgHeight
-         });
+      const {
+         left: frameLeft,
+         top: frameTop,
+         width: frameWidth,
+         height: frameHeight,
+      } = DOM_avtFrame.current?.getBoundingClientRect();
+
+      const {
+         left: imgLeft,
+         top: imgTop,
+         width: imgWidth
+      } = DOM_img.current.getBoundingClientRect();
+
+      const ratio = imgWidth / naturalWidth
+      console.log(ratio);
+      
+      const circleLeft = frameLeft + (frameWidth - CIRCLE_DIAMETER) / 2;
+      const circleTop = frameTop + (frameHeight - CIRCLE_DIAMETER) / 2;
+
+      let cropX = Math.max(0, circleLeft - imgLeft);
+      let cropY = Math.max(0, circleTop - imgTop);
+      cropX /= ratio
+      cropY /= ratio
+
+      const cropWidth  = CIRCLE_DIAMETER / ratio
+      const cropHeight  = CIRCLE_DIAMETER / ratio
+
+      // console.log(cropX, cropY, cropWidth, cropHeight);
+
+      return {
+         cropX,
+         cropY,
+         cropWidth,
+         cropHeight,
+         destinationWidth: CIRCLE_DIAMETER,
+         destinationHeight: CIRCLE_DIAMETER,
+      };
+   }, [src]);
+
+   useEffect(() => {
+      let timer;
+
+      if (!dragging) {
+         timer = setTimeout(() => {
+            const cropData = handleCropData()
+            updateImageCrop(cropData);
+         }, 300); // delay to allow animation to finish
       }
-   }, [position, zoom, dragging]);
+
+      return () => clearTimeout(timer);
+   }, [position, zoom, dragging, handleCropData]);
 
    const applyBoundedPosition = useCallback(() => {
       setPosition((prev) => {
@@ -129,7 +153,10 @@ function EditPhoto({ className, src, updateImageCrop }) {
       applyBoundedPosition();
    }, [zoom, handleUpdatePositionLimit]);
 
-   const handleLoadImg = useCallback(() => {
+   const handleLoadImg = useCallback((e) => {
+      const { naturalWidth, naturalHeight } = e.target
+      naturalSizeImg.current = {naturalWidth, naturalHeight}
+      
       isImgLoaded.current = true;
       handleUpdatePositionLimit();
    }, [handleUpdatePositionLimit]);
