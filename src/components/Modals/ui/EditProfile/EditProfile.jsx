@@ -6,17 +6,17 @@ import Image from "../../../Image";
 import { Icon_PencilSolid, Icon_XMark } from "../../../../assets/Icons";
 
 import { cropImage } from "../../../../utils/cropImage";
+import { getToken } from "../../../../utils/token";
+import { updateProfile } from "../../../../services/authService/authService";
 
 import styles from "../../../../assets/styles/components/Modals/ui/EditProfile/EditProfile.module.scss";
 import classNames from "classnames/bind";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
-
 const MAX_BIO_LEN = 80;
 
 function EditProfile({ onClose = () => {} }) {
-   const { user } = useAuth();
+   const { user, updateCurrentUser } = useAuth();
 
    const [avatarPreview, setAvatarPreview] = useState(null);
    const [croppedImg, setCroppedImg] = useState(null);
@@ -24,6 +24,7 @@ function EditProfile({ onClose = () => {} }) {
       username: user?.nickname,
       name: user?.first_name + " " + user?.last_name,
       bio: user?.bio,
+      avatar: null,
    });
    const originalFormData = useRef({
       username: user?.nickname,
@@ -41,10 +42,9 @@ function EditProfile({ onClose = () => {} }) {
    useEffect(() => {
       let check = true;
 
-      Object.keys(formData).forEach(key => {
-         if (formData[key] !== originalFormData.current?.[key])
-            check = false
-      })
+      Object.keys(formData).forEach((key) => {
+         if (formData[key] !== originalFormData.current?.[key]) check = false;
+      });
 
       setIsDisabledSubmit(check);
    }, [formData]);
@@ -72,9 +72,37 @@ function EditProfile({ onClose = () => {} }) {
       return () => URL.revokeObjectURL(url);
    }, []);
 
-   const handleSave = useCallback(() => {
+   const handleSave = useCallback(async () => {
       console.log("save");
-   }, []);
+      const uploadData = new FormData();
+
+      Object.keys(formData).forEach((key) => {
+         const data = formData[key];
+
+         if (key === "name") {
+            uploadData.append("first_name", data);
+         } else {
+            uploadData.append(key, data);
+         }
+      });
+
+      // last_name must includes at least 2 characters
+      uploadData.append("last_name", "..");
+
+      try {
+         const token = getToken();
+         const response = await updateProfile(token, uploadData);
+
+         if (response.success) {
+            updateCurrentUser({
+               ...formData,
+               avatar: URL.createObjectURL(formData.avatar),
+            });
+         }
+      } catch (error) {
+         console.log("UPDATE PROFILE", error);
+      }
+   }, [formData, croppedImg]);
 
    const handleApply = useCallback(async () => {
       console.log("apply");
@@ -88,6 +116,9 @@ function EditProfile({ onClose = () => {} }) {
          setShowPhotoEditor(false);
 
          const newCroppedImg = URL.createObjectURL(blob);
+         const file = new File([blob], "avatar.png", { type: "image/png" });
+         setFromData((prev) => ({ ...prev, avatar: file }));
+
          setCroppedImg(newCroppedImg);
       } catch (error) {
          console.log(error);
@@ -242,7 +273,7 @@ function EditProfile({ onClose = () => {} }) {
                   </button>
 
                   <button
-                     onClick={avatarPreview ? handleApply : handleSave}
+                     onClick={showPhotoEditor ? handleApply : handleSave}
                      className={cx("save-btn")}
                      disabled={!(showPhotoEditor || !isDiabledSubmit)}
                   >

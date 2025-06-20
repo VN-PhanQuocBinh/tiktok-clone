@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
             setFollowingList(_list);
          })();
       } else {
-         setFollowingList([])
+         setFollowingList([]);
       }
 
       navigate("/");
@@ -149,6 +149,20 @@ const AuthProvider = ({ children }) => {
       }
    };
 
+   const updateCurrentUser = useCallback((formData = {}) => {
+      setUser((prev) => {
+         const newUser = {...prev}
+
+         Object.keys(newUser).forEach((key) => {
+            newUser[key] = formData[key] || newUser[key]
+         });
+
+         return newUser
+      });
+
+      () => URL.revokeObjectURL(user.avatar)
+   }, [user])
+
    return (
       <AuthContext.Provider
          value={{
@@ -161,7 +175,8 @@ const AuthProvider = ({ children }) => {
             isRegistering,
             isLoggingIn,
             followingList,
-            updateFollowingList
+            updateFollowingList,
+            updateCurrentUser
          }}
       >
          {/* CHILDREND */}

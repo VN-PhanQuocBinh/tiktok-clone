@@ -30,17 +30,11 @@ function ProfileHeader({ user, isOwnProfile }) {
       [followingList]
    );
 
-   const [displayUser, setDisplayUser] = useState({});
+   const displayUser = useMemo(() => user, [user, isOwnProfile]);
    const isFollowed = useMemo(
       () => !isOwnProfile && followedSet.has(user?.id),
       [followedSet, user, isOwnProfile]
    );
-
-   useEffect(() => {
-      console.log(user);
-
-      setDisplayUser(user);
-   }, [user, isOwnProfile]);
 
    const handleToggleFollow = useCallback(() => {
       toggleFollowUser(user, !isFollowed);

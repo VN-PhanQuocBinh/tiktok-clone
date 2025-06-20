@@ -49,3 +49,23 @@ export const login = async (email, password) => {
 
    return result;
 };
+
+export const updateProfile = async (token, formData) => {
+   let result = { success: false, message: "", data: null };
+
+   try {
+      const API_query = "auth/me?_method=PATCH";
+      const response = await request.updateProfile(API_query, formData, {
+         headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+         },
+      });
+
+      result = { ...result, success: true, data: response?.data };
+   } catch (error) {
+      result = { ...result, success: false, message: error };
+   }
+
+   return result;
+};

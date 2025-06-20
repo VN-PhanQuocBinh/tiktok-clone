@@ -36,7 +36,7 @@ const SORT_OPTIONS = {
 };
 
 export default function Profile() {
-   const { user, isLoggedIn } = useAuth();
+   const { user } = useAuth();
    const { nickname } = useParams();
 
    const [displayUser, setDisplayUser] = useState({});
@@ -70,11 +70,13 @@ export default function Profile() {
       let _isMyProfile = nickname === user?.nickname
       setIsMyProfile(_isMyProfile)
       // console.log(nickname, user.nickname);
+      console.log(_isMyProfile, user);
       
 
       const fetchAPI = async () => {
          try {
             if (_isMyProfile) {
+               
                setDisplayUser(user);
             } else {
                const response = await getUser(nickname);
@@ -85,7 +87,7 @@ export default function Profile() {
       };
 
       fetchAPI();
-   }, [nickname]);
+   }, [nickname, user]);
 
    useEffect(() => {
       const firstTab = DOM_tabs.current?.children[0];
