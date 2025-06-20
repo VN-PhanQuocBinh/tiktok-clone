@@ -1,4 +1,5 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 import EditPhoto from "./EditPhoto";
 import Image from "../../../Image";
@@ -8,23 +9,45 @@ import { cropImage } from "../../../../utils/cropImage";
 
 import styles from "../../../../assets/styles/components/Modals/ui/EditProfile/EditProfile.module.scss";
 import classNames from "classnames/bind";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
+const MAX_BIO_LEN = 80;
+
 function EditProfile({ onClose = () => {} }) {
+   const { user } = useAuth();
+
    const [avatarPreview, setAvatarPreview] = useState(null);
    const [croppedImg, setCroppedImg] = useState(null);
    const [formData, setFromData] = useState({
-      username: "",
-      name: "",
-      bio: "",
+      username: user?.nickname,
+      name: user?.first_name + " " + user?.last_name,
+      bio: user?.bio,
+   });
+   const originalFormData = useRef({
+      username: user?.nickname,
+      name: user?.first_name + " " + user?.last_name,
+      bio: user?.bio,
    });
 
-   const [showEditPhoto, setShowEditPhoto] = useState(false);
+   const [showPhotoEditor, setShowPhotoEditor] = useState(false);
    const [animation, setAnimation] = useState(true);
+   const [isDiabledSubmit, setIsDisabledSubmit] = useState(false);
    // true: opening, false: closing
 
    const imageCrop = useRef(null);
+
+   useEffect(() => {
+      let check = true;
+
+      Object.keys(formData).forEach(key => {
+         if (formData[key] !== originalFormData.current?.[key])
+            check = false
+      })
+
+      setIsDisabledSubmit(check);
+   }, [formData]);
 
    const handleClose = useCallback(() => {
       setAnimation(false);
@@ -38,12 +61,12 @@ function EditProfile({ onClose = () => {} }) {
    const handleUploadFile = useCallback((e) => {
       console.dir(e.target.files[0]);
       const file = e.target.files[0];
-      
+
       if (file) {
          const url = URL.createObjectURL(file);
 
          setAvatarPreview(url);
-         setShowEditPhoto(true);
+         setShowPhotoEditor(true);
       }
 
       return () => URL.revokeObjectURL(url);
@@ -61,19 +84,34 @@ function EditProfile({ onClose = () => {} }) {
             crop: imageCrop.current,
          });
 
-         const croppedImg = URL.createObjectURL(blob);
-         setCroppedImg(croppedImg);
+         URL.revokeObjectURL(croppedImg);
+         setShowPhotoEditor(false);
+
+         const newCroppedImg = URL.createObjectURL(blob);
+         setCroppedImg(newCroppedImg);
       } catch (error) {
          console.log(error);
       }
-   }, [avatarPreview]);
+   }, [avatarPreview, croppedImg]);
 
    const updateImageCrop = useCallback((crop) => {
       imageCrop.current = { ...crop };
       console.log(imageCrop.current);
    }, []);
 
-   console.log("re-render");
+   const handleChangeForm = useCallback((e) => {
+      const key = e.target.name;
+      setFromData((prev) => ({
+         ...prev,
+         [key]: e.target.value,
+      }));
+   }, []);
+
+   const handleBeforeInputBio = useCallback((e) => {
+      const currentValue = e.target.value;
+      const newValueLen = currentValue.length + e.data.length;
+      if (newValueLen > MAX_BIO_LEN) e.preventDefault();
+   }, []);
 
    return (
       <div className={cx("wrapper")}>
@@ -93,13 +131,13 @@ function EditProfile({ onClose = () => {} }) {
                   </button>
                </div>
 
-               {!showEditPhoto ? (
+               {!showPhotoEditor ? (
                   <form className={cx("inner")}>
                      <div className={cx("info-field", "profile-photo")}>
                         <span className={cx("title")}>Profile photo</span>
                         <div className={cx("content")}>
                            <div className={cx("input-field")}>
-                              <Image className={cx("avt")} />
+                              <Image src={croppedImg} className={cx("avt")} />
 
                               <span>
                                  <input
@@ -120,10 +158,13 @@ function EditProfile({ onClose = () => {} }) {
                         <div className={cx("content")}>
                            <div className={cx("input-field")}>
                               <input
+                                 onChange={handleChangeForm}
+                                 value={formData.username}
                                  id="username"
                                  name="username"
                                  type="text"
                                  autoComplete="true"
+                                 spellCheck="false"
                               />
                            </div>
 
@@ -144,10 +185,13 @@ function EditProfile({ onClose = () => {} }) {
                         <div className={cx("content")}>
                            <div className={cx("input-field")}>
                               <input
+                                 onChange={handleChangeForm}
+                                 value={formData.name}
                                  id="name"
                                  name="name"
                                  type="text"
                                  autoComplete="true"
+                                 spellCheck="false"
                               />
                            </div>
 
@@ -165,15 +209,21 @@ function EditProfile({ onClose = () => {} }) {
                         <div className={cx("content")}>
                            <div className={cx("input-field")}>
                               <textarea
+                                 onInput={handleChangeForm}
+                                 onBeforeInput={handleBeforeInputBio}
+                                 value={formData.bio}
                                  id="bio"
                                  name="bio"
                                  rows="3"
                                  autoComplete="true"
+                                 spellCheck="false"
                               ></textarea>
                            </div>
 
                            <div className={cx("description")}>
-                              <span>0/80</span>
+                              <span>
+                                 {formData.bio.length}/{MAX_BIO_LEN}
+                              </span>
                            </div>
                         </div>
                      </div>
@@ -193,9 +243,10 @@ function EditProfile({ onClose = () => {} }) {
 
                   <button
                      onClick={avatarPreview ? handleApply : handleSave}
-                     className={cx("save-btn", "active")}
+                     className={cx("save-btn")}
+                     disabled={!(showPhotoEditor || !isDiabledSubmit)}
                   >
-                     {avatarPreview ? "Apply" : "Save"}
+                     {showPhotoEditor ? "Apply" : "Save"}
                   </button>
                </div>
             </div>

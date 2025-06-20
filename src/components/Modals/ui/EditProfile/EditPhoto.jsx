@@ -56,7 +56,6 @@ function EditPhoto({ className, src, updateImageCrop }) {
       } = DOM_img.current.getBoundingClientRect();
 
       const ratio = imgWidth / naturalWidth
-      console.log(ratio);
       
       const circleLeft = frameLeft + (frameWidth - CIRCLE_DIAMETER) / 2;
       const circleTop = frameTop + (frameHeight - CIRCLE_DIAMETER) / 2;
@@ -68,8 +67,6 @@ function EditPhoto({ className, src, updateImageCrop }) {
 
       const cropWidth  = CIRCLE_DIAMETER / ratio
       const cropHeight  = CIRCLE_DIAMETER / ratio
-
-      // console.log(cropX, cropY, cropWidth, cropHeight);
 
       return {
          cropX,

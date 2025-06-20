@@ -1,6 +1,5 @@
 function cropImage({ imgSrc, crop, mimeType = "image/png" }) {
    return new Promise((resolve, reject) => {
-      console.log(imgSrc, crop);
       const img = new Image();
       img.src = imgSrc;
 
