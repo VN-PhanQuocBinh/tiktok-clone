@@ -2,6 +2,7 @@ import Home from "../pages/Home";
 import Following from "../pages/Following";
 import Chat from "../pages/Chat";
 import Profile from "../pages/Profile";
+import Upload from "../pages/Upload";
 
 import Test from "../pages/Test";
 
@@ -10,11 +11,11 @@ import { LAYOUT_TYPE } from "../constants";
 import config from "../config";
 
 const publicRoutes = [
-  {
-    path: config.routes.home,
-    element: Home,
-    layout: LAYOUT_TYPE.SIDEBAR_ONLY
-  },
+  // {
+  //   path: config.routes.home,
+  //   element: Home,
+  //   layout: LAYOUT_TYPE.SIDEBAR_ONLY
+  // },
   {
     path: config.routes.following,
     element: Following,
@@ -29,6 +30,11 @@ const publicRoutes = [
     path: config.routes.profile,
     element: Profile,
     layout: LAYOUT_TYPE.SIDEBAR_ONLY
+  },
+  {
+    path: "/",
+    element: Upload,
+    layout: LAYOUT_TYPE.NO_LAYOUT
   },
   // {
   //   path: config.routes.test,

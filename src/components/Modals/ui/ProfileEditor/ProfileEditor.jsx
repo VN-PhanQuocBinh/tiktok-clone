@@ -4,7 +4,7 @@ import { useUI } from "../../../../contexts/UIContext/UIContext";
 
 import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../../constants";
 
-import EditPhoto from "./EditPhoto";
+import PhotoEditor from "./PhotoEditor";
 import Image from "../../../Image";
 import {
    Icon_PencilSolid,
@@ -16,7 +16,7 @@ import { cropImage } from "../../../../utils/cropImage";
 import { getToken } from "../../../../utils/token";
 import { updateProfile } from "../../../../services/authService/authService";
 
-import styles from "../../../../assets/styles/components/Modals/ui/EditProfile/EditProfile.module.scss";
+import styles from "../../../../assets/styles/components/Modals/ui/ProfileEditor/ProfileEditor.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
@@ -24,7 +24,7 @@ const MAX_BIO_LEN = 80;
 const MAX_NAME_LEN = 20;
 const MIN_NAME_LEN = 4;
 
-function EditProfile({ onClose = () => {} }) {
+function ProfileEditor({ onClose = () => {} }) {
    const { user, updateCurrentUser } = useAuth();
    const { dispatch: uiDispatch } = useUI();
 
@@ -86,7 +86,6 @@ function EditProfile({ onClose = () => {} }) {
    }, []);
 
    const handleSave = useCallback(async () => {
-      console.log("save");
       const uploadData = new FormData();
 
       Object.keys(formData).forEach((key) => {
@@ -103,8 +102,6 @@ function EditProfile({ onClose = () => {} }) {
       try {
          const token = getToken();
          const response = await updateProfile(token, uploadData);
-
-         console.log(response);
 
          const handleCloseAlert = () => {
             setTimeout(() => {
@@ -156,7 +153,6 @@ function EditProfile({ onClose = () => {} }) {
    }, [formData, croppedImg]);
 
    const handleApply = useCallback(async () => {
-      console.log("apply");
       try {
          const blob = await cropImage({
             imgSrc: avatarPreview,
@@ -326,7 +322,7 @@ function EditProfile({ onClose = () => {} }) {
                      </div>
                   </form>
                ) : (
-                  <EditPhoto
+                  <PhotoEditor
                      updateImageCrop={updateImageCrop}
                      className={cx("edit-photo")}
                      src={avatarPreview}
@@ -355,4 +351,4 @@ function EditProfile({ onClose = () => {} }) {
    );
 }
 
-export default EditProfile;
+export default ProfileEditor;

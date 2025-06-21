@@ -4,6 +4,7 @@ const routes = {
    chat: "/chat",
    profile: "/profile/:nickname",
    videoPage: "/:nickname/video/:videoId",
+   uploadPage: "/upload",
    test: "/"
 }
 

@@ -5,7 +5,7 @@ import Alert from "./ui/Alert"
 
 import AuthModal from "./ui/AuthModal"
 import LogoutModal from "./ui/AuthModal/LogoutModal"
-import EditProfile from "./ui/EditProfile/EditProfile.jsx"
+import EditProfile from "./ui/ProfileEditor/ProfileEditor.jsx"
 
 const MODAL_COMPONENTS = {
    [MODAL_TYPES.CONFIRM_DELETE_COMMENT]: DeleteConfirmComment,

@@ -2,17 +2,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "../../../Image";
 import InputRange from "../../../InputRange";
 
-import styles from "../../../../assets/styles/components/Modals/ui/EditProfile/EditPhoto.module.scss";
+import styles from "../../../../assets/styles/components/Modals/ui/ProfileEditor/PhotoEditor.module.scss";
 import classNames from "classnames/bind";
-import { head } from "lodash";
-import { height } from "@fortawesome/free-regular-svg-icons/faAddressBook";
 
 const cx = classNames.bind(styles);
 
 const CIRCLE_DIAMETER = 360;
 // 2 * radius
 
-function EditPhoto({ className, src, updateImageCrop }) {
+function PhotoEditor({ className, src, updateImageCrop }) {
    const [position, setPosition] = useState({
       currentX: 0,
       currentY: 0,
@@ -245,4 +243,4 @@ function EditPhoto({ className, src, updateImageCrop }) {
    );
 }
 
-export default EditPhoto;
+export default PhotoEditor;

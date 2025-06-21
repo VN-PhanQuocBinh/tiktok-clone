@@ -1,0 +1,143 @@
+@use "../../../base/variables";
+@use "../../../base/mixins";
+
+.wrapper {
+   background-color: white;
+   border-radius: 8px;
+   overflow: hidden;
+
+   --primary-color: #0075dc;
+
+   &.success {
+      --primary-color: #0be09b;
+   }
+   
+   .drag-area {
+      margin: 16px;
+      border-radius: 8px;
+      background-color: #f8f8f8;
+      height: 200px;
+      display: grid;
+      place-items: center;
+      border: 1px dashed rgba($color: #000000, $alpha: 0.3);
+
+      &:hover {
+         background-color: rgba(0, 117, 220, 0.06);
+         border-color: var(--primary-color);
+      }
+
+      .content {
+         @include mixins.flex-row;
+         gap: 8px;
+
+         .icon {
+            width: 72px;
+            height: 72px;
+            color: rgba($color: #000000, $alpha: 0.3);
+         }
+
+         > div {
+            @include mixins.flex-column;
+            justify-content: center;
+
+            span:first-child {
+               font-weight: 600;
+               font-size: 1.8rem;
+            }
+
+            span:last-child {
+               font-size: 1.4rem;
+               font-weight: 500;
+               color: rgba($color: #000000, $alpha: 0.5);
+            }
+         }
+      }
+   }
+
+   .upload-info {
+      height: 100px;
+      justify-content: space-between;
+      padding: 16px;
+      @include mixins.flex-row;
+      align-items: center;
+
+      .details {
+         @include mixins.flex-column;
+         gap: 8px;
+
+         .file-name {
+            span:first-child {
+               font-size: 1.6rem;
+               font-weight: 700;
+            }
+
+            span:last-child {
+               font-size: 1rem;
+               padding: 4px;
+               border: 1px solid rgba($color: #000000, $alpha: 0.2);
+               border-radius: 4px;
+               margin-left: 8px;
+               font-weight: 600;
+            }
+         }
+
+         .file-details {
+            @include mixins.flex-row;
+            gap: 16px;
+
+            .size,
+            .duration,
+            .time-left {
+               font-size: 1.4rem;
+            }
+
+            .size {
+               color: var(--primary-color);
+               font-weight: 500;
+            }
+
+            .duration, .time-left {
+               color: rgba($color: #000000, $alpha: 0.65)
+            }
+         }
+      }
+
+      .actions {
+         height: 100%;
+         @include mixins.flex-column;
+         justify-content: space-between;
+         align-items: flex-end;
+
+         button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            background-color: rgba($color: #000000, $alpha: 0.1);
+            transition: all 0.2s ease;
+            @include mixins.flex-row;
+            align-items: center;
+            gap: 4px;
+
+            &:hover {
+               background-color: rgba($color: #000000, $alpha: 0.15);
+            }
+
+            .icon {
+               width: 16px;
+               height: 16px;
+            }
+         }  
+
+         span {
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 500;
+         }
+      }
+   }
+
+   .progress {
+      width: 100%;
+      height: 4px;
+      background-color: var(--primary-color);
+   }
+}

@@ -1,0 +1,20 @@
+@use "../../assets/styles/base/variables";
+@use "../../assets/styles/base/mixins";
+
+.container {
+   width: 100vw;
+   height: 100vh;
+   background-color: rgba($color: white, $alpha: 0.99);
+
+   .header {
+      height: 68px;
+      width: 100%;
+      border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+   }
+
+   .content {
+      padding: 32px;
+      width: 1200px;
+      margin: auto;
+   }
+}

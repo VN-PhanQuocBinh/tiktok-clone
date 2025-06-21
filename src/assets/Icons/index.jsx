@@ -82,3 +82,7 @@ export {
    Icon_Emoji,
    Icon_Tag
 } from "../Icons/components/CommentSide"
+
+export {
+   Icon_CloudUpload
+} from "../Icons/components/Upload"
