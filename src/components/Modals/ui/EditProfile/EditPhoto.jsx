@@ -23,6 +23,9 @@ function EditPhoto({ className, src, updateImageCrop }) {
    const [offset, setOffset] = useState({ x: 0, y: 0 });
    const positionLimit = useRef({ maxX: 0, maxY: 0, minX: 0, minY: 0 });
 
+   const [fitMode, setFitMode] = useState(false)
+   // true: portrait, false: landscape
+
    const [dragging, setDragging] = useState(false);
    const [circleMaskRatio, setCircleMaskRatio] = useState(0); // 0 <= x <= 1
    const [transition, setTransition] = useState(true);
@@ -34,9 +37,9 @@ function EditPhoto({ className, src, updateImageCrop }) {
 
    useEffect(() => {
       const { width, height } = DOM_avtFrame.current?.getBoundingClientRect();
-      const ratio =
+      const circleRatio =
          CIRCLE_DIAMETER / Math.sqrt(width * width + height * height);
-      setCircleMaskRatio(ratio);
+      setCircleMaskRatio(circleRatio);
    }, []);
 
    const handleCropData = useCallback(() => {
@@ -132,6 +135,9 @@ function EditPhoto({ className, src, updateImageCrop }) {
       const { height: imgHeight, width: imgWidth } =
          DOM_img.current?.getBoundingClientRect();
 
+      console.log(imgWidth, imgHeight);
+      
+
       const dLeft = (CIRCLE_DIAMETER - imgWidth) / 2; // max of x, the negative is min of x
       const dTop = (CIRCLE_DIAMETER - imgHeight) / 2; // max of y, the negative is min of y
 
@@ -148,14 +154,16 @@ function EditPhoto({ className, src, updateImageCrop }) {
       setTransition(false);
       handleUpdatePositionLimit();
       applyBoundedPosition();
-   }, [zoom, handleUpdatePositionLimit]);
+   }, [zoom, handleUpdatePositionLimit, fitMode]);
 
    const handleLoadImg = useCallback((e) => {
       const { naturalWidth, naturalHeight } = e.target
       naturalSizeImg.current = {naturalWidth, naturalHeight}
-      
+
       isImgLoaded.current = true;
       handleUpdatePositionLimit();
+
+      setFitMode(naturalWidth / naturalHeight < 1)
    }, [handleUpdatePositionLimit]);
 
    const handlePointerMove = useCallback(
@@ -216,11 +224,10 @@ function EditPhoto({ className, src, updateImageCrop }) {
             }}
             className={cx("avt-frame")}
          >
-            {/* <div className={cx("img-wrapper")}> */}
             <Image
                ref={DOM_img}
                style={imageStyle}
-               className={cx("img", { transition: transition })}
+               className={cx("img", { transition: transition, portrait: fitMode, landscape: !fitMode })}
                src={src}
                draggable="false"
                onPointerDown={handlePointerDown}
@@ -228,7 +235,6 @@ function EditPhoto({ className, src, updateImageCrop }) {
                onWheel={handleScroll}
                onLoad={handleLoadImg}
             />
-            {/* </div> */}
          </div>
 
          <div className={cx("zoom-control")}>

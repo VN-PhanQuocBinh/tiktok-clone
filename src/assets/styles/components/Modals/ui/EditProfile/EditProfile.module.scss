@@ -51,15 +51,25 @@ $border-body-style-large: 1px solid rgba(255, 255, 255, 0.5);
          .header {
             @include mixins.flex-row;
             justify-content: space-between;
+            align-items: center;
             padding: 24px 24px 12px;
             border-bottom: $border-body-style-medium;
+            gap: 16px;
+
+            .back-btn {
+
+            }
+
+            h2 {
+               flex: 1;
+            }
 
             h2,
             .icon {
                color: variables.$text-color;
             }
 
-            button {
+            .close-btn, .back-btn {
                .icon {
                   width: 24px;
                   height: 24px;

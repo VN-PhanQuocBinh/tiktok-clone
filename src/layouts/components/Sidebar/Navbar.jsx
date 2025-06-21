@@ -2,7 +2,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { useUI } from "../../../contexts/UIContext/UIContext";
 
 import { navListData } from "../../../fakeDB";
-import { ACTION_MODAL_TYPES } from "../../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../constants";
 import { AUTH_TYPE } from "../../../constants";
 
 import NavbarItem from "./NavbarItem";
@@ -27,7 +27,8 @@ function Navbar({ className, showLabel, onOpen }) {
       if (!isLoggedIn) {
          e.preventDefault();
          uiDispatch({
-            type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+            type: ACTION_MODAL_TYPES.OPEN_MODAL,
+            modalType: MODAL_TYPES.AUTH_MODALS,
             modalProps: {
                type: AUTH_TYPE.LOGIN_OPTIONS,
             },

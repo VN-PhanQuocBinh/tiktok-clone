@@ -7,19 +7,23 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function ModalRenderer({ modalType }) {
-   const { state: { isOpen, modalProps } } = useUI();
+function ModalRenderer() {
+   const {
+      state: { isOpen, modalProps, modalType },
+   } = useUI();
 
-   if (!isOpen) return null
-   
-
-   const ModalComponent = MODAL_COMPONENTS[modalType]
-
-   if (!ModalComponent) return null
+   if (!isOpen) return null;
 
    return (
       <div className={cx("modal-wrapper")}>
-         <ModalComponent {...modalProps} />
+         {Object.keys(MODAL_TYPES).map((key, index) => {
+            const modalKey = MODAL_TYPES[key];
+            if (modalType[modalKey]) {
+               const ModalComponent = MODAL_COMPONENTS[modalKey]
+               return  <ModalComponent key={index} {...modalProps[modalKey]}/>
+            }
+            return null
+         })}
       </div>
    );
 }

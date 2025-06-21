@@ -1,9 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
+import { useUI } from "../../../../contexts/UIContext/UIContext";
+
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../../constants";
 
 import EditPhoto from "./EditPhoto";
 import Image from "../../../Image";
-import { Icon_PencilSolid, Icon_XMark } from "../../../../assets/Icons";
+import {
+   Icon_PencilSolid,
+   Icon_XMark,
+   Icon_AngleLeft,
+} from "../../../../assets/Icons";
 
 import { cropImage } from "../../../../utils/cropImage";
 import { getToken } from "../../../../utils/token";
@@ -14,9 +21,12 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 const MAX_BIO_LEN = 80;
+const MAX_NAME_LEN = 20;
+const MIN_NAME_LEN = 4;
 
 function EditProfile({ onClose = () => {} }) {
    const { user, updateCurrentUser } = useAuth();
+   const { dispatch: uiDispatch } = useUI();
 
    const [avatarPreview, setAvatarPreview] = useState(null);
    const [croppedImg, setCroppedImg] = useState(null);
@@ -43,8 +53,11 @@ function EditProfile({ onClose = () => {} }) {
       let check = true;
 
       Object.keys(formData).forEach((key) => {
+         if (key === "name" && formData[key].length < 4) check = false;
          if (formData[key] !== originalFormData.current?.[key]) check = false;
       });
+
+      if (formData.name.length < MIN_NAME_LEN) check = true;
 
       setIsDisabledSubmit(check);
    }, [formData]);
@@ -80,23 +93,61 @@ function EditProfile({ onClose = () => {} }) {
          const data = formData[key];
 
          if (key === "name") {
-            uploadData.append("first_name", data);
+            uploadData.append("first_name", data.slice(0, MIN_NAME_LEN));
+            uploadData.append("last_name", data.slice(MIN_NAME_LEN));
          } else {
             uploadData.append(key, data);
          }
       });
 
-      // last_name must includes at least 2 characters
-      uploadData.append("last_name", "..");
-
       try {
          const token = getToken();
          const response = await updateProfile(token, uploadData);
 
+         console.log(response);
+
+         const handleCloseAlert = () => {
+            setTimeout(() => {
+               uiDispatch({
+                  type: ACTION_MODAL_TYPES.CLOSE_MODAL,
+                  modalType: MODAL_TYPES.ALERT,
+               });
+            }, 300); // delay 300ms to allow the animation to finish
+         };
+
          if (response.success) {
             updateCurrentUser({
-               ...formData,
+               ...Object.fromEntries(uploadData),
                avatar: URL.createObjectURL(formData.avatar),
+            });
+
+            uiDispatch({
+               type: ACTION_MODAL_TYPES.CLOSE_MODAL,
+               modalType: MODAL_TYPES.PROFILE_EDITOR,
+            });
+
+            uiDispatch({
+               type: ACTION_MODAL_TYPES.OPEN_MODAL,
+               modalType: MODAL_TYPES.ALERT,
+               modalProps: {
+                  message: "Edit profile successfully!",
+                  openClassName: "slide-down",
+                  closeClassName: "slide-up",
+                  duration: 2000,
+                  onClose: handleCloseAlert,
+               },
+            });
+         } else {
+            uiDispatch({
+               type: ACTION_MODAL_TYPES.OPEN_MODAL,
+               modalType: MODAL_TYPES.ALERT,
+               modalProps: {
+                  message: "Edit profile error!",
+                  openClassName: "slide-down",
+                  closeClassName: "slide-up",
+                  duration: 5000,
+                  onClose: handleCloseAlert,
+               },
             });
          }
       } catch (error) {
@@ -127,7 +178,6 @@ function EditProfile({ onClose = () => {} }) {
 
    const updateImageCrop = useCallback((crop) => {
       imageCrop.current = { ...crop };
-      console.log(imageCrop.current);
    }, []);
 
    const handleChangeForm = useCallback((e) => {
@@ -144,6 +194,16 @@ function EditProfile({ onClose = () => {} }) {
       if (newValueLen > MAX_BIO_LEN) e.preventDefault();
    }, []);
 
+   const handleBeforeInputName = useCallback((e) => {
+      const currentValue = e.target.value;
+      const newValueLen = currentValue.length + e.data.length;
+      if (newValueLen > MAX_NAME_LEN) e.preventDefault();
+   }, []);
+
+   const handleBack = useCallback(() => {
+      setShowPhotoEditor(false);
+   }, []);
+
    return (
       <div className={cx("wrapper")}>
          <div className={cx("black-bg") + " " + "test-img"}>
@@ -156,8 +216,13 @@ function EditProfile({ onClose = () => {} }) {
                }
             >
                <div className={cx("header")}>
-                  <h2>Edit profile</h2>
-                  <button onClick={handleClose}>
+                  {showPhotoEditor && (
+                     <button className={cx("back-btn")} onClick={handleBack}>
+                        <Icon_AngleLeft className={cx("icon")} />
+                     </button>
+                  )}
+                  <h2>{showPhotoEditor ? "Edit Photo" : "Edit Profile"}</h2>
+                  <button className={cx("close-btn")} onClick={handleClose}>
                      <Icon_XMark className={cx("icon")} />
                   </button>
                </div>
@@ -216,7 +281,8 @@ function EditProfile({ onClose = () => {} }) {
                         <div className={cx("content")}>
                            <div className={cx("input-field")}>
                               <input
-                                 onChange={handleChangeForm}
+                                 onInput={handleChangeForm}
+                                 onBeforeInput={handleBeforeInputName}
                                  value={formData.name}
                                  id="name"
                                  name="name"
@@ -268,7 +334,10 @@ function EditProfile({ onClose = () => {} }) {
                )}
 
                <div className={cx("footer")}>
-                  <button onClick={handleClose} className={cx("cancel-btn")}>
+                  <button
+                     onClick={showPhotoEditor ? handleBack : handleClose}
+                     className={cx("cancel-btn")}
+                  >
                      Cancel
                   </button>
 

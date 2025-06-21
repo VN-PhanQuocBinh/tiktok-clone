@@ -8,6 +8,7 @@ import DropDownItem from "../../../components/DropDownItem";
 import {
    DROPDOWN_ITEM_TYPE as TYPE,
    ACTION_MODAL_TYPES,
+   MODAL_TYPES,
 } from "../../../constants";
 import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
 
@@ -40,7 +41,8 @@ function MoreOption({ className, onClose }) {
          switch (item.label) {
             case "Log out":
                uiDispatch({
-                  type: ACTION_MODAL_TYPES.OPEN_CONFIRM_LOGOUT,
+                  type: ACTION_MODAL_TYPES.OPEN_MODAL,
+                  modalType: MODAL_TYPES.CONFIRM_LOGOUT
                });
                break;
             default:

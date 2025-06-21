@@ -3,7 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useFollow } from "../../hooks";
 import { useUI } from "../../contexts/UIContext/UIContext";
 
-import { ACTION_MODAL_TYPES } from "../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../constants";
 
 import Image from "../../components/Image";
 
@@ -43,7 +43,8 @@ function ProfileHeader({ user, isOwnProfile }) {
    const handleEditProfile = useCallback(() => {
       console.log("edit profile");
       uiDispatch({
-         type: ACTION_MODAL_TYPES.OPEN_EDIT_PROFILE,
+         type: ACTION_MODAL_TYPES.OPEN_MODAL,
+         modalType: MODAL_TYPES.PROFILE_EDITOR,
          modalProps: {
             onClose: () => uiDispatch({ type: ACTION_MODAL_TYPES.CLOSE_MODAL }),
          },

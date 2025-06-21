@@ -15,7 +15,7 @@ import CommentItem from "./CommentItem";
 import CommentSideSkeleton from "./CommentItemSkeleton";
 import { Icon_XMark, Icon_Tag, Icon_Emoji } from "../../assets/Icons";
 import _ from "lodash";
-import { ACTION_MODAL_TYPES, ACTION_VIDEOS_TYPE } from "../../constants";
+import { ACTION_MODAL_TYPES, ACTION_VIDEOS_TYPE, MODAL_TYPES } from "../../constants";
 
 import {
    getComments,
@@ -375,7 +375,8 @@ function CommentSide({ className }) {
 
             // notify create comment successfully
             uiDispatch({
-               type: ACTION_MODAL_TYPES.OPEN_ALERT,
+               type: ACTION_MODAL_TYPES.OPEN_MODAL,
+               modalType: MODAL_TYPES.ALERT,
                modalProps: {
                   message: "Comment created successfully!",
                   openClassName: "slide-down",

@@ -7,7 +7,6 @@ import {
 } from "react";
 
 import * as authService from "../services/authService/authService";
-import { follow, unfollow } from "../services/userService/followingService";
 import { getToken, removeToken, saveToken } from "../utils/token";
 import { getAllFollowingList } from "../utils/getAllFollowing";
 

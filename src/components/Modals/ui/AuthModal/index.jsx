@@ -8,6 +8,7 @@ import LoginForm_email from "./LoginForm_email";
 import { loginMethods, signupMethods } from "../../../../fakeDB";
 import {
    ACTION_MODAL_TYPES,
+   MODAL_TYPES,
    AUTH_TYPE as FORM_TYPE,
 } from "../../../../constants";
 
@@ -54,7 +55,7 @@ function AuthModal({ isOpen = true, type = FORM_TYPE.LOGIN_OPTIONS, onClose }) {
 
       setTimeout(() => {
          onClose?.();
-         uiDispatch({ type: ACTION_MODAL_TYPES.CLOSE_MODAL });
+         uiDispatch({ type: ACTION_MODAL_TYPES.CLOSE_MODAL, modalType: MODAL_TYPES.AUTH_MODALS });
          setIsClosing(false);
       }, 200);
    };
@@ -64,7 +65,8 @@ function AuthModal({ isOpen = true, type = FORM_TYPE.LOGIN_OPTIONS, onClose }) {
          console.log(type);
 
          uiDispatch({
-            type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+            type: ACTION_MODAL_TYPES.OPEN_MODAL,
+            modalType: MODAL_TYPES.AUTH_MODALS,
             modalProps: {
                type,
             },

@@ -12,7 +12,7 @@ const MODAL_COMPONENTS = {
    [MODAL_TYPES.ALERT]: Alert,
    [MODAL_TYPES.AUTH_MODALS]: AuthModal,
    [MODAL_TYPES.CONFIRM_LOGOUT]: LogoutModal,
-   [MODAL_TYPES.EDIT_PROFILE]: EditProfile
+   [MODAL_TYPES.PROFILE_EDITOR]: EditProfile
 }
 
 export default MODAL_COMPONENTS

@@ -12,7 +12,7 @@ function Alert({ message, openClassName, closeClassName, duration, onClose }) {
    useEffect(() => {
       const timer = setTimeout(() => {
          setAnimationClass(closeClassName) 
-         onClose && onClose();
+         onClose?.();
       }, duration || 0)
 
       return () => clearTimeout(timer)

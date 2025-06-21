@@ -69,8 +69,6 @@ export default function Profile() {
 
       let _isMyProfile = nickname === user?.nickname
       setIsMyProfile(_isMyProfile)
-      // console.log(nickname, user.nickname);
-      console.log(_isMyProfile, user);
       
 
       const fetchAPI = async () => {

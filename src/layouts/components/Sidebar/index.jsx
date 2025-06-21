@@ -13,7 +13,7 @@ import { Icon_Search } from "../../../assets/Icons";
 import SideMenu from "./SideMenu";
 import MoreOption from "./MoreOption";
 
-import { AUTH_TYPE } from "../../../constants";
+import { AUTH_TYPE, MODAL_TYPES } from "../../../constants";
 import { ACTION_MODAL_TYPES } from "../../../constants";
 
 import logo from "../../../assets/images/logo.svg";
@@ -176,7 +176,8 @@ export default function Sidebar({ className }) {
 
    const handleLogin = useCallback(() => {
       uiDispatch({
-         type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+         type: ACTION_MODAL_TYPES.OPEN_MODAL,
+         modalType: MODAL_TYPES.AUTH_MODALS,
          modalProps: {
             type: AUTH_TYPE.LOGIN_OPTIONS
          },

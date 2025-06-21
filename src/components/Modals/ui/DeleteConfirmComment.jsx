@@ -1,6 +1,6 @@
 import { useUI } from "../../../contexts/UIContext/UIContext";
 
-import { ACTION_MODAL_TYPES } from "../../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../constants";
 
 
 import classNames from "classnames/bind";
@@ -17,7 +17,7 @@ function DeleteConfirmComment({actions}) {
    const handleCancel = () => {
       console.log("cancel");
       
-      uiDispatch({type: ACTION_MODAL_TYPES.CLOSE_MODAL})
+      uiDispatch({type: ACTION_MODAL_TYPES.CLOSE_MODAL, modalType: MODAL_TYPES.CONFIRM_DELETE_COMMENT})
    }
 
    const handleDelete = () => {
@@ -25,7 +25,7 @@ function DeleteConfirmComment({actions}) {
       
       actions?.forEach(action => action())
 
-      uiDispatch({type: ACTION_MODAL_TYPES.CLOSE_MODAL})
+      uiDispatch({type: ACTION_MODAL_TYPES.CLOSE_MODAL, modalType: MODAL_TYPES.CONFIRM_DELETE_COMMENT})
    }
 
    return ( 

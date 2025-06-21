@@ -10,6 +10,7 @@ import {
    ACTION_VIDEOS_TYPE,
    ACTION_MODAL_TYPES,
    AUTH_TYPE,
+   MODAL_TYPES,
 } from "../../constants";
 
 import {
@@ -65,8 +66,6 @@ function VideoActions({
    }, []);
 
    const handleComment = useCallback(() => {
-      console.log(isLoggedIn);
-
       if (isLoggedIn) {
          if (videoState.isCommentVisible) {
             videoDispatch({ type: ACTION_VIDEOS_TYPE.CLOSE_COMMENT });
@@ -75,14 +74,23 @@ function VideoActions({
          }
       } else {
          uiDispatch({
-            type: ACTION_MODAL_TYPES.OPEN_AUTH_MODALS,
+            type: ACTION_MODAL_TYPES.OPEN_MODAL,
+            modalType: MODAL_TYPES.AUTH_MODALS,
             modalProps: { type: AUTH_TYPE.LOGIN_OPTIONS },
          });
       }
    }, [isLoggedIn, videoState]);
 
    const handleFollowUser = useCallback(() => {
-      toggleFollow(video?.user, !followed);
+      if (isLoggedIn) {
+         toggleFollow(video?.user, !followed);
+      } else {
+         uiDispatch({
+            type: ACTION_MODAL_TYPES.OPEN_MODAL,
+            modalType: MODAL_TYPES.AUTH_MODALS,
+            modalProps: { type: AUTH_TYPE.LOGIN_OPTIONS },
+         })
+      }
    }, [toggleFollow]);
 
    const handleClickToNavigate = useCallback(() => {

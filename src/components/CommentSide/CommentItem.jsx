@@ -3,7 +3,7 @@ import { useUI } from "../../contexts/UIContext/UIContext";
 import { useVideo } from "../../contexts/VideoContext/VideoContext";
 import { useAuth } from "../../contexts/AuthContext";
 
-import { ACTION_MODAL_TYPES } from "../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../constants";
 import { ACTION_VIDEOS_TYPE } from "../../constants";
 
 import Image from "../../components/Image";
@@ -23,7 +23,6 @@ import { getToken } from "../../utils/token";
 
 import styles from "../../assets/styles/components/CommentSide/CommentItem.module.scss";
 import classNames from "classnames/bind";
-import { use } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -135,7 +134,8 @@ function CommentItem({
       };
 
       uiDispatch({
-         type: ACTION_MODAL_TYPES.OPEN_CONFIRM_DELETE_COMMENT,
+         type: ACTION_MODAL_TYPES.OPEN_MODAL,
+         modalType: MODAL_TYPES.CONFIRM_DELETE_COMMENT,
          modalProps: {
             actions: [handleDelete],
          },

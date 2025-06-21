@@ -8,7 +8,7 @@ function ModalContainer() {
    const { state } = useUI();
 
    return createPortal(
-      <ModalRenderer modalType={state.modalType} />,
+      <ModalRenderer />,
       document.querySelector("body")
    );
 }

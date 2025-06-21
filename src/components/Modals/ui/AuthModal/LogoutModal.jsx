@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useUI } from "../../../../contexts/UIContext/UIContext";
 
-import { ACTION_MODAL_TYPES } from "../../../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../../constants";
 
 import styles from "../../../../assets/styles/components/LogoutModal.module.scss";
 import classNames from "classnames/bind";
@@ -36,6 +36,7 @@ function LogoutModal({ onClose }) {
          onClose?.();
          uiDispatch({
             type: ACTION_MODAL_TYPES.CLOSE_MODAL,
+            modalType: MODAL_TYPES.CONFIRM_LOGOUT
          });
 
          setIsClosing(false);

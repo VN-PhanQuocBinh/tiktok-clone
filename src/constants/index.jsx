@@ -41,10 +41,11 @@ const MODAL_TYPES = {
    ALERT: "alert",
    AUTH_MODALS: "auth_modals",
    CONFIRM_LOGOUT: "confirm_logout",
-   EDIT_PROFILE: "edit_profile"
+   PROFILE_EDITOR: "profile_editor"
 }
 
 const ACTION_MODAL_TYPES = {
+   OPEN_MODAL: "open_modal",
    CLOSE_MODAL: "close_modal",
    OPEN_CONFIRM_DELETE_COMMENT: "open_confirm_delete_comment",
    OPEN_ALERT: "open_alert",

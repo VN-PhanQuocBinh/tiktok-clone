@@ -3,6 +3,7 @@
 
 .wrapper {
    width: 100%;
+   position: relative;
    @include mixins.flex-column;
 
    .avt-frame {
@@ -18,19 +19,23 @@
       user-select: none;
       @include mixins.flex-center;
 
-      // .img-wrapper {
-      //    position: absolute;
-      //    height: 100%;
-      //    width: 100%;
-      //    @include mixins.flex-center;
-
       .img {
          cursor: move;
-         min-height: 360px;
-         min-width: 360px;
+         // height: auto;
+         // width: 360px;
          max-height: 100%;
          max-width: 100%;
          object-fit: cover;
+
+         &.portrait {
+            height: auto;
+            width: 360px;
+         }
+
+         &.landscape {
+            height: 360px;
+            width: auto;
+         }
 
          &.transition {
             transition: transform 0.3s ease-out;
@@ -40,6 +45,10 @@
    }
 
    .zoom-control {
+      position: absolute;
+      translate: -50%;
+      bottom: 0;
+      left: 50%;
       @include mixins.flex-row;
       justify-content: center;
       align-items: center;
