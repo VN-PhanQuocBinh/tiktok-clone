@@ -5,7 +5,6 @@
    background-color: white;
    border-radius: 6px;
    overflow: hidden;
-   border: 1px dashed rgba($color: #000000, $alpha: 0.3);
    
    &.uploaded {
       border: 1px solid rgba($color: #000000, $alpha: 0.1);
@@ -24,6 +23,7 @@
       height: 200px;
       display: grid;
       place-items: center;
+      border: 1px dashed rgba($color: #000000, $alpha: 0.3);
 
       &:hover {
          background-color: rgba(0, 117, 220, 0.06);
