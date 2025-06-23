@@ -3,11 +3,16 @@
 
 .wrapper {
    background-color: white;
-   border-radius: 8px;
+   border-radius: 6px;
    overflow: hidden;
+   border: 1px dashed rgba($color: #000000, $alpha: 0.3);
+   
+   &.uploaded {
+      border: 1px solid rgba($color: #000000, $alpha: 0.1);
+   }
 
    --primary-color: #0075dc;
-
+   
    &.success {
       --primary-color: #0be09b;
    }
@@ -19,7 +24,6 @@
       height: 200px;
       display: grid;
       place-items: center;
-      border: 1px dashed rgba($color: #000000, $alpha: 0.3);
 
       &:hover {
          background-color: rgba(0, 117, 220, 0.06);
@@ -60,6 +64,7 @@
       padding: 16px;
       @include mixins.flex-row;
       align-items: center;
+      border-radius: 6px;
 
       .details {
          @include mixins.flex-column;
@@ -94,6 +99,20 @@
             .size {
                color: var(--primary-color);
                font-weight: 500;
+               @include mixins.flex-row;
+               align-items: center;
+               gap: 4px;
+
+               &.uploaded {
+                  color: #008568;
+                  .icon {
+                  }
+               }
+
+               .icon {
+                  width: 16px;
+                  height: 16px;
+               }
             }
 
             .duration, .time-left {
@@ -138,6 +157,6 @@
    .progress {
       width: 100%;
       height: 4px;
-      background-color: var(--primary-color);
+      background-image: linear-gradient(90deg, rgba(0, 117, 220, 0.4) 0%, rgb(0, 117, 220) 100%);;
    }
 }

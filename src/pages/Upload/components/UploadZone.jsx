@@ -1,5 +1,4 @@
-import { Icon_CloudUpload } from "../../../assets/Icons";
-import { Icon_ArrowRepeat } from "../../../assets/Icons/components/Upload";
+import { Icon_CloudUpload, Icon_ArrowRepeat, Icon_BlueTick } from "../../../assets/Icons";
 
 import styles from "../../../assets/styles/components/pages/Upload/UploadZone.module.scss";
 import classNames from "classnames/bind";
@@ -8,7 +7,7 @@ const cx = classNames.bind(styles);
 
 function UploadZone({ className }) {
    return (
-      <div className={cx("wrapper", { [className]: className })}>
+      <div className={cx("wrapper", "uploaded", { [className]: className })}>
          {/* <div className={cx("drag-area")}>
             <div className={cx("content")}>
                <Icon_CloudUpload className={cx("icon")}/>
@@ -27,7 +26,12 @@ function UploadZone({ className }) {
                </div>
 
                <div className={cx("file-details")}>
-                  <span className={cx("size")}>7.5MB/12.7MB</span>
+                  <span className={cx("size")}>
+                     <Icon_CloudUpload className={cx("icon")} />
+                     {/* <Icon_BlueTick className={cx("icon", "tick")} /> */}
+                     7.5MB/12.7MB
+                     {/* Uploaded (12.7MB) */}
+                  </span>
                   <span className={cx("duration")}>Duration: 0m25s</span>
                   <span className={cx("time-left")}>3 seconds left</span>
                </div>

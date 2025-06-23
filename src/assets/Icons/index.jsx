@@ -84,5 +84,6 @@ export {
 } from "../Icons/components/CommentSide"
 
 export {
-   Icon_CloudUpload
+   Icon_CloudUpload,
+   Icon_ArrowRepeat
 } from "../Icons/components/Upload"

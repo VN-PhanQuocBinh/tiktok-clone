@@ -212,7 +212,6 @@ const Icon_ChevronRight = (props) => {
 const Icon_BlueTick = (props) => {
    return (
       <svg
-         fontSize="14px"
          viewBox="0 0 48 48"
          fill="currentColor"
          xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +222,6 @@ const Icon_BlueTick = (props) => {
          <g clipPath="url(#Icon_Color-Verified_Badge_svg__a)">
             <path
                d="M0 24a24 24 0 1 1 48 0 24 24 0 0 1-48 0Z"
-               fill="#20D5EC"
             ></path>
             <path
                fillRule="evenodd"
