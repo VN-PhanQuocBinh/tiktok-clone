@@ -12,10 +12,6 @@
 
    --primary-color: #0075dc;
    
-   &.success {
-      --primary-color: #0be09b;
-   }
-   
    .drag-area {
       margin: 16px;
       border-radius: 8px;
@@ -97,17 +93,11 @@
             }
 
             .size {
-               color: var(--primary-color);
                font-weight: 500;
                @include mixins.flex-row;
                align-items: center;
                gap: 4px;
-
-               &.uploaded {
-                  color: #008568;
-                  .icon {
-                  }
-               }
+               color: #008568;
 
                .icon {
                   width: 16px;
@@ -146,17 +136,18 @@
             }
          }  
 
-         span {
-            color: var(--primary-color);
-            font-size: 2rem;
-            font-weight: 500;
-         }
+         // span {
+         //    color: var(--primary-color);
+         //    font-size: 2rem;
+         //    font-weight: 500;
+         // }
       }
    }
 
    .progress {
       width: 100%;
       height: 4px;
-      background-image: linear-gradient(90deg, rgba(0, 117, 220, 0.4) 0%, rgb(0, 117, 220) 100%);;
+      // background-image: linear-gradient(90deg, rgba(0, 117, 220, 0.4) 0%, rgb(0, 117, 220) 100%);
+      background-color: #0be09b;
    }
 }

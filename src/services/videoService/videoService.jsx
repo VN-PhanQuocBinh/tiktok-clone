@@ -60,3 +60,23 @@ export const unlikeVideo = async (token, id) => {
 
    return result;
 };
+
+export const postVideo = async (token, formData) => {
+   let result = { success: false, message: "", data: null };
+
+   try {
+      const API_query = "videos";
+      const response = await request.postVideo(API_query, formData, {
+         headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+         },
+      });
+
+      result = { ...result, success: true, data: response?.data };
+   } catch (error) {
+      result = { ...result, success: false, message: error };
+   }
+
+   return result;
+};

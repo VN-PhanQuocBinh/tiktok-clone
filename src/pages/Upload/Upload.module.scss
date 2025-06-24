@@ -4,6 +4,7 @@
 .container {
    width: 100vw;
    height: 100vh;
+   overflow-y: auto;
    background-color: rgba($color: white, $alpha: 0.99);
 
    .header {
@@ -100,23 +101,27 @@
             width: 200px;
             margin-right: 12px;
 
-            &:hover {
+            &:hover:not(:disabled) {
                background-color: rgba(
                   $color: variables.$primary-color,
                   $alpha: 0.8
                );
             }
-         }
 
-         .discard {
-            padding: 0 12px;
-            color: black;
-            background-color: rgba(0, 0, 0, 0.05);
-
-            &:hover {
-               background-color: rgba(0, 0, 0, 0.1);
+            &:disabled {
+               opacity: 0.7;
             }
          }
+
+         // .discard {
+         //    padding: 0 12px;
+         //    color: black;
+         //    background-color: rgba(0, 0, 0, 0.05);
+
+         //    &:hover {
+         //       background-color: rgba(0, 0, 0, 0.1);
+         //    }
+         // }
       }
    }
 }

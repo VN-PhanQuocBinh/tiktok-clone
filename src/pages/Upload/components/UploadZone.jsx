@@ -10,20 +10,31 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
-function UploadZone({ className }) {
+function UploadZone({ className, updateVideoFile }) {
    const [videoFile, setVideoFile] = useState(null);
-   const [isDragging, setIsDragging] = useState(false);
+   const [videoDetails, setVideoDetails] = useState({
+      size: 0,
+      name: "",
+   });
    const [isUploaded, setIsUploaded] = useState(false);
-   const [isUploading, setIsUploading] = useState(false)
 
    const DOM_inputFile = useRef(null);
 
    useEffect(() => {
       if (videoFile) {
-         const fileSize = Math.round(videoFile.size / (1024*1024) * 100) / 100
-         console.log(fileSize + "MB");
-         
          setIsUploaded(true);
+         updateVideoFile(videoFile)
+
+         const fileSize =
+            Math.round((videoFile.size / (1024 * 1024)) * 100) / 100;
+         setVideoDetails((prev) => ({
+            ...prev,
+            size: fileSize,
+            name: videoFile.name,
+         }));
+      } else {
+         updateVideoFile(null)
+         setIsUploaded(false);
       }
    }, [videoFile]);
 
@@ -32,47 +43,31 @@ function UploadZone({ className }) {
    }, []);
 
    const handleInputChange = useCallback((e) => {
-      const file = e.target.files[0]
-      console.log(file);
+      const file = e.target.files[0];
       if (file) {
-         setVideoFile(file)
+         setVideoFile(file);
       }
-
-      const reader = new FileReader()
-      reader.onload = () => {
-         const arrayBuffer = reader.result
-         const video = new Uint8Array(arrayBuffer)
-         const mediaSource = new MediaSource(video)
-         const videoUrl = URL.createObjectURL(mediaSource)
-         console.log(videoUrl);
-         
-      }
-
-      reader.readAsArrayBuffer(file)
    }, []);
 
    const handleDragOver = useCallback((e) => {
       e.preventDefault();
-      setIsDragging(true);
    }, []);
 
    const handleDragLeave = useCallback((e) => {
       e.preventDefault();
-      setIsDragging(false);
    }, []);
 
    const handleDrop = useCallback((e) => {
       e.preventDefault();
-      console.log(e.dataTransfer.files);
       const file = e.dataTransfer.files[0];
       if (file?.type?.startsWith("video/")) {
          setVideoFile(file);
       }
    }, []);
 
-   const handleDiscard = useCallback(() => {
-      setIsUploaded(false);
-      setVideoFile(null)
+   const handleReplace = useCallback(() => {
+      setVideoFile(null);
+      DOM_inputFile.current?.click();
    }, []);
 
    return (
@@ -106,7 +101,7 @@ function UploadZone({ className }) {
             <div className={cx("upload-info")}>
                <div className={cx("details")}>
                   <div className={cx("file-name")}>
-                     <span>OfficialVideo.mp4</span>
+                     <span>{videoDetails.name}</span>
                      <span>1080P</span>
                   </div>
 
@@ -114,21 +109,20 @@ function UploadZone({ className }) {
                      <span className={cx("size")}>
                         {/* <Icon_CloudUpload className={cx("icon")} /> */}
                         <Icon_BlueTick className={cx("icon", "tick")} />
-                        7.5MB/12.7MB 
-                        {isUploaded && "Uploaded (12.7MB)"}
+                        {isUploaded && `Uploaded (${videoDetails.size}MB)`}
                      </span>
-                     <span className={cx("duration")}>Duration: 0m25s</span>
-                     <span className={cx("time-left")}>3 seconds left</span>
+                     {/* <span className={cx("duration")}>Duration: 0m25s</span> */}
+                     {/* <span className={cx("time-left")}>3 seconds left</span> */}
                   </div>
                </div>
 
                <div className={cx("actions")}>
                   {/* <button onClick={handleDiscard}>Cancel</button> */}
-                  <button onClick={handleDiscard}>
+                  <button onClick={handleReplace}>
                      <Icon_ArrowRepeat className={cx("icon")} />
                      Replace
                   </button>
-                  <span>26.04%</span>
+                  {/* <span>26.04%</span> */}
                </div>
             </div>
          )}

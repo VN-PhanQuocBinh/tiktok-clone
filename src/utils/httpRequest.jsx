@@ -197,18 +197,26 @@ export const unlikeVideo = async (path, option = {}) => {
    return response.data
 }
 
-export default request
-
-export const updateProfile = async (path, data, config) => {
+export const postVideo = async (path, data, config) => {
    const response = await request.post(path, data, config)
-
-   console.log(data.get('avatar'));
    
-
    if (response.status !== 200) {
-      throw Error("Network response was not ok! - UPDATE PROFILE")
+      throw Error("Network response was not ok! - POST VIDEO")
    }
-
+   
    return response.data
 }
 
+
+export const updateProfile = async (path, data, config) => {
+   const response = await request.post(path, data, config)
+   
+   if (response.status !== 200) {
+      throw Error("Network response was not ok! - UPDATE PROFILE")
+   }
+   
+   return response.data
+}
+
+
+export default request
