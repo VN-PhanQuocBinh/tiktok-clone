@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 
-import { useUI } from "../../contexts/UIContext/UIContext";
+import { useUI } from "@contexts/UIContext/UIContext";
 
 import ModalRenderer from "./ModalRenderer";
 

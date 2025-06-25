@@ -1,26 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
 import { useMediaQuery } from "../../../hooks";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useUI } from "../../../contexts/UIContext/UIContext";
+import { useAuth } from "@contexts/AuthContext";
+import { useUI } from "@contexts/UIContext/UIContext";
 
 import { Link } from "react-router";
 import SidebarSearch from "./SidebarSearch";
 import Navbar from "./Navbar";
 import UserSuggested from "./UserSuggested";
-import Image from "../../../components/Image";
-import { Icon_Search } from "../../../assets/Icons";
+import Image from "@components/Image";
+import { Icon_Search } from "@icons";
 import SideMenu from "./SideMenu";
 import MoreOption from "./MoreOption";
 
-import { AUTH_TYPE, MODAL_TYPES } from "../../../constants";
-import { ACTION_MODAL_TYPES } from "../../../constants";
+import { AUTH_TYPE, MODAL_TYPES, ACTION_MODAL_TYPES } from "@types";
 
 import logo from "../../../assets/images/logo.svg";
 import logoLess from "../../../assets/images/logo-less.png";
 import config from "../../../config";
 
-import styles from "../../../assets/styles/components/Sidebar.module.scss";
+import styles from "@styles/components/Sidebar.module.scss";
 import classNames from "classnames/bind";
 
 let cx = classNames.bind(styles);

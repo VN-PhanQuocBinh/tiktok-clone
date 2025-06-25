@@ -9,13 +9,14 @@ import Test from "../pages/Test";
 import { LAYOUT_TYPE } from "../constants";
 
 import config from "../config";
+import routes from "../config/routes";
 
 const publicRoutes = [
-  // {
-  //   path: config.routes.home,
-  //   element: Home,
-  //   layout: LAYOUT_TYPE.SIDEBAR_ONLY
-  // },
+  {
+    path: config.routes.home,
+    element: Home,
+    layout: LAYOUT_TYPE.SIDEBAR_ONLY
+  },
   {
     path: config.routes.following,
     element: Following,
@@ -32,7 +33,7 @@ const publicRoutes = [
     layout: LAYOUT_TYPE.SIDEBAR_ONLY
   },
   {
-    path: "/",
+    path: config.routes.uploadPage,
     element: Upload,
     layout: LAYOUT_TYPE.NO_LAYOUT
   },

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 
-import styles from "../../../assets/styles/components/NavbarItem.module.scss";
+import styles from "@styles/components/NavbarItem.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

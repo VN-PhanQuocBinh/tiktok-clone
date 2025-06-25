@@ -1,4 +1,4 @@
-import { MODAL_TYPES } from "../../constants"
+import { MODAL_TYPES } from "@types"
 
 import DeleteConfirmComment from "./ui/DeleteConfirmComment"
 import Alert from "./ui/Alert"

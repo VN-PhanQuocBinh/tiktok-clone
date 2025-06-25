@@ -1,21 +1,18 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "@contexts/AuthContext";
 
-import ProfileHeader from "../../components/Profile/ProfileHeader";
-import VideoGrid from "../../components/Profile/VideoGrid";
+import ProfileHeader from "@components/pages/ProfilePage/ProfileHeader";
+import VideoGrid from "@components/pages/ProfilePage/VideoGrid";
 
 import {
    Icon_Videos,
    Icon_Repost,
    Icon_Favourites,
    Icon_Liked,
-} from "../../assets/Icons";
+} from "@icons";
 
-import { getCurrentUser } from "../../services/authService/authService";
-import { getUser } from "../../services/userService/userServices";
-import { getToken } from "../../utils/token";
-import { formatLabel } from "../../utils/formatString";
+import { getUser } from "@services/userService/userServices";
 
 import styles from "./Profile.module.scss";
 import classNames from "classnames/bind";

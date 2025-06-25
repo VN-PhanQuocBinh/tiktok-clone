@@ -1,14 +1,14 @@
-import DropDown from "../../../components/DropDown.jsx";
-import DropDownItem from "../../../components/DropDownItem.jsx";
+import DropDown from "@components/DropDown.jsx";
+import DropDownItem from "@components/DropDownItem.jsx";
 
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants";
+import { DROPDOWN_ITEM_TYPE as TYPE } from "@types";
 
-import { Icon_ChevronRight } from "../../../assets/Icons/index.jsx";
+import { Icon_ChevronRight } from "@icons";
 
-import * as UserService from "../../../services/userService/userServices.jsx";
+import * as UserService from "@services/userService/userServices.jsx";
 
 import classNames from "classnames/bind";
-import styles from "../../../assets/styles/components/UserSuggested.module.scss";
+import styles from "@styles/components/UserSuggested.module.scss";
 import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);

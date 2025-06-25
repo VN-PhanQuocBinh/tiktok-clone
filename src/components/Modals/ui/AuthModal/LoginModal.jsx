@@ -1,11 +1,11 @@
 import LoginItem from "./LoginItem";
 import SignupForm_email from "./SignupForm_email";
 import LoginForm_email from "./LoginForm_email";
-import { loginMethods, signupMethods } from "../../fakeDB";
+import { loginMethods, signupMethods } from "@/fakeDB";
 
-import { Icon_XMark } from "../../assets/Icons";
+import { Icon_XMark } from "@icons";
 
-import styles from "../../../../assets/styles/components/LoginModal.module.scss";
+import styles from "@styles/components/LoginModal.module.scss";
 import classNames from "classnames/bind";
 import { useCallback, useEffect, useState } from "react";
 

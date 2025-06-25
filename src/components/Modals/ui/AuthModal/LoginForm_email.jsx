@@ -4,13 +4,13 @@ import {
    Icon_Eye,
    Icon_EyeXmark,
    Icon_CircleNotch,
-} from "../../../../assets/Icons";
+} from "@icons";
 
-import { useAuth } from "../../../../contexts/AuthContext";
-import { useUI } from "../../../../contexts/UIContext/UIContext";
-import { ACTION_MODAL_TYPES } from "../../../../constants";
+import { useAuth } from "@contexts/AuthContext";
+import { useUI } from "@contexts/UIContext/UIContext";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "@types";
 
-import styles from "../../../../assets/styles/components/LoginForm_email.module.scss";
+import styles from "@styles/components/LoginForm_email.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
@@ -73,7 +73,8 @@ function LoginForm_email({ className }) {
 
             uiDispatch({ type: ACTION_MODAL_TYPES.CLOSE_MODAL });
             uiDispatch({
-               type: ACTION_MODAL_TYPES.OPEN_ALERT,
+               type: ACTION_MODAL_TYPES.OPEN_MODAL,
+               modalType: MODAL_TYPES.ALERT,
                modalProps: {
                   message: "Login successfully!",
                   openClassName: "slide-down",

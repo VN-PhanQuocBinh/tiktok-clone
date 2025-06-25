@@ -1,10 +1,10 @@
-import { useUI } from "../../../contexts/UIContext/UIContext";
+import { useUI } from "@contexts/UIContext/UIContext";
 
-import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "@types";
 
 
 import classNames from "classnames/bind";
-import styles from "../../../assets/styles/components/Modals/ui/DeleteConfirmComment.module.scss";
+import styles from "@styles/components/Modals/ui/DeleteConfirmComment.module.scss";
 
 const cx = classNames.bind(styles);
 

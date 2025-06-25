@@ -1,0 +1,9 @@
+@use "@styles/base/mixins";
+@use "@styles/base/variables";
+
+.video {
+   max-width: 90%;
+   // min-width: 600px;
+   border-radius: 16px;
+   cursor: pointer;
+}

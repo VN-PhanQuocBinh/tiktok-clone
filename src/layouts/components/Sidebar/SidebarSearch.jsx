@@ -6,15 +6,15 @@ import {
    useEffect,
 } from "react";
 import { useDebounce } from "../../../hooks";
-import * as SearchServices from "../../../services/apiService/searchService";
+import * as SearchServices from "@services/apiService/searchService";
 
-import DropDownItem from "../../../components/DropDownItem";
+import DropDownItem from "@components/DropDownItem";
 
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants";
+import { DROPDOWN_ITEM_TYPE as TYPE } from "@types";
 
-import { Icon_Loading, Icon_Clear } from "../../../assets/Icons";
+import { Icon_Loading, Icon_Clear } from "@icons";
 
-import styles from "../../../assets/styles/components/SidebarSearch.module.scss";
+import styles from "@styles/components/SidebarSearch.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../../../contexts/AuthContext";
-import { useUI } from "../../../contexts/UIContext/UIContext";
+import { useAuth } from "@contexts/AuthContext";
+import { useUI } from "@contexts/UIContext/UIContext";
 
-import DropDown from "../../../components/DropDown";
-import DropDownItem from "../../../components/DropDownItem";
+import DropDown from "@components/DropDown";
+import DropDownItem from "@components/DropDownItem";
 
 import {
    DROPDOWN_ITEM_TYPE as TYPE,
    ACTION_MODAL_TYPES,
    MODAL_TYPES,
 } from "../../../constants";
-import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
+import { Icon_XMark, Icon_ChevronRight } from "@icons";
 
 import { actionItems_loggedIn, actionItems_loggedOut } from "../../../fakeDB";
 import classNames from "classnames/bind";
-import styles from "../../../assets/styles/components/MoreOption.module.scss";
+import styles from "@styles/components/MoreOption.module.scss";
 
 const cx = classNames.bind(styles);
 

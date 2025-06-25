@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Image from "../../../Image";
-import InputRange from "../../../InputRange";
+import Image from "@components/Image";
+import InputRange from "@components/InputRange";
 
-import styles from "../../../../assets/styles/components/Modals/ui/ProfileEditor/PhotoEditor.module.scss";
+import styles from "@styles/components/Modals/ui/ProfileEditor/PhotoEditor.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

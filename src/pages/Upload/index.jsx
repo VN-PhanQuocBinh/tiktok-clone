@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from "react";
-import UploadZone from "./components/UploadZone";
+import UploadZone from "@components/pages/UploadPage/UploadZone";
 
-import { postVideo } from "../../services/videoService/videoService";
-import { getToken } from "../../utils/token";
+import { postVideo } from "@services/videoService/videoService";
+import { getToken } from "@utils/token";
 
 import styles from "./Upload.module.scss";
 import classNames from "classnames/bind";

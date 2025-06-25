@@ -1,9 +1,6 @@
-import { useState } from "react";
-
-import { Icon_XMark, Icon_ChevronRight } from "../../../assets/Icons";
+import { Icon_XMark } from "@icons";
 import classNames from "classnames/bind";
-import styles from "../../../assets/styles/components/SideMenu.module.scss";
-import React, { useEffect, useRef } from "react";
+import styles from "@styles/components/SideMenu.module.scss";
 
 const cx = classNames.bind(styles);
 

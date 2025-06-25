@@ -1,7 +1,7 @@
 import Sidebar from "../components/Sidebar"
 
 import classNames from "classnames/bind"
-import styles from "../../assets/styles/layouts/SidebarOnlyLayout.module.scss"
+import styles from "@styles/layouts/SidebarOnlyLayout.module.scss"
 
 const cx = classNames.bind(styles)
 

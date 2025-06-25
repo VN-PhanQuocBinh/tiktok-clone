@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAuth } from "../../../../contexts/AuthContext";
-import { useUI } from "../../../../contexts/UIContext/UIContext";
+import { useAuth } from "@contexts/AuthContext";
+import { useUI } from "@contexts/UIContext/UIContext";
 
-import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES } from "@types";
 
 import PhotoEditor from "./PhotoEditor";
-import Image from "../../../Image";
+import Image from "@components/Image";
 import {
    Icon_PencilSolid,
    Icon_XMark,
    Icon_AngleLeft,
-} from "../../../../assets/Icons";
+} from "@icons";
 
-import { cropImage } from "../../../../utils/cropImage";
-import { getToken } from "../../../../utils/token";
-import { updateProfile } from "../../../../services/authService/authService";
+import { cropImage } from "@utils/cropImage";
+import { getToken } from "@utils/token";
+import { updateProfile } from "@services/authService/authService";
 
-import styles from "../../../../assets/styles/components/Modals/ui/ProfileEditor/ProfileEditor.module.scss";
+import styles from "@styles/components/Modals/ui/ProfileEditor/ProfileEditor.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

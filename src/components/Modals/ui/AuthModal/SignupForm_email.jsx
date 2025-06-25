@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../../../../contexts/AuthContext";
+import { useAuth } from "@contexts/AuthContext";
 
 import {
    validateForm,
-   validateFullDate,
    validateEmail,
    validatePassword,
    validateDay,
    validateMonth,
    validateYear,
-} from "../../../../utils/validators";
+} from "@utils/validators";
 
 import {
    Icon_ArrowDown,
@@ -17,9 +16,9 @@ import {
    Icon_EyeXmark,
    Icon_Warning,
    Icon_CircleNotch,
-} from "../../../../assets/Icons";
+} from "@icons";
 
-import styles from "../../../../assets/styles/components/SignupForm_email.module.scss";
+import styles from "@styles/components/SignupForm_email.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
@@ -53,7 +52,7 @@ const validateMethods = {
 };
 
 function SignupForm_email({ className }) {
-   const { isLoggedIn, isRegistering, register } = useAuth();
+   const { isRegistering, register } = useAuth();
 
    const [showMenu, setShowMenu] = useState({
       day: false,

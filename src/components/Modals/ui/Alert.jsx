@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import styles from "../../../assets/styles/components/Modals/ui/Alert.module.scss";
+import styles from "@styles/components/Modals/ui/Alert.module.scss";
 import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);

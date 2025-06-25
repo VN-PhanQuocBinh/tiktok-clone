@@ -1,6 +1,6 @@
-import { VideoProvider } from "../../contexts/VideoContext/VideoContext";
-import VideoList from "../../components/VideoList/VideoList";
-import CommentSide from "../../components/CommentSide/CommentSide";
+import { VideoProvider } from "@contexts/VideoContext/VideoContext";
+import VideoList from "@components/pages/HomePage/VideoList/VideoList";
+import CommentSide from "@/components/pages/HomePage/CommentSide/CommentSide";
 
 import styles from "./Home.module.scss";
 import classNames from "classnames/bind";

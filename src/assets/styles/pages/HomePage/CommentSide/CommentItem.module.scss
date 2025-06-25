@@ -1,0 +1,112 @@
+@use "@styles/base/variables";
+@use "@styles/base/mixins";
+
+.wrapper {
+   width: 100%;
+   @include mixins.flex-row;
+   gap: 12px;
+
+   .avt-wrapper {
+      width: 40px;
+
+      .img {
+         width: 40px;
+      }
+   }
+
+   .inner {
+      color: variables.$text-color;
+      flex: 1;
+
+      .inner-header {
+         @include mixins.flex-row;
+         justify-content: space-between;
+
+         .username {
+            font-size: 1.4rem;
+         }
+
+         .more-btn {
+            position: relative;
+            
+            &.hide {
+               display: none;
+            }
+            
+            svg {
+               rotate: 90deg;
+               color: variables.$text-color;
+               width: 18px;
+               height: 18px;
+            }
+
+            .more-dropdown {
+               background-color: rgba(58, 58, 58, 1);
+               position: absolute;
+               top: 100%;
+               right: 0;
+               border-radius: 4px;
+               padding: 12px 20px;
+
+               span {
+                  color: variables.$text-color;
+                  font-weight: 500;
+
+                  &:hover {
+                     color: variables.$primary-color;
+                  }
+               }
+            }
+         }
+      }
+
+      .content {
+         span {
+            font-weight: 500
+         }
+      }
+
+      .inner-footer {
+         @include mixins.flex-row;
+         justify-content: space-between;
+         color: rgba(255, 255, 255, .6);
+         font-size: 1.4rem;
+
+         .left-part, .right-part {
+            @include mixins.flex-row;
+            align-items: center;
+            
+         }
+
+         .left-part {
+            gap: 20px;
+
+            .created-time, .reply-btn {
+               font-weight: 500;
+            }
+
+            .reply-btn {
+               color: rgba(255, 255, 255, .6);
+            }
+         }
+
+         .right-part {
+            gap: 2px;
+
+            button span {
+               color: rgba(255, 255, 255, .6);
+               @include mixins.flex-center;
+
+               svg {
+                  width: 20px;
+                  height: 20px;
+               }
+            }
+
+            button.liked span {
+               color: variables.$primary-color;
+            }
+         }
+      }
+   }
+}

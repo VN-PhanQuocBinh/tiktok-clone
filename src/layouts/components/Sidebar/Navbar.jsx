@@ -1,21 +1,20 @@
-import { useAuth } from "../../../contexts/AuthContext";
-import { useUI } from "../../../contexts/UIContext/UIContext";
+import { useAuth } from "@contexts/AuthContext";
+import { useUI } from "@contexts/UIContext/UIContext";
 
 import { navListData } from "../../../fakeDB";
-import { ACTION_MODAL_TYPES, MODAL_TYPES } from "../../../constants";
-import { AUTH_TYPE } from "../../../constants";
+import { ACTION_MODAL_TYPES, MODAL_TYPES, AUTH_TYPE } from "@types";
 
 import NavbarItem from "./NavbarItem";
-import Image from "../../../components/Image";
+import Image from "@components/Image";
 import {
    Icon_EllipsisVertical,
    Icon_TelevisionRegular,
    Icon_TelevisionSolid,
    Icon_UserSolid,
-} from "../../../assets/Icons";
+} from "@icons";
 
 import classNames from "classnames/bind";
-import styles from "../../../assets/styles/components/Navbar.module.scss";
+import styles from "@styles/components/Navbar.module.scss";
 
 const cx = classNames.bind(styles);
 
