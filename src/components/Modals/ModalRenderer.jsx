@@ -2,7 +2,7 @@ import { MODAL_TYPES } from "@types";
 import MODAL_COMPONENTS from "./modalComponents";
 import { useUI } from "@contexts/UIContext/UIContext";
 
-import styles from "@styles/components/Modals/ModalRenderer.module.scss";
+import styles from "@styles/components/uiContext/ModalRenderer.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

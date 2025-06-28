@@ -18,7 +18,7 @@ import {
    Icon_CircleNotch,
 } from "@icons";
 
-import styles from "@styles/components/SignupForm_email.module.scss";
+import styles from "@styles/components/uiContext/ui/AuthModals/SignupForm_email.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

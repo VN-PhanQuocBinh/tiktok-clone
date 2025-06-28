@@ -9,7 +9,7 @@ import {
    DROPDOWN_ITEM_TYPE as TYPE,
    ACTION_MODAL_TYPES,
    MODAL_TYPES,
-} from "../../../constants";
+} from "../../../types";
 import { Icon_XMark, Icon_ChevronRight } from "@icons";
 
 import { actionItems_loggedIn, actionItems_loggedOut } from "../../../fakeDB";

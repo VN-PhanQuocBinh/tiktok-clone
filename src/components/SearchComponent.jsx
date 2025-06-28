@@ -7,7 +7,7 @@ import DropDown from "./Dropdown";
 import DropDownItem from "./DropDownItem";
 
 import { Icon_Loading, Icon_Clear, Icon_Search } from "../assets/Icons";
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../constants";
+import { DROPDOWN_ITEM_TYPE as TYPE } from "../types";
 
 import styles from "../assets/styles/components/SearchComponent.module.scss";
 import classNames from "classnames/bind";

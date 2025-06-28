@@ -16,7 +16,6 @@ const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
    const [isLoggedIn, setIsLoggedIn] = useState(false);
-   const [isLoggedOut, setIsLoggedOut] = useState(true);
    const [isRegistering, setIsRegistering] = useState(false);
    const [isLoggingIn, setLoggingIn] = useState(false);
    const [user, setUser] = useState({});
@@ -47,11 +46,9 @@ const AuthProvider = ({ children }) => {
 
             if (response.success) {
                setUser(response.data);
-               setIsLoggedOut(false);
                setIsLoggedIn(true);
             } else {
                setIsLoggedIn(false);
-               setIsLoggedOut(true);
             }
          })();
       }
@@ -170,7 +167,6 @@ const AuthProvider = ({ children }) => {
             logout,
             register,
             isLoggedIn,
-            isLoggedOut,
             isRegistering,
             isLoggingIn,
             followingList,

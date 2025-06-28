@@ -4,7 +4,7 @@ import { useUI } from "@contexts/UIContext/UIContext";
 
 import { ACTION_MODAL_TYPES, MODAL_TYPES } from "@types";
 
-import styles from "@styles/components/LogoutModal.module.scss";
+import styles from "@styles/components/uiContext/ui/AuthModals/LogoutModal.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

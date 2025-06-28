@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useReducer } from "react";
 import { useUI } from "../UIContext/UIContext";
 
-import { ACTION_MODAL_TYPES, AUTH_TYPE } from "../../constants";
+import { ACTION_MODAL_TYPES, AUTH_TYPE } from "../../types";
 
 import { initState, videoReducer } from "./VideoReducer";
 
@@ -10,7 +10,7 @@ import {
    unlikeVideo,
 } from "../../services/videoService/videoService";
 import { getToken } from "../../utils/token";
-import { ACTION_VIDEOS_TYPE } from "../../constants";
+import { ACTION_VIDEOS_TYPE } from "../../types";
 
 const VideoContext = createContext(null);
 

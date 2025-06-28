@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { follow, unfollow } from "../services/userService/followingService";
 import { getToken } from "../utils/token";
 
-import { ACTION_MODAL_TYPES, AUTH_TYPE } from "../constants";
+import { ACTION_MODAL_TYPES, AUTH_TYPE } from "../types";
 
 export default function useFollow() {
    const { updateFollowingList } = useAuth();

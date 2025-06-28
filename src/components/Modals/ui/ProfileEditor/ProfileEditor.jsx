@@ -16,7 +16,7 @@ import { cropImage } from "@utils/cropImage";
 import { getToken } from "@utils/token";
 import { updateProfile } from "@services/authService/authService";
 
-import styles from "@styles/components/Modals/ui/ProfileEditor/ProfileEditor.module.scss";
+import styles from "@styles/components/uiContext/ui/ProfileEditor/ProfileEditor.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

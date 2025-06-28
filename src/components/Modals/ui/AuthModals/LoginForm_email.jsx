@@ -10,7 +10,7 @@ import { useAuth } from "@contexts/AuthContext";
 import { useUI } from "@contexts/UIContext/UIContext";
 import { ACTION_MODAL_TYPES, MODAL_TYPES } from "@types";
 
-import styles from "@styles/components/LoginForm_email.module.scss";
+import styles from "@styles/components/uiContext/ui/AuthModals/LoginForm_email.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

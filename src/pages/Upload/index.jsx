@@ -1,5 +1,10 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUI } from "@/contexts/UIContext/UIContext";
+
 import UploadZone from "@components/pages/UploadPage/UploadZone";
+
+import { MODAL_TYPES, ACTION_MODAL_TYPES } from "@/types";
 
 import { postVideo } from "@services/videoService/videoService";
 import { getToken } from "@utils/token";
@@ -12,11 +17,23 @@ const cx = classNames.bind(styles);
 const MAX_CAPTION_LENGTH = 4000;
 
 function Upload() {
+   const { isLoggedIn } = useAuth()
+   const { dispatch: uiDispatch } = useUI()
+
    const [videoFormValue, setVideoFormValue] = useState({
       description: "",
       upload_file: null,
    });
    const DOM_captionEditor = useRef(null);
+
+   useEffect(() => {
+      if (!isLoggedIn) {
+         uiDispatch({
+            type: ACTION_MODAL_TYPES.OPEN_MODAL,
+            modalType: MODAL_TYPES.AUTH_MODALS,
+         })
+      }
+   }, [])
 
    const handleBeforeInput = useCallback(
       (e) => {

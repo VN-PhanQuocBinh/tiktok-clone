@@ -1,5 +1,5 @@
-@use "../base/variables";
-@use "../base/mixins";
+@use '@styles/base/variables';
+@use '@styles/base/mixins';
 
 .form {
    color: variables.$text-color;

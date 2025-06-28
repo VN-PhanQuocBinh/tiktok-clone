@@ -6,7 +6,7 @@ import Upload from "../pages/Upload";
 
 import Test from "../pages/Test";
 
-import { LAYOUT_TYPE } from "../constants";
+import { LAYOUT_TYPE } from "../types";
 
 import config from "../config";
 import routes from "../config/routes";

@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import { publicRoutes } from "./routes";
 
 import { DefaultLayout, HeaderOnlyLayout, SidebarOnlyLayout } from "./layouts";
-import { LAYOUT_TYPE } from "./constants";
+import { LAYOUT_TYPE } from "./types";
 
 import { AuthProvider } from "./contexts/AuthContext";
 import { UIProvider } from "./contexts/UIContext/UIContext";

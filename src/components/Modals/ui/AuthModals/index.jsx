@@ -14,7 +14,7 @@ import {
 
 import { Icon_XMark } from "@icons";
 
-import styles from "@styles/components/AuthModal.module.scss";
+import styles from "@styles/components/uiContext/ui/AuthModals/AuthModal.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);

@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 import { Link } from "react-router"; 
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../constants";
+import { DROPDOWN_ITEM_TYPE as TYPE } from "../types";
 import Image from "../components/Image";
 
 import {

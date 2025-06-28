@@ -1,7 +1,7 @@
 import {
    ACTION_VIDEOS_TYPE as ACTION_TYPES,
    ACTION_VIDEOS_TYPE,
-} from "../../constants";
+} from "../../types";
 
 const initVideoCache = {
    isLiked: false,

@@ -1,4 +1,4 @@
-import { MODAL_TYPES, ACTION_MODAL_TYPES } from "../../constants";
+import { MODAL_TYPES, ACTION_MODAL_TYPES } from "../../types";
 
 const initState = {
    isOpen: false,

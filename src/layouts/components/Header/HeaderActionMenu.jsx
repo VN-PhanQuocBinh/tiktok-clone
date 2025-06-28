@@ -4,7 +4,7 @@ import { useAuth } from "../../../contexts/AuthContext"
 import DropDown from "../../../components/DropDown"
 import DropDownItem from "../../../components/DropDownItem"
 
-import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../constants"
+import { DROPDOWN_ITEM_TYPE as TYPE } from "../../../types"
 
 import classNames from "classnames/bind"
 import styles from "../../../assets/styles/components/HeaderActionMenu.module.scss"

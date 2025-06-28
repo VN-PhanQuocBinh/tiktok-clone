@@ -3,8 +3,8 @@ import { MODAL_TYPES } from "@types"
 import DeleteConfirmComment from "./ui/DeleteConfirmComment"
 import Alert from "./ui/Alert"
 
-import AuthModal from "./ui/AuthModal"
-import LogoutModal from "./ui/AuthModal/LogoutModal"
+import AuthModal from "./ui/AuthModals"
+import LogoutModal from "./ui/AuthModals/LogoutModal"
 import EditProfile from "./ui/ProfileEditor/ProfileEditor.jsx"
 
 const MODAL_COMPONENTS = {
