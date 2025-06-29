@@ -4,6 +4,7 @@ import {
    memo,
    forwardRef,
    useImperativeHandle,
+   useState,
 } from "react";
 import { useVideo } from "@contexts/VideoContext/VideoContext";
 
@@ -26,6 +27,8 @@ function VideoPlayer(
 ) {
    const { state: videoState } = useVideo();
    const DOM_video = useRef(null);
+   const [playing, setPlaying] = useState(false);
+   const [inViewport, setInViewport] = useState(false);
 
    useEffect(() => {
       if (DOM_video.current) {
@@ -44,23 +47,60 @@ function VideoPlayer(
                   DOM_video.current.currentTime = time;
                }
             },
-            contains: (element) => DOM_video.current?.contains(element)
+            contains: (element) => DOM_video.current?.contains(element),
          };
       },
       []
    );
 
    useEffect(() => {
+      onDisplayStateBtn(playing, false);
+   }, [playing, onDisplayStateBtn]);
+
+   useEffect(() => {
+      const handleWaiting = (e) => {
+         if (e.target?.paused) setPlaying(false);
+      };
+
+      const handlePlaying = (e) => {
+         console.dir(e.target);
+         
+         setPlaying(true);
+      };
+
+      const handleEnd = () => {
+         // replay video
+         setTimeout(() => {
+            onDisplayStateBtn(true, false)
+         }, 1000) // delay allow timeline transition to finish
+      }
+      
+      if (inViewport) {
+         DOM_video.current.addEventListener("waiting", handleWaiting);
+         DOM_video.current.addEventListener("playing", handlePlaying);
+         DOM_video.current.addEventListener("ended", handleEnd);
+      }
+
+      return () => {
+         DOM_video.current?.removeEventListener("waiting", handleWaiting);
+         DOM_video.current?.removeEventListener("playing", handlePlaying);
+         DOM_video.current?.removeEventListener("ended", handleEnd);
+      };
+   }, [inViewport]);
+
+   useEffect(() => {
       const observer = new IntersectionObserver(
          ([entry]) => {
             if (entry.isIntersecting) {
-               onDisplayStateBtn(true, false);
+               setInViewport(true);
+               setPlaying(true);
             } else {
-               onDisplayStateBtn(false, false);
+               setInViewport(false);
+               setPlaying(false);
             }
          },
          {
-            threshold: 0.6,
+            threshold: 0.8,
          }
       );
 
@@ -93,7 +133,7 @@ function VideoPlayer(
          {...props}
          className={cx("video", { [className]: className })}
          ref={DOM_video}
-         loop
+         // loop
       >
          <source src={src} type="video/mp4" />
       </video>

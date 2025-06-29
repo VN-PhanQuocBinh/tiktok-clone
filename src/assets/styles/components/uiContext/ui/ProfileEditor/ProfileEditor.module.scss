@@ -225,9 +225,24 @@ $border-body-style-large: 1px solid rgba(255, 255, 255, 0.5);
                         $alpha: 0.8
                      );
                   }
+
+                  .icon {
+                     animation: loadingAnimation 1.25s linear infinite;
+                  }
                }
             }
          }
       }
+   }
+}
+
+
+@keyframes loadingAnimation {
+   from {
+      rotate: 0deg;
+   }
+
+   to {
+      rotate: 360deg;
    }
 }

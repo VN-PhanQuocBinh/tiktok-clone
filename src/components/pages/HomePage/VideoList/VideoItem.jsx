@@ -140,7 +140,7 @@ function VideoItem({ className, video }) {
       setIsPlay(played);
 
       if (played) {
-         DOM_video.current?.play();
+         DOM_video.current?.play().catch(() => {setIsPlay(false)});
       } else {
          DOM_video.current?.pause();
       }

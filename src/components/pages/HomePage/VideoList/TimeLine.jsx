@@ -25,20 +25,24 @@ function TimeLine({
       const trackWidth = DOM_track.current?.offsetWidth;
       const thumbWith = DOM_thumb.current?.offsetWidth;
 
-      setLeftThumb(1/duration * trackWidth)
+      setLeftThumb(0)
+      // setLeftThumb(1/duration * trackWidth)
+      // console.log(1/duration * trackWidth);
+      
 
       const clearEvents = () => {
-
          setGrabbing(false);
          setNotTransition(false)
+         onDisplayStateBtn(true, false)
 
          window.removeEventListener("pointermove", handlePointerMove);
          window.removeEventListener("pointerup", handlePointerUp);
       };
 
       const handlePointerMove = (e) => {
-         let trackWidth = DOM_track.current?.offsetWidth;
+         e.preventDefault()
 
+         let trackWidth = DOM_track.current?.offsetWidth;
          const rect = DOM_track.current?.getBoundingClientRect();
 
          let left = Math.min(
@@ -51,9 +55,11 @@ function TimeLine({
 
       const handlePointerUp = (e) => {
          e.stopPropagation()
+         e.preventDefault()
+
          let trackWidth = DOM_track.current?.offsetWidth;
 
-         onDisplayStateBtn(true, false)
+         // onDisplayStateBtn(true, false)
          setLeftThumb(prev => {
             const percent = prev / trackWidth
             let newTime = percent * duration
@@ -69,6 +75,7 @@ function TimeLine({
 
       const handlePointerDown = (e) => {
          e.stopPropagation()
+         e.preventDefault()
 
          setGrabbing(true);
          setNotTransition(true)
@@ -89,7 +96,7 @@ function TimeLine({
             "pointerdown",
             handlePointerDown
          );
-         DOM_wrapper.current?.removeEventListener("poinerdown", () => {
+         DOM_wrapper.current?.removeEventListener("poinerdown", (e) => {
             e.preventDefault();
          });
       };
@@ -113,6 +120,8 @@ function TimeLine({
                return newValue
             });
          }, 1000);
+      } else {
+         clearInterval(timerId)
       }
 
       return () => clearInterval(timerId);

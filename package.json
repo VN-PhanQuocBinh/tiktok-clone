@@ -16,6 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.9",
     "classnames": "^2.5.1",
+    "firebase-tools": "^14.9.0",
     "idb-keyval": "^6.2.2",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",

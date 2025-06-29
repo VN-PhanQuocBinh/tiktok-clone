@@ -10,6 +10,7 @@ import {
    Icon_PencilSolid,
    Icon_XMark,
    Icon_AngleLeft,
+   Icon_Loading,
 } from "@icons";
 
 import { cropImage } from "@utils/cropImage";
@@ -27,6 +28,7 @@ const MIN_NAME_LEN = 4;
 function ProfileEditor({ onClose = () => {} }) {
    const { user, updateCurrentUser } = useAuth();
    const { dispatch: uiDispatch } = useUI();
+   const [uploading, setUploading] = useState(false)
 
    const [avatarPreview, setAvatarPreview] = useState(null);
    const [croppedImg, setCroppedImg] = useState(null);
@@ -100,6 +102,8 @@ function ProfileEditor({ onClose = () => {} }) {
       });
 
       try {
+         setUploading(true)
+
          const token = getToken();
          const response = await updateProfile(token, uploadData);
 
@@ -147,7 +151,10 @@ function ProfileEditor({ onClose = () => {} }) {
                },
             });
          }
+
+         setUploading(false)
       } catch (error) {
+         setUploading(false)
          console.log("UPDATE PROFILE", error);
       }
    }, [formData, croppedImg]);
@@ -342,7 +349,7 @@ function ProfileEditor({ onClose = () => {} }) {
                      className={cx("save-btn")}
                      disabled={!(showPhotoEditor || !isDiabledSubmit)}
                   >
-                     {showPhotoEditor ? "Apply" : "Save"}
+                     {showPhotoEditor ? "Apply" : (uploading ? <Icon_Loading className={cx("icon")}/> :"Save")}
                   </button>
                </div>
             </div>
